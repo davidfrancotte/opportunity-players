@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { siteOrigin as origin } from '../lib/site-origin.ts';
 import {
   demoMembers,
   demoOpportunities,
@@ -8,8 +9,6 @@ import {
   demoNotifications,
 } from '../lib/member-data.ts';
 const base = process.argv[2] || 'http://localhost:3000';
-const origin =
-  'https://opportunity-players-arena.espace-de-tr-1383.chatgpt.site';
 const routes = [
   '/espace',
   ...Object.keys(memberPages).map((x) => `/espace/${x}`),

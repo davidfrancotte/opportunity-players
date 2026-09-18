@@ -1,10 +1,9 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { siteOrigin as origin } from '../lib/site-origin.ts';
 
 // HTTP/content verification only; no browser automation or visual inspection.
 const base = process.argv[2] || 'http://localhost:3000';
-const origin =
-  'https://opportunity-players-arena.espace-de-tr-1383.chatgpt.site';
 const content = fs.readFileSync(
   new URL('../lib/content.ts', import.meta.url),
   'utf8',

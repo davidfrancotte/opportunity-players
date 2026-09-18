@@ -5,6 +5,7 @@ import './arena.css';
 import './athlete-images.css';
 import './supporters-app.css';
 import { Header, Footer } from '@/components/arena';
+import { siteOrigin } from '@/lib/site-origin';
 
 const arenaSans = DM_Sans({
   variable: '--font-arena',
@@ -12,9 +13,7 @@ const arenaSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    'https://opportunity-players-arena.espace-de-tr-1383.chatgpt.site',
-  ),
+  metadataBase: new URL(siteOrigin),
   title: 'Opportunity Players — Le réseau des acteurs du sport',
   description:
     'Sportifs, professionnels et organisations : présentez votre parcours et développez votre réseau dans le sport. Découvrez la nouvelle expérience Arena.',
@@ -29,7 +28,7 @@ export const metadata: Metadata = {
       'Sportifs, professionnels et organisations : les bonnes rencontres changent la suite de votre parcours.',
     images: [
       {
-        url: 'https://opportunity-players-arena.espace-de-tr-1383.chatgpt.site/og.png',
+        url: '/og.png',
         width: 1536,
         height: 1024,
         alt: 'Opportunity Players — Le réseau des acteurs du sport',
@@ -41,9 +40,7 @@ export const metadata: Metadata = {
     title: 'Opportunity Players — Le réseau des acteurs du sport',
     description:
       'Sportifs, professionnels et organisations : les bonnes rencontres changent la suite de votre parcours.',
-    images: [
-      'https://opportunity-players-arena.espace-de-tr-1383.chatgpt.site/og.png',
-    ],
+    images: ['/og.png'],
   },
 };
 

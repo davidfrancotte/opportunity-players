@@ -1,6 +1,10 @@
-# Opportunity Players — Arena
+# Opportunity Players — Arena · édition Netlify
 
-Préversion privée du site vitrine, en français. Identité Arena : anthracite, blanc cassé et vert acide, typographie éditoriale et photographie sportive cohérente. Aucun changement sur le domaine ou les comptes existants.
+Copie du site Arena adaptée à Next.js standard et Netlify. Le site Sites/Cloudflare original reste indépendant et inchangé. Identité Arena : anthracite, blanc cassé et vert acide, typographie éditoriale et photographie sportive cohérente. Aucun changement sur les comptes existants.
+
+**Déploiement : lire [DEPLOIEMENT_NETLIFY.md](DEPLOIEMENT_NETLIFY.md).** Node.js 24, `npm ci`, puis `npm run build`. Netlify doit compiler le dépôt GitHub ; ne pas déposer ce dossier source dans Netlify Drop. Le dossier de publication est `.next`, pas `dist` ni `public`.
+
+Cette livraison reste une préversion de démonstration, même si son adresse Netlify est publique. `noindex` est conservé, mais n'est pas un contrôle d'accès.
 
 ## Périmètre
 
@@ -37,7 +41,9 @@ Vérifications dédiées : `node scripts/validate-members.mjs`, compilation, Typ
 
 ## Commandes de développement
 
-`npm run dev`, `npm run build`, `npx tsc --noEmit`.
+`npm run dev`, `npm run build`, `npm start`, `npm run typecheck`.
+
+Après compilation, lancer `npm start` dans un terminal et `npm run test:http` dans un second terminal. `npm run test:phone` vérifie la géométrie et la rotation du smartphone sans navigateur.
 
 La compilation et le contrôle TypeScript sont requis avant publication. Le lint complet du kit contient des alertes héritées dans des composants UI non utilisés ; les images HTML sont un choix explicite, les actifs étant déjà optimisés localement. Le code produit est contrôlé séparément. Pas de test navigateur automatisé dans cette livraison : validation HTTP et code uniquement.
 
@@ -45,4 +51,4 @@ La compilation et le contrôle TypeScript sont requis avant publication. Le lint
 
 Validation éditoriale et juridique par Opportunity Players, revue visuelle sur appareils réels, branchement au service existant et test de bout en bout, vérification des droits exacts de chaque offre, stratégie des neuf langues et redirections SEO. Les retours sur vérification d'email, double authentification et autocomplétion devront être traités dans le vrai parcours d'identité, pas simulés ici.
 
-Audit dépendances : correctif React / React DOM / RSC appliqué en 19.2.8. L'audit du socle fourni signale encore dix entrées (sept hautes, deux modérées, une basse), essentiellement outils de développement et traitement d'images. Aucun téléversement utilisateur ni Server Action applicative dans cette préversion. Une mise à jour contrôlée du socle et un nouvel audit restent nécessaires avant bascule publique ; ne pas lancer de mise à jour forcée sans validation.
+Socle Netlify : Next.js 16.3.5, React / React DOM 19.2.8. Le runtime Vinext/Cloudflare et sa dépendance directe RSC ont été retirés de cette copie. Le verrouillage npm est fourni. Exécuter `npm audit` pour l'état courant des dépendances ; ne pas appliquer de mise à jour forcée sans validation. Aucun téléversement utilisateur ni Server Action applicative dans cette préversion.

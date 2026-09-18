@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!o) return { title: 'Annonce introuvable' };
   const title = `${o.title} · Annonce fictive Arena`;
   const description = `${o.intro} Démonstration : aucune offre réelle.`;
-  const image = `https://opportunity-players-arena.espace-de-tr-1383.chatgpt.site/images/${o.image}-color.webp`;
+  const image = `/images/${o.image}-color.webp`;
   return {
     title,
     description,
