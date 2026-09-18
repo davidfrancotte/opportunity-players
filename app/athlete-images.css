@@ -1,0 +1,74 @@
+/* The selective-color master contains grayscale scenery and colored subjects.
+   Reusing one image for both states keeps poses/edges perfectly registered. */
+img.athlete-image {
+  --athlete-grayscale: 1;
+  --athlete-contrast: 1;
+  --athlete-brightness: 1;
+  filter: grayscale(var(--athlete-grayscale)) contrast(var(--athlete-contrast))
+    brightness(var(--athlete-brightness));
+  transition:
+    filter 650ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 650ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.hero-visual > img.athlete-image {
+  --athlete-contrast: 1.03;
+}
+.sport-image > img.athlete-image {
+  --athlete-contrast: 1.02;
+}
+.join-page-visual > img.athlete-image {
+  --athlete-brightness: 0.5;
+}
+
+/* Keyboard activation follows the existing links, without adding decorative
+   images to the tab order or turning them into fake controls. */
+:is(.sport-card, .journal-card):focus-visible img.athlete-image {
+  --athlete-grayscale: 0;
+}
+.sport-card:focus-visible img.athlete-image {
+  transform: scale(1.035);
+  --athlete-contrast: 1.08;
+}
+.journal-card:focus-visible img.athlete-image {
+  transform: scale(1.025);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  img.athlete-image:hover,
+  :is(
+      .hero-visual,
+      .sport-image,
+      .profile-photo,
+      .about-photo,
+      .join-page-visual
+    ):hover
+    > img.athlete-image,
+  .sport-detail figure:hover > img.athlete-image,
+  :is(.sport-card, .journal-card):hover img.athlete-image {
+    --athlete-grayscale: 0;
+  }
+  .sport-card:hover img.athlete-image {
+    --athlete-contrast: 1.08;
+  }
+}
+
+/* A touch press gives the same nonessential feedback, without intercepting
+   scrolling or requiring an extra tap to open a linked sport. */
+@media (hover: none) {
+  img.athlete-image:active,
+  :is(.hero-visual, .profile-photo, .about-photo, .join-page-visual):active
+    > img.athlete-image,
+  .sport-detail figure:active > img.athlete-image,
+  :is(.sport-card, .journal-card):active img.athlete-image {
+    --athlete-grayscale: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  img.athlete-image {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}
