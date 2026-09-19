@@ -1,5 +1,7 @@
 'use client';
 import Link from 'next/link';
+import { MemberDossier, SafetyActions } from './trust-screens';
+import { memberSports, matchesSportRecords, levels } from '@/lib/studio/trust';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
@@ -394,19 +396,40 @@ export function FeedPage() {
 }
 
 export function NetworkPage() {
-  const { social, dispatchSocial, requestAccess } = useDemo();
+  const { social, dispatchSocial, requestAccess, trust } = useDemo();
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [kind, setKind] = useState('Tous');
   const [sport, setSport] = useState('Tous');
   const [onlyFollowed, setOnlyFollowed] = useState(false);
   const [member, setMember] = useState<Member | null>(null);
+  const [level, setLevel] = useState('Tous');
+  const [club, setClub] = useState('');
+  const [ranking, setRanking] = useState('');
   const filtered = members.filter(
     (m) =>
       (kind === 'Tous' || m.kind === kind) &&
-      (sport === 'Tous' || m.sport === sport) &&
+      !trust.blocked.includes(m.id) &&
+      (memberSports[m.id]
+        ? matchesSportRecords(memberSports[m.id], sport, level, club, ranking)
+        : (sport === 'Tous' || m.sport === sport) &&
+          level === 'Tous' &&
+          !club.trim() &&
+          !ranking.trim()) &&
       (!onlyFollowed || social.following.includes(m.id)) &&
-      matchesQuery([m.name, m.role, m.city, m.sport].join(' '), query),
+      matchesQuery(
+        [
+          m.name,
+          m.role,
+          m.city,
+          m.sport,
+          ...(memberSports[m.id] || []).flatMap((r) => [
+            r.sport,
+            ...r.clubs.map((c) => c.name),
+          ]),
+        ].join(' '),
+        query,
+      ),
   );
   function message(m: Member) {
     if (!requestAccess('message', m.id)) return;
@@ -448,6 +471,54 @@ export function NetworkPage() {
         </Button>
       </div>
       <div className="list-caption">
+        <details className="trust-filters">
+          <summary>Niveau et parcours sportif</summary>
+          <div className="trust-filter-fields">
+          <label>
+            Niveau
+            <select
+              aria-label="Filtrer par niveau"
+              value={level}
+              onChange={(e) => setLevel(e.target.value)}
+            >
+              {['Tous', ...levels].map((l) => (
+                <option key={l}>{l}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Club actuel ou passé
+            <input
+              aria-label="Filtrer par club"
+              value={club}
+              onChange={(e) => setClub(e.target.value)}
+              placeholder="Nom du club"
+            />
+          </label>
+          <label>
+            Classement
+            <input
+              aria-label="Filtrer par classement"
+              value={ranking}
+              onChange={(e) => setRanking(e.target.value)}
+              placeholder="Ex. C15.2, P200…"
+            />
+          </label>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              setLevel('Tous');
+              setClub('');
+              setRanking('');
+              setSport('Tous');
+            }}
+          >
+            Réinitialiser ces filtres
+          </Button>
+          </div>
+        </details>
+      </div>
+      <div className="list-caption">
         <span>
           {onlyFollowed ? 'Vous les suivez' : 'Des profils à découvrir'}
         </span>
@@ -464,10 +535,20 @@ export function NetworkPage() {
               <img src={m.image} alt="" />
               <span>
                 <small>
-                  {m.kind} · {m.sport}
+                  {m.kind} ·{' '}
+                  {memberSports[m.id]?.map((r) => r.sport).join(' / ') ||
+                    m.sport}
                 </small>
                 <strong>{m.name}</strong>
                 <span>{m.role}</span>
+                {memberSports[m.id] && (
+                  <span className="trust-filter-hint">
+                    {memberSports[m.id]
+                      .filter((r) => sport === 'Tous' || r.sport === sport)
+                      .map((r) => r.sport + ' · ' + r.level + ' · ' + r.ranking)
+                      .join(' / ')}
+                  </span>
+                )}
                 <span className="member-location">
                   <MapPin size={12} />
                   {m.city}
@@ -521,6 +602,8 @@ export function NetworkPage() {
             <h3>{member.role}</h3>
             <p>{member.city}</p>
             <p>{member.bio}</p>
+            <MemberDossier key={member.id} member={member} />
+            <SafetyActions memberId={member.id} />
             <Link
               className="action secondary"
               href={`/espace/organiser?invite=${member.id}`}
@@ -538,7 +621,7 @@ export function NetworkPage() {
 }
 
 export function MessagesPage() {
-  const { social, dispatchSocial, access, requestAccess } = useDemo();
+  const { social, dispatchSocial, access, requestAccess, trust } = useDemo();
   const [query, setQuery] = useState('');
   const [text, setText] = useState('');
   const [newChat, setNewChat] = useState(false);
@@ -577,6 +660,9 @@ export function MessagesPage() {
         réelle.
       </p>
       <PlanStatus compact />
+      <Link className="text-link" href="/espace/securite">
+        Sécurité : signalements et membres bloqués
+      </Link>
       {!canReceive(social, access.category) && <LockedFeature />}
       <div
         className={`web-messaging ${active && member ? 'has-conversation' : ''}`}
@@ -600,6 +686,7 @@ export function MessagesPage() {
                 <p>{member.role}</p>
               </div>
             </header>
+            <SafetyActions memberId={member.id} />
             <div
               ref={log}
               className="message-log"
@@ -698,6 +785,7 @@ export function MessagesPage() {
                     className="conversation-row"
                     key={c.memberId}
                     aria-pressed={social.activeChat === c.memberId}
+                    disabled={trust.blocked.includes(c.memberId)}
                     onClick={() =>
                       dispatchSocial({ type: 'open-chat', id: c.memberId })
                     }
@@ -706,9 +794,12 @@ export function MessagesPage() {
                     <span>
                       <strong>{m.name}</strong>
                       <small>
-                        {!canReceive(social, access.category)
-                          ? 'Réception des messages réservée à Premium'
-                          : c.messages.at(-1)?.text || 'Nouvelle conversation'}
+                        {trust.blocked.includes(c.memberId)
+                          ? 'Membre bloqué · gérer dans Sécurité'
+                          : !canReceive(social, access.category)
+                            ? 'Réception des messages réservée à Premium'
+                            : c.messages.at(-1)?.text ||
+                              'Nouvelle conversation'}
                       </small>
                     </span>
                     {c.unread && canReceive(social, access.category) && (
@@ -746,23 +837,25 @@ export function MessagesPage() {
         description="Choisissez un membre fictif pour ouvrir une conversation de démonstration."
       >
         <div className="new-chat-list">
-          {members.map((m) => (
-            <button
-              key={m.id}
-              className="conversation-row"
-              onClick={() => {
-                dispatchSocial({ type: 'open-chat', id: m.id });
-                setNewChat(false);
-              }}
-            >
-              <img src={m.image} alt="" />
-              <span>
-                <strong>{m.name}</strong>
-                <small>{m.role}</small>
-              </span>
-              <ArrowUpRight size={16} />
-            </button>
-          ))}
+          {members
+            .filter((m) => !trust.blocked.includes(m.id))
+            .map((m) => (
+              <button
+                key={m.id}
+                className="conversation-row"
+                onClick={() => {
+                  dispatchSocial({ type: 'open-chat', id: m.id });
+                  setNewChat(false);
+                }}
+              >
+                <img src={m.image} alt="" />
+                <span>
+                  <strong>{m.name}</strong>
+                  <small>{m.role}</small>
+                </span>
+                <ArrowUpRight size={16} />
+              </button>
+            ))}
         </div>
       </Modal>
     </ProfileLayout>

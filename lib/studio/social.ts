@@ -1,4 +1,5 @@
 import type { Category } from './model';
+import { moderateText } from './trust.ts';
 export type Member = {
   id: string;
   name: string;
@@ -397,7 +398,11 @@ export type AccessReason =
   | 'quota'
   | 'recipient';
 export type AccessFeature = 'publish' | 'message' | 'comment' | 'receive';
-export type AccessContext = { category: Category; month: string };
+export type AccessContext = {
+  category: Category;
+  month: string;
+  blocked?: string[];
+};
 export const FREE_MESSAGES = 5;
 // Fictional recipient plans, not subscription data from the real platform.
 export const unpaidRecipients = ['sam', 'united'];
@@ -480,6 +485,20 @@ export function guardedSocialReducer(
   command: { action: SocialAction; context: AccessContext },
 ): SocialState {
   const { action, context } = command;
+  const text =
+    action.type === 'message'
+      ? action.message.text
+      : action.type === 'post'
+        ? action.post.text
+        : action.type === 'comment'
+          ? action.comment.text
+          : '';
+  if (moderateText(text)) return state;
+  if (
+    (action.type === 'message' || action.type === 'open-chat') &&
+    context.blocked?.includes(action.id)
+  )
+    return state;
   let reason: AccessReason | null = null;
   if (action.type === 'post') reason = accessReason(state, context, 'publish');
   if (action.type === 'message') {

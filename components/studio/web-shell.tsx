@@ -15,6 +15,8 @@ import {
   LogOut,
   CalendarDays,
   Bell,
+  ShieldCheck,
+  Gift,
 } from 'lucide-react';
 import { EventHeader } from './event-navigation';
 import { useDemo } from './demo-provider';
@@ -35,6 +37,7 @@ const authRoutes = [
   'connexion',
   'inscription',
   'verification',
+  'double-facteur',
   'personnalisation',
   'presentation',
   'mot-de-passe-oublie',
@@ -44,7 +47,7 @@ export function WebShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const page = pathname.split('/')[2] || 'accueil';
   const { profile, social, dispatchSocial, reset, events } = useDemo();
-  const current = ['parcours', 'medias', 'modifier-profil'].includes(page)
+  const current = ['parcours', 'medias', 'modifier-profil', 'disciplines', 'agent', 'documents'].includes(page)
     ? 'profil'
     : ['jouer', 'organiser', 'match'].includes(page)
       ? 'reseau'
@@ -87,6 +90,8 @@ export function WebShell({ children }: { children: ReactNode }) {
           ))}
         </nav>
         <div className="web-sidebar-secondary">
+          <Link href="/espace/securite" aria-current={page === 'securite' ? 'page' : undefined}><ShieldCheck size={19}/>Sécurité</Link>
+          <Link href="/espace/parrainage" aria-current={page === 'parrainage' ? 'page' : undefined}><Gift size={19}/>Parrainage</Link>
           <Link
             href="/espace/jouer"
             aria-current={page === 'jouer' ? 'page' : undefined}
@@ -161,6 +166,12 @@ export function WebShell({ children }: { children: ReactNode }) {
                   match: 'Votre match',
                   agenda: 'Mon agenda',
                   notifications: 'Notifications',
+                  disciplines: 'Sports, niveaux et clubs',
+                  agent: 'Mon agent',
+                  documents: 'CV et références',
+                  securite: 'Sécurité et modération',
+                  parrainage: 'Inviter mon réseau',
+                  confidentialite: 'Confidentialité et charte',
                 } as Record<string, string>
               )[page] ||
                 navigation.find((n) => n.href === current)?.label ||
@@ -191,6 +202,7 @@ export function WebShell({ children }: { children: ReactNode }) {
               <section className="web-rail-card">
                 <span className="web-space-label">VOTRE PROCHAIN PAS</span>
                 <h2>Un profil qui ouvre des portes.</h2>
+                <p>Sports, niveaux, clubs, CV et agent : donnez du contexte à chaque rencontre.</p>
                 <p>
                   {progress.count} rubriques complétées sur {progress.total}.
                 </p>
@@ -199,8 +211,8 @@ export function WebShell({ children }: { children: ReactNode }) {
                   max={progress.total}
                   aria-label="Complétion du profil"
                 />
-                <Link href="/espace/modifier-profil">
-                  Compléter mon profil <ArrowUpRight size={17} />
+                <Link href="/espace/disciplines">
+                  Compléter mon parcours <ArrowUpRight size={17} />
                 </Link>
               </section>
               <section className="web-rail-card">

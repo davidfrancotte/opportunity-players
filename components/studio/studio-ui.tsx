@@ -176,22 +176,22 @@ export function AuthLayout({
 }) {
   return (
     <main id="main" className="auth-layout">
-      <aside className="auth-editorial">
+      <aside className="auth-editorial auth-editorial--workspace">
         <Brand />
         <div className="editorial-copy">
-          <p className="eyebrow">LE SPORT RAPPROCHE LES BONNES PERSONNES</p>
+          <p className="eyebrow">VOTRE DOSSIER SPORTIF. VOTRE RÉSEAU.</p>
           <h2>
-            La suite de votre
+            Tous vos sports.
             <br />
-            parcours commence <em>ici.</em>
+            Un espace <em>pour avancer.</em>
           </h2>
         </div>
         <img
-          src="/studio-images/coach.webp"
-          alt="Portrait d’un coach de padel fictif"
+          src="/app-visuals/studio-web-profil-trust.png"
+          alt="Capture de la démo web : profil multisport, niveaux, clubs, agent et références"
         />
         <span className="editorial-caption">
-          SPORT. PEOPLE. OPPORTUNITIES. <ArrowUpRight size={19} />
+          INTERFACE RÉELLE DE LA DÉMO · DONNÉES FICTIVES <ArrowUpRight size={19} />
         </span>
       </aside>
       <section className="auth-content">

@@ -1,4 +1,33 @@
 /* Web integration only. Imported mobile app styles remain namespaced. */
+body:has(.studio-surface) .auth-editorial--workspace {background:linear-gradient(145deg,#293523,#15191b 65%);}
+body:has(.studio-surface) .auth-editorial--workspace::after {display:none;}
+body:has(.studio-surface) .auth-editorial--workspace .editorial-copy {position:relative;inset:auto;margin:65px 0 34px;}
+body:has(.studio-surface) .auth-editorial--workspace .editorial-copy .eyebrow {font-size:12px;line-height:1.5;}
+body:has(.studio-surface) .auth-editorial--workspace > img {position:relative;inset:auto;width:100%;height:auto;object-fit:contain;filter:none;z-index:auto;transform:rotate(-3deg);border:1px solid #768269;border-radius:8px;box-shadow:0 25px 60px #0006;}
+body:has(.studio-surface) .auth-editorial--workspace .editorial-caption {font-size:12px;line-height:1.6;}
+@media (min-width:900px) and (max-height:850px) {
+ body:has(.studio-surface) .auth-editorial--workspace .editorial-copy {margin-top:30px;}
+ body:has(.studio-surface) .auth-editorial--workspace > img {max-height:330px;}
+}
+@media (min-width: 1100px) {
+  body:has(.studio-surface) .trust-profile {display:grid;grid-template-columns:1fr 1fr;gap:0 24px;}
+  body:has(.studio-surface) .trust-profile > .mini-kicker,
+  body:has(.studio-surface) .trust-profile > .trust-sport-pills {grid-column:1 / -1;}
+  body:has(.studio-surface) .trust-filters[open] {display:block;}
+  body:has(.studio-surface) .trust-filter-fields {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;}
+  body:has(.studio-surface) .trust-filter-fields > button {grid-column:1 / -1;justify-self:start;}
+  .studio-page-disciplines .event-form {grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;}
+  .studio-page-disciplines .event-form > :not(.trust-card) {grid-column:1 / -1;}
+}
+body:has(.studio-surface) .trust-card p {font-size:16px;}
+body:has(.studio-surface) .trust-card label {font-size:14px;}
+body:has(.studio-surface) .trust-profile strong {font-size:16px;}
+body:has(.studio-surface) .trust-profile small {font-size:13px;}
+body:has(.studio-surface) .trust-card small {font-size:13px;}
+body:has(.studio-surface) .trust-profile > a {min-width:0;}
+body:has(.studio-surface) .trust-profile > a > span {min-width:0;overflow-wrap:anywhere;}
+body:has(.studio-surface) .trust-sport-pills > span {font-size:13px;}
+body:has(.studio-surface) .trust-safety-actions button {font-size:14px;}
 body:has(.studio-surface) {
   --app-width: 100%;
   background: #080a0c;

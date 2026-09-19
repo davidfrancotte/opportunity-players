@@ -1,5 +1,17 @@
 # Arena Studio integration — 19 September 2026
 
+## Trust / multisport update
+
+The web member area now includes disciplines and per-sport rankings/clubs, agent declarations and reciprocal-link simulation, pending document/photo metadata, professional reviews, reports and blocking, signup notices and a second simulated code, and referral qualification. Seven additional member routes remain under `/espace/`. Source rules match the mobile demo; desktop sidebar, profile columns and two-pane messaging are preserved.
+
+The public Application page explains all features and their separate benefits for athletes, professionals and collectives. Safety and referral descriptions explicitly distinguish prototype behaviour from production requirements. The home page has three keyboard-accessible screenshot tabs: profile, player filters and safety. The login/onboarding editorial panel uses an actual updated desktop screenshot.
+
+Screenshots `studio-web-*-trust.png` are 1440×1000 captures of the implemented desktop UI. Updated mobile captures are 780×1688 (390×844 at 2x), including the dossier, level filters, messages, safety and referral screens. These are real prototype interactions with fictional records, not generated mockups.
+
+47 shared rule tests pass. Desktop flows and new routes were checked in Chrome at 390/900/1440 CSS pixels; no new server authentication, uploads, real moderation or billing has been introduced.
+
+Older sync scripts are migration utilities, not automatic synchronization. Do not run them over the web adaptations without reviewing route and desktop-layout differences.
+
 - `/application`: five features and separate benefits for athletes, professionals and collectives.
 - `/espace/connexion`: entry to the simulated member experience, imported from the approved mobile app.
 - `/espace/*`: namespaced mobile routes, in-memory interactions and subscription gates. No real identity, email, messaging or payment service.

@@ -102,16 +102,17 @@ export default function Home() {
             ↗
           </span>
           <p>
-            Sur ordinateur comme sur mobile, votre réseau sportif prend vie.
-            Mettez votre parcours en valeur, suivez les publications de votre
-            communauté et découvrez de nouvelles opportunités. Puis passez du
-            contact au terrain : invitez vos partenaires, trouvez un créneau
-            commun et organisez votre prochain match.
+            Plusieurs sports. Un seul réseau. Présentez vos niveaux et vos clubs
+            pour chaque discipline, ajoutez votre CV et vos références, et rendez
+            visible votre lien avec un agent. Trouvez les bons profils grâce aux
+            filtres de niveau et de parcours, échangez et organisez votre prochain
+            match. Sur ordinateur comme sur mobile, chaque rencontre part de ce
+            qui vous rapproche.
           </p>
         </div>
         <WebWorkspacePreview />
         <div className="section-bottom">
-          <span>VOTRE PROFIL. VOTRE RÉSEAU. VOS OPPORTUNITÉS.</span>
+          <span>VOS SPORTS. VOTRE PARCOURS. VOS PROCHAINES RENCONTRES.</span>
           <Link className="text-link" href="/plateforme">
             Explorer la plateforme <ArrowUpRight size={18} />
           </Link>

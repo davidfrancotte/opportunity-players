@@ -41,6 +41,8 @@ import {
 } from '@/components/studio/ui/dialog';
 import { useDemo } from './demo-provider';
 import { PlanStatus } from './subscription-ui';
+import { ProfileExtensions } from './trust-screens';
+import { moderateText } from '@/lib/studio/trust';
 import { EventHeader } from './event-navigation';
 import {
   Brand,
@@ -75,6 +77,11 @@ function BottomNav() {
   const route = usePathname();
   const pathname = route === '/espace' ? '/espace/accueil' : route;
   const current = [
+    '/espace/disciplines',
+    '/espace/agent',
+    '/espace/documents',
+    '/espace/securite',
+    '/espace/parrainage',
     '/espace/modifier-profil',
     '/espace/parcours',
     '/espace/medias',
@@ -256,6 +263,12 @@ export function ProfilePage({
       period: String(data.get('period') || '').trim(),
       description: String(data.get('description') || '').trim(),
     };
+    if (moderateText(JSON.stringify(record))) {
+      notify(
+        'Contenu bloqué par le filtre de démonstration. Reformulez cette expérience.',
+      );
+      return;
+    }
     if (!record.title || !record.organisation || !record.period) {
       notify(
         'Complétez le rôle, l’organisation et la période avant d’enregistrer.',
@@ -291,6 +304,16 @@ export function ProfilePage({
         </span>
       </div>
       {tab === 'about' && <PlanStatus />}
+      {tab !== 'about' && (
+        <Link
+          className="action secondary"
+          href={tab === 'media' ? '/espace/documents' : '/espace/disciplines'}
+        >
+          {tab === 'media'
+            ? 'Ajouter un document ou une photo'
+            : 'Gérer mes sports, niveaux et clubs'}
+        </Link>
+      )}
       <nav className="profile-subnav" aria-label="Rubriques de mon profil">
         <Link
           href="/espace/profil"
@@ -367,6 +390,7 @@ export function ProfilePage({
           </aside>
         )}
         <section className="profile-content">
+          {tab === 'about' && <ProfileExtensions />}
           {tab === 'about' && (
             <Button
               className="completion-card"
@@ -781,6 +805,18 @@ export function EditProfile() {
     e.preventDefault();
     const next = {
       ...draft,
+      disciplines: draft.disciplines.some((r) => r.sport === draft.sport)
+        ? draft.disciplines
+        : [
+            ...draft.disciplines,
+            {
+              sport: draft.sport,
+              level: 'Loisir',
+              ranking: '',
+              federation: '',
+              clubs: [],
+            },
+          ],
       firstName: draft.firstName.trim(),
       lastName: draft.lastName.trim(),
       headline: draft.headline.trim(),
@@ -798,6 +834,9 @@ export function EditProfile() {
       ].slice(0, 8),
     };
     const issues = validateProfile(next);
+    if (moderateText(JSON.stringify(next)))
+      issues.bio =
+        'Contenu bloqué par le filtre de démonstration. Reformulez les informations.';
     setErrors(issues);
     focusError(issues);
     if (Object.keys(issues).length) return;

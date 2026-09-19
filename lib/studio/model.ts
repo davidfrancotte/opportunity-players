@@ -25,6 +25,8 @@ export type Experience = {
   description: string;
 };
 export type Profile = {
+  disciplines: SportRecord[];
+  agent: AgentRecord;
   firstName: string;
   lastName: string;
   email: string;
@@ -54,6 +56,23 @@ export const photos = [
   },
 ];
 export const initialProfile: Profile = {
+  disciplines: [
+    {
+      sport: 'Padel',
+      level: 'Compétition',
+      ranking: 'P500 · exemple',
+      federation: 'Belgique · déclaration fictive',
+      clubs: [
+        {
+          id: 'club-initial',
+          name: 'Club Horizon · fictif',
+          current: true,
+          period: '2023 — aujourd’hui',
+        },
+      ],
+    },
+  ],
+  agent: { name: '', memberId: '', status: 'none' },
   firstName: 'Alex',
   lastName: 'Dupont',
   email: DEMO_EMAIL,
@@ -156,6 +175,8 @@ export function createProfile(identity: Identity): Profile {
     objective: '',
     skills: [],
     experiences: [],
+    disciplines: [],
+    agent: { name: '', memberId: '', status: 'none' },
     media: [],
   };
 }
@@ -196,6 +217,29 @@ export function cvText(profile: Profile) {
     'COMPÉTENCES',
     profile.skills.join(' · ') || 'À compléter',
     '',
+    'DISCIPLINES ET CLUBS · INFORMATIONS DÉCLARÉES',
+    ...profile.disciplines.flatMap((r) => [
+      r.sport + ' · ' + r.level + ' · ' + r.ranking,
+      r.federation,
+      ...r.clubs.map(
+        (c) =>
+          c.name +
+          ' · ' +
+          c.period +
+          ' · ' +
+          (c.current ? 'Club actuel' : 'Ancien club'),
+      ),
+      '',
+    ]),
+    'AGENT',
+    profile.agent.status === 'none'
+      ? 'Aucun agent déclaré'
+      : profile.agent.name +
+        ' · ' +
+        (profile.agent.status === 'confirmed'
+          ? 'Confirmation simulée'
+          : 'Relation déclarée, non vérifiée'),
+    '',
     'PARCOURS',
     ...profile.experiences.flatMap((x) => [
       x.title,
@@ -206,3 +250,4 @@ export function cvText(profile: Profile) {
     'Document généré localement. Ne constitue pas le CV d’une personne réelle.',
   ].join('\n');
 }
+import type { SportRecord, AgentRecord } from './trust';

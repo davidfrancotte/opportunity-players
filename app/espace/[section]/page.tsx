@@ -2,6 +2,13 @@ import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import { StudioScreen } from '@/components/studio/studio-screen';
 const screens: Record<string, string> = {
+  disciplines: 'Sports, niveaux et clubs',
+  agent: 'Mon agent',
+  documents: 'CV et références',
+  securite: 'Sécurité et modération',
+  parrainage: 'Inviter mon réseau',
+  confidentialite: 'Confidentialité et charte',
+  'double-facteur': 'Seconde validation',
   accueil: 'Accueil',
   reseau: 'Mon réseau',
   jouer: 'Jouer ensemble',

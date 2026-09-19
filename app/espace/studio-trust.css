@@ -1,0 +1,290 @@
+/* Scoped trust and multisport UI from the mobile demo. */
+body:has(.studio-surface) .trust-profile {
+  border-radius: 20px;
+  margin: 24px 0;
+  border: 1px solid #ffffff20;
+  padding: 20px;
+  background: #181d1e;
+}
+body:has(.studio-surface) .trust-profile > a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 17px 0;
+  border-bottom: 1px solid #ffffff13;
+}
+body:has(.studio-surface) .trust-profile > a:last-child {
+  border: 0;
+}
+body:has(.studio-surface) .trust-profile strong {
+  font-size: 14px;
+}
+body:has(.studio-surface) .trust-profile small {
+  display: block;
+  color: #9faa9f;
+  font-size: 12px;
+  margin-top: 5px;
+}
+body:has(.studio-surface) .trust-sport-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 15px 0;
+}
+body:has(.studio-surface) .trust-sport-pills > span,
+body:has(.studio-surface) .trust-badge {
+  font-size: 11px;
+  color: #d1f94c;
+  background: #d1f94c0d;
+  padding: 8px 10px;
+  line-height: 1.6;
+}
+body:has(.studio-surface) .trust-card {
+  border-radius: 18px;
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid #ffffff20;
+  background: #171c1e;
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+body:has(.studio-surface) .trust-card h2 {
+  font-size: 23px;
+  letter-spacing: -0.6px;
+  line-height: 1.25;
+}
+body:has(.studio-surface) .trust-card h3 {
+  font-size: 17px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+body:has(.studio-surface) .trust-card p {
+  font-size: 14px;
+  color: #c1cac4;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+body:has(.studio-surface) .trust-card small {
+  display: block;
+  font-size: 12px;
+  color: #96a69b;
+  line-height: 1.7;
+}
+body:has(.studio-surface) .trust-card > svg {
+  color: #d1f94c;
+}
+body:has(.studio-surface) .trust-card label {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+}
+body:has(.studio-surface) .trust-card .event-check {
+  display: flex;
+}
+body:has(.studio-surface) .trust-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+body:has(.studio-surface) .trust-club {
+  border-top: 1px solid #ffffff24;
+  padding: 14px 0;
+  display: grid;
+  gap: 13px;
+}
+body:has(.studio-surface) .trust-club legend {
+  color: #d1f94c;
+  font-size: 12px;
+  padding-right: 10px;
+}
+body:has(.studio-surface) .trust-upload {
+  border: 1px dashed #d1f94c66;
+  padding: 20px;
+  display: grid;
+  gap: 15px;
+}
+body:has(.studio-surface) .trust-upload input {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  font-size: 13px;
+}
+body:has(.studio-surface) .trust-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+body:has(.studio-surface) .trust-score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #d1f94c !important;
+}
+body:has(.studio-surface) .trust-safety-actions {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0;
+}
+body:has(.studio-surface) .trust-safety-actions button {
+  font-size: 12px;
+  min-height: 44px;
+  flex: 1;
+}
+body:has(.studio-surface) .trust-card button,
+body:has(.studio-surface) .trust-card select,
+body:has(.studio-surface) .trust-upload {
+  min-height: 44px;
+}
+body:has(.studio-surface) .trust-card [data-slot="native-select-wrapper"] {
+  width: 100%;
+}
+body:has(.studio-surface) .trust-card summary {
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 44px;
+}
+body:has(.studio-surface) .trust-dossier {
+  margin: 20px 0;
+}
+body:has(.studio-surface) .trust-reward {
+  border-radius: 22px;
+  padding: 27px;
+  background: #d1f94c;
+  color: #101214;
+  margin: 20px 0;
+}
+body:has(.studio-surface) .trust-reward > strong {
+  display: block;
+  font-size: 68px;
+  letter-spacing: -3px;
+  line-height: 1.3;
+}
+body:has(.studio-surface) .trust-reward h2 {
+  font-size: 26px;
+  line-height: 1.2;
+  margin: 8px 0 20px;
+}
+body:has(.studio-surface) .trust-reward p {
+  font-size: 15px;
+  line-height: 1.6;
+}
+body:has(.studio-surface) .trust-reward small {
+  display: block;
+  font-size: 12px;
+  margin-top: 18px;
+  line-height: 1.7;
+}
+body:has(.studio-surface) .trust-reward .mini-kicker {
+  color: #38431e;
+}
+body:has(.studio-surface) .referral-steps {
+  display: grid;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+}
+body:has(.studio-surface) .referral-steps li {
+  font-size: 13px;
+  color: #879587;
+  padding-left: 18px;
+  border-left: 3px solid #ffffff22;
+}
+body:has(.studio-surface) .referral-steps [data-complete="true"] {
+  border-color: #d1f94c;
+  color: #d1f94c;
+}
+body:has(.studio-surface) .trust-consents {
+  display: grid;
+  gap: 16px;
+  margin: 24px 0;
+}
+body:has(.studio-surface) .trust-consents label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+body:has(.studio-surface) .trust-consents input {
+  margin-top: 5px;
+  accent-color: #d1f94c;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+body:has(.studio-surface) .trust-consents a {
+  color: #d1f94c;
+  text-decoration: underline;
+}
+body:has(.studio-surface) .trust-filters {
+  border-radius: 18px;
+  border: 1px solid #ffffff20;
+  margin: 18px 0;
+  padding: 16px;
+  display: grid;
+  gap: 14px;
+}
+body:has(.studio-surface) .trust-filters label {
+  font-size: 13px;
+  display: grid;
+  gap: 8px;
+}
+body:has(.studio-surface) .trust-filters summary {
+  min-height: 40px;
+  font-size: 14px;
+  cursor: pointer;
+}
+body:has(.studio-surface) .trust-filters[open] > div {
+  display: grid;
+  gap: 14px;
+}
+body:has(.studio-surface) .trust-filter-hint {
+  font-size: 12px;
+  color: #a4b49e;
+  line-height: 1.6;
+}
+body:has(.studio-surface) .trust-card .event-form {
+  margin-top: 14px;
+}
+body:has(.studio-surface) .trust-filters {
+  width: 100%;
+}
+body:has(.studio-surface) .trust-filters[open] {
+  display: block;
+}
+body:has(.studio-surface) .trust-filters label {
+  margin-top: 14px;
+}
+body:has(.studio-surface) .trust-filters input,
+body:has(.studio-surface) .trust-filters select {
+  width: 100%;
+  min-height: 44px;
+  background: #222a2c;
+  color: #edf2e9;
+  border: 1px solid #ffffff30;
+  border-radius: 5px;
+  padding: 10px;
+}
+body:has(.studio-surface) .trust-filters button {
+  margin-top: 14px;
+}
+body:has(.studio-surface) .trust-consents label {
+  display: block;
+  padding-left: 30px;
+  position: relative;
+}
+body:has(.studio-surface) .trust-consents input {
+  position: absolute;
+  left: 0;
+  top: 1px;
+}
+body:has(.studio-surface) .trust-consents a {
+  display: inline;
+}
+body:has(.studio-surface) .trust-reward code {
+  overflow-wrap: anywhere;
+}

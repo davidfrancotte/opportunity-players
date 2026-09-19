@@ -19,6 +19,7 @@ const screens = [
   'personnalisation',
   'presentation',
   'mot-de-passe-oublie',
+  'disciplines', 'agent', 'documents', 'securite', 'parrainage', 'confidentialite', 'double-facteur',
 ];
 const social = screens.slice(0, 10);
 for (const screen of screens) {
@@ -105,9 +106,11 @@ for (const screen of [
   'messages',
   'opportunities',
   'profil',
+  'securite',
+  'parrainage',
 ]) {
   assert.ok(app.includes('id="' + screen + '"'));
-  const file = '/app-visuals/studio-' + screen + '.png';
+  const file = '/app-visuals/studio-' + (screen === 'reseau' ? 'reseau-niveaux' : screen === 'profil' ? 'disciplines' : screen) + '.png';
   assert.ok(app.includes(file));
   const r = await fetch(base + file);
   assert.equal(r.status, 200);
@@ -136,5 +139,5 @@ for (const name of ['model', 'social', 'pricing'])
     fs.existsSync(new URL('../lib/studio/' + name + '.ts', import.meta.url)),
   );
 console.log(
-  'PASS: 16 Studio routes, legacy redirects, 5 real screen assets, homepage links, feature benefits and approved pricing.',
+  'PASS: Studio routes, legacy redirects, real screen assets, homepage links, feature benefits and approved pricing.',
 );

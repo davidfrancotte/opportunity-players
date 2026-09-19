@@ -105,9 +105,10 @@ export function AppShowcase({ variant = 'home' }: AppShowcaseProps) {
           )}
         </h2>
         <p>
-          Opportunity Players existe aussi en application mobile. Votre
-          parcours, vos contacts et les échanges autour de votre sport vous
-          accompagnent au-delà du terrain.
+          Retrouvez votre fil sportif, vos matchs et votre réseau dans la poche.
+          La nouvelle expérience Arena ajoute un parcours multisport, vos niveaux
+          et clubs, votre agent et vos références, ainsi que des espaces dédiés
+          aux signalements et au parrainage.
         </p>
         <Link href="/application" className="app-demo-link">
           Explorer l’application <ArrowUpRight size={20} aria-hidden="true" />
