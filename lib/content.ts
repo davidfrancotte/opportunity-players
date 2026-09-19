@@ -211,7 +211,7 @@ export const faqs = [
   ],
   [
     'Puis-je créer un compte gratuitement ?',
-    'Oui. La plateforme actuelle propose un accès gratuit, sans carte bancaire. Certaines fonctions sont réservées au Premium. Les droits et tarifs applicables sont ceux présentés sur la plateforme au moment de votre inscription.',
+    'Oui, la création de compte est gratuite pour les sportifs, les professionnels et les collectifs. Les formules Premium Arena Studio sont de 2,99 €/mois pour les sportifs, 14,99 €/mois pour les professionnels et 29,99 €/mois pour les collectifs. La page Formules détaille les droits de chaque offre. Aucun paiement n’est traité dans cette démonstration.',
   ],
   [
     'Que puis-je mettre dans mon profil sportif ?',
@@ -219,7 +219,7 @@ export const faqs = [
   ],
   [
     'Comment entrer en relation avec un club ou un professionnel ?',
-    'La plateforme permet de rechercher des profils, de suivre leur activité et d’accéder à une messagerie. Les possibilités de premier contact dépendent de votre offre et des règles de la plateforme.',
+    'Recherchez un profil dans Réseau puis ouvrez une conversation. Les sportifs gratuits disposent de cinq messages envoyés par mois. Les professionnels et collectifs doivent être abonnés pour communiquer avec les joueurs et recevoir des messages ou des commentaires. Un destinataire professionnel ou collectif gratuit ne peut pas recevoir de message, même si l’expéditeur est abonné.',
   ],
   [
     'Faut-il être professionnel ou vivre en Europe ?',
@@ -235,6 +235,6 @@ export const faqs = [
   ],
   [
     'Cette nouvelle version remplace-t-elle mon compte ?',
-    'Non. Arena est pour le moment une préversion du site public. Les inscriptions, connexions et échanges sont ouverts sur la plateforme actuelle. Aucun compte n’est créé ou modifié dans cette préversion.',
+    'Non. Le bouton Connexion ouvre la démonstration Arena Studio, avec le même design et les mêmes fonctionnalités que la démo mobile. Les profils et échanges sont fictifs et s’effacent au rechargement. Vos véritables comptes restent sur la plateforme actuelle ; n’utilisez pas vos identifiants réels dans la démo.',
   ],
 ];

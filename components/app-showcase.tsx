@@ -18,10 +18,14 @@ const stores = [
   ],
 ] as const;
 
-/** Replace screenSrc only with an approved capture of the real future app.
- * The default screen is explicitly a placeholder, never a fabricated capture.
- */
-function AppPhone({ label, screenSrc }: { label: string; screenSrc?: string }) {
+/** Screens are captures of the implemented Arena Studio demo, not invented UI. */
+export function AppPhone({
+  label,
+  screenSrc,
+}: {
+  label: string;
+  screenSrc?: string;
+}) {
   return (
     <Phone3D label={label} screenSrc={screenSrc}>
       <Image
@@ -74,16 +78,9 @@ type AppShowcaseProps = {
   audience?: string;
 };
 
-export function AppShowcase({ variant = 'home', audience }: AppShowcaseProps) {
+export function AppShowcase({ variant = 'home' }: AppShowcaseProps) {
   const isPlatform = variant === 'platform';
-  const label =
-    audience === 'organisations'
-      ? 'Profil de votre organisation'
-      : audience === 'professionnels'
-        ? 'Profil professionnel'
-        : variant === 'home'
-          ? 'Fil d’actualité'
-          : 'Profil sportif';
+  const label = 'Accueil de l’application Arena Studio';
   return (
     <section
       className={`section app-showcase app-showcase--${variant}`}
@@ -112,9 +109,8 @@ export function AppShowcase({ variant = 'home', audience }: AppShowcaseProps) {
           parcours, vos contacts et les échanges autour de votre sport vous
           accompagnent au-delà du terrain.
         </p>
-        <Link href="/espace" className="app-demo-link">
-          Explorer la démo web Arena{' '}
-          <ArrowUpRight size={20} aria-hidden="true" />
+        <Link href="/application" className="app-demo-link">
+          Explorer l’application <ArrowUpRight size={20} aria-hidden="true" />
         </Link>
         <div className="app-store-area">
           <span className="app-store-label">
@@ -139,30 +135,36 @@ export function AppShowcase({ variant = 'home', audience }: AppShowcaseProps) {
           </div>
         </div>
         <p className="app-showcase-disclosure">
-          Les smartphones présentent des emplacements provisoires. Ils
-          accueilleront les captures réelles de la future app Arena ; les liens
-          de téléchargement ouvrent l’application actuelle.
+          Aperçu réel de notre démo Arena Studio, avec des contenus fictifs. Les
+          liens de téléchargement ouvrent l’application actuelle, dont le design
+          peut différer.
         </p>
       </div>
       <AppPhoneStage duo={isPlatform}>
         <span className="app-stage-word" aria-hidden="true">
-          ON
-          <br />
-          THE
-          <br />
-          MOVE.
+          <span>ON</span>
+          <span>THE</span>
+          <span>MOVE.</span>
         </span>
-        {isPlatform && (
-          <div className="app-phone-secondary">
-            <AppPhone label="Messagerie" />
+        <div className="app-phone-scene">
+          {isPlatform && (
+            <div className="app-phone-secondary">
+              <AppPhone
+                label="Messagerie Arena Studio"
+                screenSrc="/app-visuals/studio-messages.png"
+              />
+            </div>
+          )}
+          <div className="app-phone-primary">
+            <AppPhone
+              label={label}
+              screenSrc="/app-visuals/studio-accueil.png"
+            />
           </div>
-        )}
-        <div className="app-phone-primary">
-          <AppPhone label={label} />
         </div>
         <figcaption>
           <span>APP MOBILE / ARENA</span>
-          <span>CAPTURES À VENIR</span>
+          <span>APERÇU ARENA STUDIO</span>
         </figcaption>
       </AppPhoneStage>
     </section>

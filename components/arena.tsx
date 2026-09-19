@@ -62,7 +62,7 @@ export function Header() {
     ['Pour vous', '/pour-vous/sportifs'],
     ['Les sports', '/sports'],
     ['Formules', '/tarifs'],
-    ['Démo de l’app', '/espace'],
+    ['L’application', '/application'],
   ];
   return (
     <header className="site-header">
@@ -79,9 +79,9 @@ export function Header() {
         ))}
       </nav>
       <div className="header-actions">
-        <a className="login-link" href={`${currentSite}/connexion`}>
-          Connexion <ExternalLink size={11} />
-        </a>
+        <Link className="login-link" href="/espace/connexion">
+          Connexion <ArrowUpRight size={13} />
+        </Link>
         <Link className="header-join" href="/rejoindre">
           Rejoindre le réseau <ArrowUpRight size={17} />
         </Link>
@@ -130,9 +130,13 @@ export function Header() {
                 <ArrowUpRight />
               </Link>
             </nav>
-            <a className="text-link" href={`${currentSite}/connexion`}>
-              Se connecter sur la plateforme actuelle <ExternalLink size={15} />
-            </a>
+            <Link
+              className="text-link"
+              href="/espace/connexion"
+              onClick={() => setOpen(false)}
+            >
+              Connexion <ArrowUpRight size={15} />
+            </Link>
           </DialogContent>
         </Dialog>
       </div>
@@ -156,7 +160,7 @@ export function Footer() {
         <div>
           <h3>Explorer</h3>
           <Link href="/plateforme">La plateforme</Link>
-          <Link href="/espace">Explorer la démo de l’app</Link>
+          <Link href="/application">Explorer l’application</Link>
           <Link href="/sports">Les sports</Link>
           <Link href="/tarifs">Les formules</Link>
           <Link href="/actualites">Le journal</Link>
@@ -166,7 +170,7 @@ export function Footer() {
           <Link href="/a-propos">Notre histoire</Link>
           <Link href="/#soutiens">Ils nous soutiennent</Link>
           <Link href="/aide">Aide & contact</Link>
-          <a href={`${currentSite}/connexion`}>Connexion ↗</a>
+          <Link href="/espace/connexion">Connexion ↗</Link>
           <Link href="/rejoindre">Rejoindre le réseau</Link>
         </div>
         <div>
@@ -195,9 +199,9 @@ export function Footer() {
       <p className="preview-disclosure">
         Préversion Arena · Illustrations des disciplines générées par IA. Les
         portraits de la section « Nous avons leur soutien » sont les photos
-        originales du site actuel. Écrans mobiles provisoires en attente des
-        captures de la future app. Les comptes et opérations restent sur la
-        plateforme actuelle.
+        originales du site actuel. Les écrans mobiles présentent la démo Arena
+        Studio. L’espace Connexion est une démonstration sans compte réel ni
+        paiement.
       </p>
     </footer>
   );
@@ -646,7 +650,7 @@ export function JoinFlow() {
         </span>
       </div>
       <p className="join-existing">
-        Déjà membre ? <a href={`${currentSite}/connexion`}>Se connecter ↗</a>
+        Déjà membre ? <Link href="/espace/connexion">Se connecter ↗</Link>
       </p>
     </div>
   );

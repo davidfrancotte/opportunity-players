@@ -243,19 +243,31 @@
   position: relative;
   margin: 0;
   min-width: 0;
-  height: 560px;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 14px;
+  container-type: inline-size;
   isolation: isolate;
 }
 .app-stage-word {
-  position: absolute;
-  top: 40px;
-  left: 0;
-  font-size: clamp(68px, 9vw, 140px);
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.25em;
+  font-size: clamp(24px, 8cqw, 56px);
   font-weight: 600;
-  line-height: 0.91;
-  letter-spacing: -0.07em;
-  color: #d2d9c8;
-  z-index: -1;
+  line-height: 1.1;
+  letter-spacing: -0.055em;
+  color: #59684b;
+  white-space: nowrap;
+}
+/* The slogan, animated scene and caption occupy separate rows. Clip only
+   the scene so neither the WebGL mesh nor the fallback can cover the text. */
+.app-phone-scene {
+  position: relative;
+  min-width: 0;
+  height: 560px;
+  overflow: clip;
 }
 .app-phone-primary {
   position: absolute;
@@ -394,10 +406,7 @@
   object-fit: cover;
 }
 .app-phone-stage figcaption {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   border-top: 1px solid #a5ae9b;
   padding-top: 13px;
   display: flex;
@@ -459,7 +468,7 @@
   color: #a2ad98;
 }
 .app-showcase--audience .app-stage-word {
-  color: #2c3623;
+  color: #a9bc94;
 }
 .app-showcase--audience .app-phone-stage figcaption {
   color: #b1bd9f;
@@ -486,7 +495,7 @@
   .app-showcase {
     gap: 0;
   }
-  .app-phone-stage {
+  .app-phone-scene {
     height: 480px;
   }
   .app-phone {
@@ -541,6 +550,8 @@
   .app-phone-stage {
     width: min(460px, 100%);
     justify-self: center;
+  }
+  .app-phone-scene {
     height: 510px;
   }
   .app-phone {
@@ -560,9 +571,6 @@
   }
   .app-phone-stage--duo .app-phone-secondary {
     transform: translate(-3%, -1%) rotate(-9deg);
-  }
-  .app-stage-word {
-    font-size: 120px;
   }
 }
 @media (max-width: 460px) {
@@ -588,7 +596,7 @@
     gap: 10px;
     font-size: 14px;
   }
-  .app-phone-stage {
+  .app-phone-scene {
     height: 480px;
   }
   .app-phone {

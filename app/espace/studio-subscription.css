@@ -1,0 +1,377 @@
+/* Generated from the approved Arena Studio app; use scripts/sync-studio.mjs. */
+body:has(.studio-surface) .free-plan-note {
+  padding: 16px;
+  border: 1px solid #3e4d31;
+  border-radius: 15px;
+  background: #20291d;
+  color: #c1ceba;
+  font-size: 12px;
+  line-height: 1.65;
+  margin: 18px 0;
+}
+body:has(.studio-surface) .free-plan-note > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #dcf0b4;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+body:has(.studio-surface) .free-plan-note small {
+  font-size: 10px;
+  display: block;
+  color: #95a98a;
+  margin-top: 8px;
+}
+body:has(.studio-surface) .plan-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+  padding: 17px;
+  border: 1px solid #3b4c2c;
+  border-radius: 17px;
+  background: linear-gradient(110deg, #293620, #1c251c);
+  color: #e7f4d4;
+}
+body:has(.studio-surface) .plan-status .plan-icon {
+  flex-shrink: 0;
+  color: #d1f94c;
+}
+body:has(.studio-surface) .plan-status > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+body:has(.studio-surface) .plan-status strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+}
+body:has(.studio-surface) .plan-status small {
+  display: block;
+  font-size: 10px;
+  color: #aabf98;
+  line-height: 1.5;
+  margin-top: 5px;
+}
+body:has(.studio-surface) .plan-status > svg {
+  flex-shrink: 0;
+  color: #d1f94c;
+}
+body:has(.studio-surface) .plan-status.compact {
+  padding: 13px 15px;
+  margin: 14px 0 18px;
+}
+body:has(.studio-surface) .premium-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: #d1f94c;
+}
+body:has(.studio-surface) .premium-benefits {
+  list-style: none;
+  display: grid;
+  gap: 14px;
+  margin: 22px 0;
+  padding: 0;
+}
+body:has(.studio-surface) .premium-benefits li {
+  display: flex;
+  gap: 10px;
+  align-items: start;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #d3dfc9;
+}
+body:has(.studio-surface) .premium-benefits svg {
+  flex-shrink: 0;
+  color: #d1f94c;
+  margin-top: 2px;
+}
+body:has(.studio-surface) .keep-free {
+  min-height: 44px;
+  width: 100%;
+  justify-content: center;
+  font-size: 12px;
+  color: #bac9b0;
+}
+body:has(.studio-surface) .upgrade-modal .demo-context {
+  text-align: center;
+  margin: 5px 0 0;
+  font-size: 10px;
+}
+body:has(.studio-surface) .locked-feature {
+  background: #1e281c;
+  border: 1px solid #3a4d2c;
+  padding: 22px 18px;
+  border-radius: 17px;
+  margin: 18px 0;
+}
+body:has(.studio-surface) .locked-feature > svg {
+  color: #d1f94c;
+  margin-bottom: 12px;
+}
+body:has(.studio-surface) .locked-feature h3 {
+  font-size: 19px;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+body:has(.studio-surface) .locked-feature p {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #aabc9d;
+}
+body:has(.studio-surface) .locked-feature button {
+  margin-top: 14px;
+  min-height: 44px;
+  font-size: 12px;
+  border-radius: 12px;
+}
+body:has(.studio-surface) .subscription-hero {
+  padding: 28px 0 21px;
+}
+body:has(.studio-surface) .subscription-hero h1 {
+  font-size: clamp(32px, 9vw, 42px);
+  font-weight: 550;
+  letter-spacing: -0.065em;
+  line-height: 1.12;
+  margin: 16px 0;
+}
+body:has(.studio-surface) .subscription-hero h1 > span {
+  color: #d1f94c;
+}
+body:has(.studio-surface) .subscription-hero > p {
+  color: #a8b79e;
+  font-size: 13px;
+  line-height: 1.65;
+  max-width: 310px;
+}
+body:has(.studio-surface) .subscription-current {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 15px 0;
+  border-block: 1px solid #303c2c;
+  font-size: 11px;
+  color: #c1cfb6;
+}
+body:has(.studio-surface) .subscription-current strong {
+  color: #d1f94c;
+  font-size: 10px;
+  font-weight: 500;
+}
+body:has(.studio-surface) .billing-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 5px;
+  border: 1px solid #3d4a34;
+  border-radius: 15px;
+  gap: 5px;
+  margin: 25px 0 17px;
+}
+body:has(.studio-surface) .billing-toggle button {
+  min-height: 44px;
+  border-radius: 10px;
+  color: #9aac8e;
+  font-size: 12px;
+}
+body:has(.studio-surface) .billing-toggle button[aria-pressed='true'] {
+  color: #17220d;
+  background: #d1f94c;
+}
+body:has(.studio-surface) .premium-offer {
+  margin-top: 24px;
+  border: 1px solid #67833c;
+  border-radius: 23px;
+  padding: 25px 22px;
+  background: linear-gradient(145deg, #28351e, #19231b);
+}
+body:has(.studio-surface) .plan-monthly {
+  display: block;
+  font-style: normal;
+  font-size: 10px;
+  color: #d1f94c;
+  margin-top: 6px;
+}
+body:has(.studio-surface) .upgrade-price {
+  font-size: 30px;
+  letter-spacing: -0.04em;
+  color: #e7f9ca;
+  margin: 4px 0;
+}
+body:has(.studio-surface) .upgrade-price > span {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0;
+  color: #9faf93;
+  margin-top: 4px;
+}
+body:has(.studio-surface) .all-plan-prices {
+  border: 1px solid #35452b;
+  border-radius: 17px;
+  padding: 20px;
+  margin: 24px 0;
+}
+body:has(.studio-surface) .all-plan-prices h2 {
+  font-size: 20px;
+  letter-spacing: -0.035em;
+  margin-bottom: 12px;
+}
+body:has(.studio-surface) .all-plan-prices > div {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 13px 0;
+  border-top: 1px solid #303c29;
+  font-size: 12px;
+}
+body:has(.studio-surface) .all-plan-prices strong {
+  color: #d1f94c;
+  font-weight: 500;
+}
+body:has(.studio-surface) .all-plan-prices small {
+  color: #a6b894;
+  margin-left: 4px;
+}
+body:has(.studio-surface) .subscription-price {
+  margin: 21px 0 12px;
+}
+body:has(.studio-surface) .subscription-price small {
+  display: block;
+  color: #a8bd93;
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+body:has(.studio-surface) .subscription-price strong {
+  font-size: 52px;
+  letter-spacing: -0.065em;
+  font-weight: 500;
+  color: #f1f7df;
+}
+body:has(.studio-surface) .subscription-price > span {
+  font-size: 15px;
+  color: #a5b991;
+  margin-left: 6px;
+}
+body:has(.studio-surface) .price-caveat {
+  font-size: 10px;
+  line-height: 1.6;
+  color: #b2c0a5;
+}
+body:has(.studio-surface) .unconfirmed-price {
+  font-size: 30px;
+  letter-spacing: -0.05em;
+  font-weight: 500;
+  margin: 20px 0 10px;
+}
+body:has(.studio-surface) .premium-offer .demo-context {
+  margin: 12px 0 0;
+  text-align: center;
+}
+body:has(.studio-surface) .premium-offer .action {
+  font-size: 12px;
+  white-space: normal;
+  gap: 8px;
+}
+body:has(.studio-surface) .plan-comparison,
+body:has(.studio-surface) .subscription-faq {
+  margin: 30px 0;
+}
+body:has(.studio-surface) .plan-comparison h2,
+body:has(.studio-surface) .subscription-faq h2 {
+  font-size: 23px;
+  letter-spacing: -0.045em;
+  margin-bottom: 18px;
+}
+body:has(.studio-surface) .plan-comparison table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 10px;
+}
+body:has(.studio-surface) .plan-comparison th,
+body:has(.studio-surface) .plan-comparison td {
+  text-align: left;
+  vertical-align: top;
+  padding: 13px 5px;
+  border-bottom: 1px solid #323f2c;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+body:has(.studio-surface) .plan-comparison th {
+  font-weight: 400;
+  color: #c6d2bb;
+}
+body:has(.studio-surface) .plan-comparison th:first-child {
+  width: 48%;
+  padding-left: 0;
+}
+body:has(.studio-surface) .plan-comparison thead th {
+  color: #d1f94c;
+  font-size: 11px;
+}
+body:has(.studio-surface) .plan-comparison td {
+  color: #a4b396;
+}
+body:has(.studio-surface) .plan-comparison .demo-context {
+  margin-top: 14px;
+}
+body:has(.studio-surface) .subscription-faq details {
+  padding: 16px 0;
+  border-bottom: 1px solid #303c29;
+}
+body:has(.studio-surface) .subscription-faq summary,
+body:has(.studio-surface) .subscription-demo-controls summary {
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.6;
+  min-height: 28px;
+}
+body:has(.studio-surface) .subscription-faq details > p {
+  font-size: 12px;
+  color: #a9b79e;
+  line-height: 1.8;
+  margin: 12px 0 2px;
+}
+body:has(.studio-surface) .pricing-source {
+  font-size: 10px;
+  line-height: 1.7;
+  color: #8fa17f;
+  margin: 20px 0;
+}
+body:has(.studio-surface) .pricing-source a {
+  text-decoration: underline;
+  color: #c7d8b5;
+}
+body:has(.studio-surface) .subscription-demo-controls {
+  padding: 18px;
+  border: 1px dashed #3e512d;
+  border-radius: 15px;
+  margin: 24px 0;
+}
+body:has(.studio-surface) .subscription-demo-controls label {
+  display: block;
+  font-size: 12px;
+  margin: 18px 0 9px;
+}
+body:has(.studio-surface) .subscription-demo-controls select {
+  font-size: 16px;
+  min-height: 48px;
+}
+body:has(.studio-surface) .subscription-demo-controls p {
+  font-size: 10px;
+  line-height: 1.7;
+  color: #a2b191;
+  margin: 12px 0;
+}
+body:has(.studio-surface) .subscription-demo-controls button {
+  min-height: 44px;
+  white-space: normal;
+  font-size: 11px;
+  width: 100%;
+}

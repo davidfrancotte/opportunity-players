@@ -45,11 +45,11 @@ for (const path of placements) {
   );
   assert.equal(
     (html.match(/data-app-screen="placeholder"/g) || []).length,
-    path === '/plateforme' ? 2 : 1,
-    path,
+    0,
+    `${path}: placeholders replaced by actual Studio captures`,
   );
-  assert.ok(html.includes('Capture à venir'), path);
-  assert.ok(html.includes('ÉCRAN PROVISOIRE'), path);
+  assert.ok(html.includes('/app-visuals/studio-accueil.png'), path);
+  assert.ok(!html.includes('ÉCRAN PROVISOIRE'), path);
   assert.ok(
     html.includes(
       'https://apps.apple.com/fr/app/opportunity-players/id6741804702',
@@ -62,7 +62,7 @@ for (const path of placements) {
     ),
     path,
   );
-  assert.ok(html.includes('href="/espace"'), path);
+  assert.ok(html.includes('href="/application"'), path);
   assert.ok(html.includes('APPLICATION ACTUELLE'), path);
 }
 const device = await get('/app-visuals/phone-placeholder.webp');
@@ -80,5 +80,5 @@ assert.match(
 assert.match(styles, /prefers-reduced-motion: reduce/);
 assert.match(styles, /hover: none/);
 console.log(
-  'PASS: 13 original supporter assets; hover/focus/touch/reduced-motion CSS; 5 app placements, 6 explicit placeholders; current store links; device asset.',
+  'PASS: 13 original supporter assets; hover/focus/touch/reduced-motion CSS; 5 app placements, 6 actual Studio captures; current store links; device asset.',
 );

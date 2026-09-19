@@ -1,123 +1,122 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { siteOrigin as origin } from '../lib/site-origin.ts';
-import {
-  demoMembers,
-  demoOpportunities,
-  memberPages,
-  initialPosts,
-  demoNotifications,
-} from '../lib/member-data.ts';
+import { demoMembers, demoOpportunities } from '../lib/member-data.ts';
 const base = process.argv[2] || 'http://localhost:3000';
-const routes = [
-  '/espace',
-  ...Object.keys(memberPages).map((x) => `/espace/${x}`),
-  ...demoMembers.map((x) => `/espace/membres/${x.slug}`),
-  ...demoOpportunities.map((x) => `/espace/opportunites/${x.slug}`),
+const screens = [
+  'accueil',
+  'reseau',
+  'messages',
+  'opportunities',
+  'profil',
+  'parcours',
+  'medias',
+  'modifier-profil',
+  'parametres',
+  'abonnement',
+  'connexion',
+  'inscription',
+  'verification',
+  'personnalisation',
+  'presentation',
+  'mot-de-passe-oublie',
 ];
-const known = new Set(routes);
-const escape = (s) => s.replaceAll('&', '&amp;').replaceAll('"', '&quot;');
-assert.equal(new Set(demoMembers.map((m) => m.slug)).size, demoMembers.length);
-assert.equal(
-  new Set(demoOpportunities.map((m) => m.slug)).size,
-  demoOpportunities.length,
-);
-for (const p of initialPosts)
-  assert.ok(demoMembers.some((m) => m.slug === p.author));
-for (const o of demoOpportunities)
-  assert.ok(demoMembers.some((m) => m.slug === o.member));
-for (const n of demoNotifications) assert.ok(known.has(n.href));
-let images = 0;
-let checkedMetadata = 0;
-for (const route of routes) {
-  const r = await fetch(base + route);
-  assert.equal(r.status, 200, route);
+const social = screens.slice(0, 10);
+for (const screen of screens) {
+  const r = await fetch(base + '/espace/' + screen);
+  assert.equal(r.status, 200, screen);
   const html = await r.text();
-  assert.ok(html.includes('DÉMO ARENA'), `${route}: disclosure`);
-  assert.ok(html.includes('id="main"'), `${route}: main landmark`);
+  assert.ok(html.includes('studio-surface'), screen + ': scoped Studio shell');
+  assert.ok(html.includes('id="main"'), screen + ': main landmark');
   assert.ok(
     !html.includes('<header class="site-header"'),
-    `${route}: member chrome`,
+    screen + ': no marketing header',
   );
-  assert.ok(
-    html.includes('aria-label="Espace membre"'),
-    `${route}: navigation`,
-  );
-  for (const img of html.matchAll(/<img\b[^>]*>/g)) {
-    if (!img[0].includes('/images/')) continue;
-    images++;
-    assert.ok(img[0].includes('-color.webp'), `${route}: color variant`);
-    assert.ok(img[0].includes('athlete-image'), `${route}: hover effect`);
-    assert.ok(/alt="[^"]+"/.test(img[0]), `${route}: alt`);
-  }
-  for (const link of html.matchAll(/href="(\/espace[^"#]*)"/g)) {
-    const path = link[1].split('?')[0];
-    assert.ok(known.has(path), `${route}: resolves ${path}`);
-  }
-  const member = demoMembers.find((m) => route === `/espace/membres/${m.slug}`);
-  const opportunity = demoOpportunities.find(
-    (o) => route === `/espace/opportunites/${o.slug}`,
-  );
-  if (member || opportunity) {
-    const record = member ?? opportunity;
-    const title = member
-      ? `${member.name} · Profil fictif Arena`
-      : `${opportunity.title} · Annonce fictive Arena`;
-    const description = member
-      ? `${member.role} · ${member.sport} · ${member.city}. Profil de démonstration, sans représentation d’un membre réel.`
-      : `${opportunity.intro} Démonstration : aucune offre réelle.`;
+  assert.ok(html.includes('aucun paiement'), screen + ': demo disclosure');
+  if (social.includes(screen)) {
     assert.ok(
-      html.includes(`<title>${escape(title)}</title>`),
-      `${route}: title`,
+      html.includes('Navigation de l’application'),
+      screen + ': bottom nav',
     );
-    for (const field of ['og:title', 'twitter:title'])
+    for (const dest of [
+      'accueil',
+      'reseau',
+      'messages',
+      'opportunities',
+      'profil',
+    ])
       assert.ok(
-        html.includes(`${field}" content="${escape(title)}"`),
-        `${route}: ${field}`,
+        html.includes('href="/espace/' + dest + '"'),
+        screen + ': ' + dest,
       );
-    for (const field of ['og:description', 'twitter:description'])
-      assert.ok(
-        html.includes(`${field}" content="${escape(description)}"`),
-        `${route}: ${field}`,
-      );
-    for (const field of ['og:image', 'twitter:image'])
-      assert.ok(
-        html.includes(
-          `${field}" content="${origin}/images/${record.image}-color.webp"`,
-        ),
-        `${route}: ${field}`,
-      );
-    checkedMetadata++;
   }
-  console.log('OK', route);
+  for (const match of html.matchAll(/href="(\/[^"#?]*)/g)) {
+    assert.ok(
+      ![
+        '/accueil',
+        '/reseau',
+        '/messages',
+        '/profil',
+        '/abonnement',
+        '/inscription',
+      ].includes(match[1]),
+      screen + ': no standalone app route escape',
+    );
+  }
+  console.log('OK /espace/' + screen);
 }
 for (const route of [
-  '/espace/inexistant',
-  '/espace/membres/inexistant',
-  '/espace/opportunites/inexistant',
-])
-  assert.equal((await fetch(base + route)).status, 404, route);
-for (const query of ['Sarah', 'zzzzzz']) {
-  const r = await fetch(`${base}/espace/reseau?q=${query}`);
-  assert.equal(r.status, 200);
-  const html = await r.text();
-  const count = [...html.matchAll(/class="network-member-card"/g)].length;
-  assert.equal(count, query === 'Sarah' ? 1 : 0, 'query filter SSR');
+  '/espace',
+  '/connexion',
+  '/espace/opportunites',
+  '/espace/notifications',
+  ...demoMembers.map((m) => '/espace/membres/' + m.slug),
+  ...demoOpportunities.map((o) => '/espace/opportunites/' + o.slug),
+]) {
+  assert.equal(
+    (await fetch(base + route)).status,
+    200,
+    route + ': legacy link resolves',
+  );
 }
-const message = await fetch(`${base}/espace/messages?avec=horizon-padel`);
-assert.equal(message.status, 200);
-const source = fs.readFileSync(
-  new URL('../components/member-pages.tsx', import.meta.url),
-  'utf8',
-);
-assert.ok(
-  source.includes('autoComplete="given-name"') &&
-    source.includes('autoComplete="family-name"'),
-);
-assert.ok(
-  !/fetch\(|localStorage|sessionStorage/.test(source),
-  'no network mutations or browser persistence',
-);
+assert.equal((await fetch(base + '/espace/inconnu')).status, 404);
+const app = await (await fetch(base + '/application')).text();
+assert.ok(app.includes('Tout votre sport.'));
+for (const screen of [
+  'accueil',
+  'reseau',
+  'messages',
+  'opportunities',
+  'profil',
+]) {
+  assert.ok(app.includes('id="' + screen + '"'));
+  const file = '/app-visuals/studio-' + screen + '.png';
+  assert.ok(app.includes(file));
+  const r = await fetch(base + file);
+  assert.equal(r.status, 200);
+  const image = Buffer.from(await r.arrayBuffer());
+  assert.equal(image.readUInt32BE(16), 780);
+  assert.equal(image.readUInt32BE(20), 1688);
+}
+for (const role of ['Sportifs', 'Professionnels', 'Collectifs'])
+  assert.ok(app.includes(role));
+const home = await (await fetch(base + '/')).text();
+assert.ok(home.includes('/app-visuals/studio-accueil.png'));
+assert.ok(home.includes('Explorer l’application'));
+assert.ok(home.includes('href="/espace/connexion"'));
+assert.ok(!home.includes('Démo de l’app'));
+assert.ok(!home.includes('Explorer la démo web Arena'));
+const pricing = await (await fetch(base + '/tarifs')).text();
+for (const price of ['2,99 €', '14,99 €', '29,99 €'])
+  assert.ok(pricing.includes(price), price);
+assert.ok(!pricing.includes('19,99 €'));
+assert.ok(!pricing.includes('mensuelle ou annuelle'));
+assert.ok(pricing.includes('5 messages'));
+assert.ok(pricing.includes('Pas de création de publications'));
+assert.ok(pricing.includes('Pas de réception de messages ni de commentaires'));
+for (const name of ['model', 'social', 'pricing'])
+  assert.ok(
+    fs.existsSync(new URL('../lib/studio/' + name + '.ts', import.meta.url)),
+  );
 console.log(
-  `PASS: ${routes.length} member pages, ${images} image occurrences, ${checkedMetadata} record metadata sets, 3 error routes, filters and internal links.`,
+  'PASS: 16 Studio routes, legacy redirects, 5 real screen assets, homepage links, feature benefits and approved pricing.',
 );

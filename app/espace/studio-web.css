@@ -1,0 +1,75 @@
+/* Web integration only. Imported mobile app styles remain namespaced. */
+body:has(.studio-surface) {
+  --app-width: 480px;
+  background: #080a0c;
+}
+.studio-surface {
+  min-height: 100svh;
+}
+.studio-web-aside {
+  position: fixed;
+  top: 55px;
+  left: max(28px, calc(50% - 610px));
+  width: 285px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 22px;
+}
+.studio-web-aside .studio-back {
+  font-size: 13px;
+  color: #d1f94c;
+  margin-bottom: 45px;
+}
+.studio-web-label {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: #9ca69b;
+}
+.studio-web-aside h2 {
+  font-size: 48px;
+  line-height: 1.04;
+  letter-spacing: -0.055em;
+  font-weight: 500;
+}
+.studio-web-aside p {
+  color: #aab1ae;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.studio-web-aside > a {
+  font-size: 13px;
+}
+.studio-web-aside small {
+  font-size: 11px;
+  color: #8b9592;
+  line-height: 1.7;
+  max-width: 260px;
+}
+.studio-web-return {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 22px;
+  background: #171b1e;
+  border-bottom: 1px solid #ffffff0d;
+  font-size: 11px;
+  color: #b8c0b5;
+}
+body:has(.studio-surface) .text-link {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+body:has(.studio-surface) .action {
+  border-radius: 12px;
+}
+@media (max-width: 1199px) {
+  .studio-web-aside {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html:has(.studio-surface) {
+    scroll-behavior: auto;
+  }
+}
