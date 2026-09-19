@@ -24,7 +24,7 @@ export function Brand({ href = '/espace/connexion' }: { href?: string }) {
       className="brand"
       aria-label="Opportunity Players — accueil"
     >
-      op<span>↗</span>
+      op<i className="op-angle" aria-hidden="true" />
       <small>Opportunity Players</small>
     </Link>
   );

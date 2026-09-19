@@ -52,7 +52,7 @@ export function AppPhone({
         ) : (
           <div className="app-screen-placeholder" data-app-screen="placeholder">
             <span className="app-screen-brand">
-              op<span>↗</span>
+              op<i className="op-angle" aria-hidden="true" />
             </span>
             <span className="app-screen-kicker">FUTURE APP ARENA</span>
             <strong>

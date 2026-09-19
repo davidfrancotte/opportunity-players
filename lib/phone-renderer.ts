@@ -28,7 +28,15 @@ function placeholderTexture(label: string) {
     ctx.fillStyle = color;
     ctx.fillText(value, 62, y, 640);
   };
-  text('op↗', 96, 258, '#d1f94c', 600);
+  text('op', 96, 258, '#f1f2eb', 600);
+  const markX = 62 + ctx.measureText('op').width + 14;
+  ctx.strokeStyle = '#d1f94c';
+  ctx.lineWidth = 4.6;
+  ctx.beginPath();
+  ctx.moveTo(markX, 211);
+  ctx.lineTo(markX + 14.4, 211);
+  ctx.lineTo(markX + 14.4, 225.4);
+  ctx.stroke();
   text('FUTURE APP ARENA', 25, 422, '#a7b09d');
   text('Votre sport.', 73, 548);
   text('Votre réseau.', 73, 638);

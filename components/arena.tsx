@@ -43,7 +43,7 @@ export function Brand() {
   return (
     <Link href="/" className="brand" aria-label="Opportunity Players accueil">
       <span className="brand-symbol">
-        op<span>↗</span>
+        op<i className="op-angle" aria-hidden="true" />
       </span>
       <span>
         opportunity
@@ -429,7 +429,7 @@ export function ProductDemo() {
         <TabsContent key={key} value={key}>
           <div className="demo-scene">
             <div className="demo-side">
-              <span className="demo-brand">op↗</span>
+              <span className="demo-brand">op<i className="op-angle" aria-hidden="true" /></span>
               <span className="demo-avatar">
                 <UserRound />
               </span>

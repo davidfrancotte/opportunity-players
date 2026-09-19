@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { DM_Sans } from 'next/font/google';
 import './globals.css';
+import './brand-mark.css';
 import './arena.css';
 import './athlete-images.css';
 import './supporters-app.css';
