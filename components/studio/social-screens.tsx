@@ -568,89 +568,101 @@ export function MessagesPage() {
       </p>
       <PlanStatus compact />
       {!canReceive(social, access.category) && <LockedFeature />}
-      {active && member ? (
-        <section
-          className="conversation-panel"
-          aria-label={'Conversation avec ' + member.name}
-        >
-          <header className="conversation-heading">
-            <Button
-              variant="ghost"
-              aria-label="Retour aux conversations"
-              onClick={() => dispatchSocial({ type: 'close-chat' })}
-            >
-              <ArrowLeft size={20} />
-            </Button>
-            <img src={member.image} alt="" />
-            <div>
-              <h2>{member.name}</h2>
-              <p>{member.role}</p>
-            </div>
-          </header>
-          <div
-            ref={log}
-            className="message-log"
-            role="log"
-            aria-label="Historique des messages"
-            aria-live="polite"
+      <div
+        className={`web-messaging ${active && member ? 'has-conversation' : ''}`}
+      >
+        {active && member ? (
+          <section
+            className="conversation-panel"
+            aria-label={'Conversation avec ' + member.name}
           >
-            <span className="chat-date">CONVERSATION DE DÉMONSTRATION</span>
-            {!active.messages.length && (
-              <p className="chat-empty">
-                Commencez l’échange avec un message fictif.
-              </p>
-            )}
-            {visibleMessages(social, access, active).map((m) => (
-              <div
-                key={m.id}
-                className={m.mine ? 'message-bubble mine' : 'message-bubble'}
+            <header className="conversation-heading">
+              <Button
+                variant="ghost"
+                aria-label="Retour aux conversations"
+                onClick={() => dispatchSocial({ type: 'close-chat' })}
               >
-                <span className="sr-only">
-                  {m.mine ? 'Vous' : member.name} :{' '}
-                </span>
-                <p>{m.text}</p>
-                <small>
-                  {m.mine ? 'Ajouté à la démo' : 'Exemple de message'}
-                </small>
+                <ArrowLeft size={20} />
+              </Button>
+              <img src={member.image} alt="" />
+              <div>
+                <h2>{member.name}</h2>
+                <p>{member.role}</p>
               </div>
-            ))}
-          </div>
-          <form
-            className="message-composer"
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (!text.trim()) return;
-              if (!requestAccess('message', member.id)) return;
-              dispatchSocial({
-                type: 'message',
-                id: member.id,
-                message: { id: crypto.randomUUID(), text, mine: true },
-              });
-              setText('');
-            }}
-          >
-            <label className="sr-only" htmlFor="message-text">
-              Votre message fictif
-            </label>
-            <Textarea
-              id="message-text"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              rows={2}
-              maxLength={1000}
-              required
-              placeholder="Votre message fictif…"
-            />
-            <Submit
-              disabled={!text.trim()}
-              aria-label="Ajouter le message à la démo"
+            </header>
+            <div
+              ref={log}
+              className="message-log"
+              role="log"
+              aria-label="Historique des messages"
+              aria-live="polite"
             >
-              <Send size={20} />
-            </Submit>
-          </form>
-        </section>
-      ) : (
-        <>
+              <span className="chat-date">CONVERSATION DE DÉMONSTRATION</span>
+              {!active.messages.length && (
+                <p className="chat-empty">
+                  Commencez l’échange avec un message fictif.
+                </p>
+              )}
+              {visibleMessages(social, access, active).map((m) => (
+                <div
+                  key={m.id}
+                  className={m.mine ? 'message-bubble mine' : 'message-bubble'}
+                >
+                  <span className="sr-only">
+                    {m.mine ? 'Vous' : member.name} :{' '}
+                  </span>
+                  <p>{m.text}</p>
+                  <small>
+                    {m.mine ? 'Ajouté à la démo' : 'Exemple de message'}
+                  </small>
+                </div>
+              ))}
+            </div>
+            <form
+              className="message-composer"
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!text.trim()) return;
+                if (!requestAccess('message', member.id)) return;
+                dispatchSocial({
+                  type: 'message',
+                  id: member.id,
+                  message: { id: crypto.randomUUID(), text, mine: true },
+                });
+                setText('');
+              }}
+            >
+              <label className="sr-only" htmlFor="message-text">
+                Votre message fictif
+              </label>
+              <Textarea
+                id="message-text"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                rows={2}
+                maxLength={1000}
+                required
+                placeholder="Votre message fictif…"
+              />
+              <Submit
+                disabled={!text.trim()}
+                aria-label="Ajouter le message à la démo"
+              >
+                <Send size={20} />
+              </Submit>
+            </form>
+          </section>
+        ) : (
+          <div className="web-chat-placeholder">
+            <MessageCircle size={34} />
+            <h2>Une conversation peut tout changer.</h2>
+            <p>
+              Sélectionnez un échange à gauche ou commencez une nouvelle
+              rencontre avec le bouton +.
+            </p>
+          </div>
+        )}
+        <section className="web-conversations" aria-label="Vos conversations">
           <SearchField
             value={query}
             onChange={setQuery}
@@ -675,6 +687,7 @@ export function MessagesPage() {
                   <button
                     className="conversation-row"
                     key={c.memberId}
+                    aria-pressed={social.activeChat === c.memberId}
                     onClick={() =>
                       dispatchSocial({ type: 'open-chat', id: c.memberId })
                     }
@@ -714,8 +727,8 @@ export function MessagesPage() {
               text="Modifiez votre recherche ou commencez un nouvel échange avec le bouton +."
             />
           )}
-        </>
-      )}
+        </section>
+      </div>
       <Modal
         open={newChat}
         onOpenChange={setNewChat}

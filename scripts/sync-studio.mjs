@@ -5,6 +5,16 @@ import path from 'node:path';
 import postcss from 'postcss';
 const source = path.resolve(process.argv[2]);
 const root = path.resolve(import.meta.dirname, '..');
+// These website components now contain a desktop-specific product layout.
+// Require an explicit migration decision rather than silently erasing it.
+if (
+  fs.existsSync(path.join(root, 'components/studio/web-shell.tsx')) &&
+  !process.argv.includes('--replace-web-customizations')
+) {
+  throw new Error(
+    'Desktop web adaptations exist. Merge mobile changes selectively, or explicitly pass --replace-web-customizations to replace shared screens.',
+  );
+}
 const routes = [
   'accueil',
   'reseau',

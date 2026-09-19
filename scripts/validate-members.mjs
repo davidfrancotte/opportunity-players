@@ -28,11 +28,19 @@ for (const screen of screens) {
   assert.ok(html.includes('studio-surface'), screen + ': scoped Studio shell');
   assert.ok(html.includes('id="main"'), screen + ': main landmark');
   assert.ok(
+    !html.includes('class="mobile-app-frame"'),
+    screen + ': not a phone embed',
+  );
+  assert.ok(
     !html.includes('<header class="site-header"'),
     screen + ': no marketing header',
   );
   assert.ok(html.includes('aucun paiement'), screen + ': demo disclosure');
   if (social.includes(screen)) {
+    assert.ok(
+      html.includes('Navigation de l’espace membre web'),
+      screen + ': desktop sidebar',
+    );
     assert.ok(
       html.includes('Navigation de l’application'),
       screen + ': bottom nav',
@@ -48,6 +56,16 @@ for (const screen of screens) {
         html.includes('href="/espace/' + dest + '"'),
         screen + ': ' + dest,
       );
+  }
+  if (screen === 'accueil') assert.ok(html.includes('web-context-rail'));
+  if (screen === 'messages') {
+    assert.ok(html.includes('web-messaging'));
+    assert.ok(html.includes('Vos conversations'));
+    assert.ok(html.includes('web-chat-placeholder'));
+  }
+  if (screen === 'connexion') {
+    assert.ok(html.includes('Entrer dans l’espace web démo'));
+    assert.ok(!html.includes('web-sidebar'));
   }
   for (const match of html.matchAll(/href="(\/[^"#?]*)/g)) {
     assert.ok(

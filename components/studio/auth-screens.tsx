@@ -462,7 +462,8 @@ export function Login() {
           vous revoir<span className="lime">.</span>
         </>
       }
-      intro="Votre parcours, vos ambitions, votre prochain chapitre."
+      intro="Connectez-vous à votre espace web : votre fil d’actualité, votre réseau, vos messages et vos opportunités."
+      back="/"
     >
       <form onSubmit={submit} noValidate id="login-form">
         <FormErrors errors={errors} />
@@ -502,7 +503,7 @@ export function Login() {
             router.push('/espace/accueil');
           }}
         >
-          Explorer le profil démo <ArrowRight size={17} />
+          Entrer dans l’espace web démo <ArrowRight size={17} />
         </Button>
         <small>
           Accès formulaire : {DEMO_EMAIL} / {DEMO_PASSWORD}
