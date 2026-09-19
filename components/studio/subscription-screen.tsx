@@ -81,6 +81,14 @@ export function SubscriptionPage() {
               {s}
             </li>
           ))}
+          <li>
+            <Check size={17} />
+            Organiser des matchs et inviter votre réseau
+          </li>
+          <li>
+            <Check size={17} />
+            Découvrir les invitations ouvertes dans les 50 km
+          </li>
         </ul>
         <Button
           className="action primary"
@@ -110,6 +118,21 @@ export function SubscriptionPage() {
             </tr>
           </thead>
           <tbody>
+            <tr>
+              <th>Organiser un match</th>
+              <td>Non</td>
+              <td>Oui</td>
+            </tr>
+            <tr>
+              <th>Voir les matchs ouverts à proximité</th>
+              <td>Non</td>
+              <td>Oui</td>
+            </tr>
+            <tr>
+              <th>Répondre à une invitation personnelle</th>
+              <td>Oui</td>
+              <td>Oui</td>
+            </tr>
             <tr>
               <th>Créer son profil, explorer et suivre</th>
               <td>Oui</td>
@@ -276,6 +299,8 @@ export function SubscriptionPage() {
                   '/espace/parcours',
                   '/espace/medias',
                   '/espace/opportunities',
+                  '/espace/organiser',
+                  '/espace/jouer',
                 ].includes(target)
                 ? target
                 : '/espace/accueil',

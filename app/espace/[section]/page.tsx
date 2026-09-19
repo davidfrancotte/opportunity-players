@@ -4,6 +4,11 @@ import { StudioScreen } from '@/components/studio/studio-screen';
 const screens: Record<string, string> = {
   accueil: 'Accueil',
   reseau: 'Mon réseau',
+  jouer: 'Jouer ensemble',
+  organiser: 'Organiser un match',
+  match: 'Votre match',
+  agenda: 'Mon agenda',
+  notifications: 'Notifications',
   messages: 'Messages',
   opportunities: 'Opportunities',
   abonnement: 'Mon abonnement',
@@ -31,7 +36,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const { section } = await params;
   if (section === 'opportunites') redirect('/espace/opportunities');
-  if (section === 'notifications') redirect('/espace/accueil');
   if (!screens[section]) notFound();
   return <StudioScreen screen={section} />;
 }

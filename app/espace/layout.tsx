@@ -6,6 +6,7 @@ import './studio-globals.css';
 import './studio-mobile-app.css';
 import './studio-social.css';
 import './studio-subscription.css';
+import './studio-events.css';
 import './studio-web.css';
 export const metadata: Metadata = {
   title: 'Espace membre · Démo Arena',

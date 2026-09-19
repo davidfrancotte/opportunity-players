@@ -44,19 +44,23 @@ const features = [
     name: 'Réseau',
     icon: UsersRound,
     title: 'Les bonnes personnes. Le même terrain.',
-    text: 'Retrouvez des joueurs, des professionnels et des collectifs. Recherchez un nom, un métier ou une ville, affinez par sport et suivez les profils qui vous intéressent.',
+    text: 'Retrouvez des joueurs, des professionnels et des collectifs, puis passez du réseau au terrain avec Jouer ensemble. Organisez un match, précisez le lieu et proposez plusieurs dates : vos invités indiquent leurs disponibilités, vous confirmez le créneau une fois l’effectif réuni.',
     tools: [
       'Recherche et filtres',
       'Profils à découvrir',
       'Suivi de vos contacts',
+      'Organisation de matchs et choix des créneaux',
+      'Invitations avec +1 et effectif total ajustable',
+      'Matchs ouverts à 50 km, sur candidature',
+      'Agenda, confirmations et notifications',
     ],
     benefits: [
-      'Repérez des partenaires, des coachs et des structures proches de votre projet sportif.',
-      'Développez votre visibilité auprès des sportifs et trouvez des partenaires dans votre discipline.',
-      'Identifiez des talents, des entraîneurs et des partenaires pour renforcer votre structure.',
+      'Trouvez des partenaires de jeu, invitez vos contacts ou proposez de rejoindre un match près de chez vous. Répondez à plusieurs dates et venez avec un ami si les +1 sont autorisés.',
+      'Rassemblez les joueurs autour d’un match et choisissez un créneau qui convient au groupe. Gardez les candidatures, les réponses et l’effectif dans un même espace.',
+      'Organisez les matchs de votre communauté, définissez le nombre total de participants et validez les candidats extérieurs avant de confirmer le rendez-vous.',
     ],
     limit:
-      'Découvrir et suivre des profils est accessible gratuitement aux trois types de comptes.',
+      'Découvrir et suivre des profils, ainsi que répondre à une invitation personnelle, reste gratuit. Créer un match et voir les invitations ouvertes à 50 km nécessite Premium. L’organisateur et les +1 sont compris dans l’effectif total ; les candidatures externes ne comptent qu’après acceptation. Notifications et rencontres simulées dans cette démo.',
   },
   {
     id: 'messages',
@@ -203,7 +207,7 @@ export default function Page() {
               <figure className="application-capture">
                 <Image
                   unoptimized
-                  src={`/app-visuals/studio-${id}.png`}
+                  src={`/app-visuals/studio-${id === 'reseau' ? 'jouer' : id}.png`}
                   alt={`Écran ${name} de l’application Arena Studio : capture réelle de la démo mobile`}
                   width={390}
                   height={844}
@@ -236,6 +240,14 @@ export default function Page() {
                   ))}
                 </div>
                 <p className="application-feature-note">{limit}</p>
+                {id === 'reseau' && (
+                  <Link
+                    className="action application-play-action"
+                    href="/espace/jouer"
+                  >
+                    Découvrir Jouer ensemble <ArrowUpRight size={18} />
+                  </Link>
+                )}
                 <Link className="text-link" href={`/espace/${id}`}>
                   Explorer{' '}
                   {name === 'Opportunities'

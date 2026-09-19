@@ -240,3 +240,7 @@
     padding-block: 20px;
   }
 }
+.application-play-action {
+  margin: 16px 0 24px;
+  max-width: 380px;
+}

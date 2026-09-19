@@ -13,7 +13,10 @@ import {
   Sparkles,
   ArrowUpRight,
   LogOut,
+  CalendarDays,
+  Bell,
 } from 'lucide-react';
+import { EventHeader } from './event-navigation';
 import { useDemo } from './demo-provider';
 import { Brand } from './studio-ui';
 import { PlanStatus } from './subscription-ui';
@@ -40,10 +43,15 @@ const authRoutes = [
 export function WebShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const page = pathname.split('/')[2] || 'accueil';
-  const { profile, social, dispatchSocial, reset } = useDemo();
+  const { profile, social, dispatchSocial, reset, events } = useDemo();
   const current = ['parcours', 'medias', 'modifier-profil'].includes(page)
     ? 'profil'
-    : page;
+    : ['jouer', 'organiser', 'match'].includes(page)
+      ? 'reseau'
+      : page;
+  const eventUnread = events.notices.filter(
+    (n) => n.recipient === 'me' && !n.read,
+  ).length;
   const unread = social.conversations.filter((c) => c.unread).length;
   const progress = completion(profile);
   if (authRoutes.includes(page))
@@ -79,6 +87,27 @@ export function WebShell({ children }: { children: ReactNode }) {
           ))}
         </nav>
         <div className="web-sidebar-secondary">
+          <Link
+            href="/espace/jouer"
+            aria-current={page === 'jouer' ? 'page' : undefined}
+          >
+            <UsersRound size={19} />
+            Jouer ensemble
+          </Link>
+          <Link
+            href="/espace/agenda"
+            aria-current={page === 'agenda' ? 'page' : undefined}
+          >
+            <CalendarDays size={19} />
+            Mon agenda
+          </Link>
+          <Link
+            href="/espace/notifications"
+            aria-current={page === 'notifications' ? 'page' : undefined}
+          >
+            <Bell size={19} />
+            Notifications{eventUnread > 0 && <small>{eventUnread}</small>}
+          </Link>
           <Link
             href="/espace/abonnement"
             aria-current={page === 'abonnement' ? 'page' : undefined}
@@ -125,20 +154,32 @@ export function WebShell({ children }: { children: ReactNode }) {
           <span>
             OPPORTUNITY PLAYERS <i>/</i>{' '}
             <strong>
-              {navigation.find((n) => n.href === current)?.label ||
+              {(
+                {
+                  jouer: 'Jouer ensemble',
+                  organiser: 'Organiser un match',
+                  match: 'Votre match',
+                  agenda: 'Mon agenda',
+                  notifications: 'Notifications',
+                } as Record<string, string>
+              )[page] ||
+                navigation.find((n) => n.href === current)?.label ||
                 (page === 'abonnement' ? 'Abonnement' : 'Paramètres')}
             </strong>
           </span>
-          <Link href="/espace/profil">
-            <Image
-              src={profile.photo}
-              alt=""
-              width={36}
-              height={36}
-              unoptimized
-            />
-            <span>{profile.firstName}</span>
-          </Link>
+          <div className="web-topbar-actions">
+            <EventHeader />
+            <Link href="/espace/profil">
+              <Image
+                src={profile.photo}
+                alt=""
+                width={36}
+                height={36}
+                unoptimized
+              />
+              <span>{profile.firstName}</span>
+            </Link>
+          </div>
         </header>
         <div className="web-content-grid">
           <div className="web-main-content">{children}</div>

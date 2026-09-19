@@ -41,6 +41,7 @@ import {
 } from '@/components/studio/ui/dialog';
 import { useDemo } from './demo-provider';
 import { PlanStatus } from './subscription-ui';
+import { EventHeader } from './event-navigation';
 import {
   Brand,
   DemoPill,
@@ -81,7 +82,14 @@ function BottomNav() {
     '/espace/abonnement',
   ].includes(pathname)
     ? '/espace/profil'
-    : pathname;
+    : [
+          '/espace/jouer',
+          '/espace/organiser',
+          '/espace/match',
+          '/espace/agenda',
+        ].includes(pathname)
+      ? '/espace/reseau'
+      : pathname;
   return (
     <nav className="bottom-nav" aria-label="Navigation de l’application">
       {navigation.map(({ href, label, icon: Icon }) => (
@@ -115,7 +123,7 @@ export function ProfileLayout({
       <header className="app-header">
         <Brand href="/espace/accueil" />
         <div className="header-right">
-          <DemoPill />
+          <EventHeader />
           {back ? (
             <Link
               href={back}

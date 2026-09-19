@@ -636,3 +636,133 @@ body:has(.studio-surface) .action {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+/* Match workflow: shared behavior with the app, desktop-native layout. */
+.web-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.web-topbar-actions > a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+.web-sidebar-secondary small {
+  margin-left: auto;
+  color: #d1f94c;
+}
+@media (min-width: 900px) {
+  body:has(.studio-surface) .event-title {
+    padding: 36px 0 26px;
+    max-width: 780px;
+  }
+  body:has(.studio-surface) .event-title h1 {
+    font-size: clamp(34px, 3.3vw, 48px);
+  }
+  body:has(.studio-surface) .event-title p {
+    font-size: 16px;
+    max-width: 650px;
+  }
+  body:has(.studio-surface) .event-note {
+    font-size: 14px;
+  }
+  body:has(.studio-surface) .event-tabs {
+    max-width: 650px;
+    gap: 20px;
+  }
+  body:has(.studio-surface) .event-tabs button {
+    font-size: 14px;
+  }
+  body:has(.studio-surface) .event-select-label {
+    max-width: 340px;
+    font-size: 14px;
+  }
+  body:has(.studio-surface) .match-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+  }
+  body:has(.studio-surface) .match-card {
+    padding: 26px;
+    min-width: 0;
+  }
+  body:has(.studio-surface) .match-card h2 {
+    font-size: 26px;
+  }
+  body:has(.studio-surface) .match-card p {
+    font-size: 14px;
+  }
+  body:has(.studio-surface) .event-title ~ .action {
+    max-width: 330px;
+  }
+  body:has(.studio-surface) .event-form {
+    max-width: 860px;
+    padding: 30px;
+    background: #171c1e;
+    border: 1px solid #ffffff16;
+  }
+  body:has(.studio-surface) .event-steps {
+    max-width: 660px;
+  }
+  body:has(.studio-surface) .event-steps li {
+    font-size: 14px;
+  }
+  body:has(.studio-surface) .event-form label {
+    font-size: 14px;
+  }
+  body:has(.studio-surface) .invite-list {
+    grid-template-columns: 1fr 1fr;
+    gap: 0 24px;
+  }
+  body:has(.studio-surface) .match-detail {
+    max-width: 1040px;
+  }
+  body:has(.studio-surface) .match-slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+  body:has(.studio-surface) .match-detail > .action {
+    max-width: 440px;
+  }
+  body:has(.studio-surface) .event-premium {
+    max-width: 700px;
+    padding: 35px;
+  }
+  body:has(.studio-surface) .event-premium p {
+    font-size: 16px;
+  }
+  body:has(.studio-surface) .event-premium small {
+    font-size: 13px;
+  }
+  body:has(.studio-surface) .notification-list,
+  body:has(.studio-surface) .notification-controls,
+  body:has(.studio-surface) .agenda-item {
+    max-width: 920px;
+  }
+  body:has(.studio-surface) .notification-item strong {
+    font-size: 16px;
+  }
+  body:has(.studio-surface) .notification-item small {
+    font-size: 12px;
+  }
+  body:has(.studio-surface) .notification-controls button {
+    font-size: 14px;
+  }
+  body:has(.studio-surface) .event-demo {
+    max-width: 860px;
+  }
+  body:has(.studio-surface) .event-banner {
+    left: auto;
+    right: 28px;
+    transform: none;
+    max-width: 420px;
+    top: 95px;
+  }
+  body:has(.studio-surface) .event-banner strong {
+    font-size: 14px;
+  }
+  body:has(.studio-surface) .event-header .icon-link {
+    min-height: 42px;
+    min-width: 42px;
+  }
+}

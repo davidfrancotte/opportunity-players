@@ -1,4 +1,12 @@
 'use client';
+import { Suspense } from 'react';
+import {
+  PlayPage,
+  CreateMatchPage,
+  MatchPage,
+  AgendaPage,
+  NotificationsPage,
+} from './play-screens';
 import {
   Signup,
   VerifyEmail,
@@ -7,7 +15,12 @@ import {
   Login,
   ForgotPassword,
 } from './auth-screens';
-import { ProfilePage, EditProfile, SettingsPage } from './profile-screens';
+import {
+  ProfilePage,
+  ProfileLayout,
+  EditProfile,
+  SettingsPage,
+} from './profile-screens';
 import { SubscriptionPage } from './subscription-screen';
 import {
   FeedPage,
@@ -17,6 +30,26 @@ import {
 } from './social-screens';
 export function StudioScreen({ screen }: { screen: string }) {
   switch (screen) {
+    case 'jouer':
+      return <PlayPage />;
+    case 'organiser':
+      return <CreateMatchPage />;
+    case 'match':
+      return (
+        <Suspense
+          fallback={
+            <ProfileLayout>
+              <p>Chargement du match…</p>
+            </ProfileLayout>
+          }
+        >
+          <MatchPage />
+        </Suspense>
+      );
+    case 'agenda':
+      return <AgendaPage />;
+    case 'notifications':
+      return <NotificationsPage />;
     case 'abonnement':
       return <SubscriptionPage />;
     case 'accueil':

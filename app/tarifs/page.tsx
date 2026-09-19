@@ -131,6 +131,7 @@ export default function Page() {
                   {free.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
+                  <li>Réponse aux invitations personnelles à jouer</li>
                 </ul>
               </div>
               <div className="plan-premium">
@@ -142,6 +143,16 @@ export default function Page() {
                       <span>{item}</span>
                     </li>
                   ))}
+                  <li>
+                    <Check size={15} />
+                    <span>
+                      Organisation de matchs et invitations de vos contacts
+                    </span>
+                  </li>
+                  <li>
+                    <Check size={15} />
+                    <span>Découverte des matchs ouverts dans les 50 km</span>
+                  </li>
                 </ul>
               </div>
               <Link href="/espace/abonnement" className="action">

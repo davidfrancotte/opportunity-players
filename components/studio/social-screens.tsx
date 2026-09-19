@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
@@ -25,6 +26,7 @@ import {
 } from '@/components/studio/ui/native-select';
 import { useDemo } from './demo-provider';
 import { PlanStatus, LockedFeature } from './subscription-ui';
+import { PlayHomeCard, NetworkSections } from './event-navigation';
 import { ProfileLayout, Modal } from './profile-screens';
 import { Submit } from './studio-ui';
 import { displayName, photos, sports } from '@/lib/studio/model';
@@ -152,6 +154,7 @@ export function FeedPage() {
         </div>
       </div>
       <PlanStatus compact />
+      <PlayHomeCard />
       <button
         type="button"
         className="compose-launch"
@@ -421,6 +424,7 @@ export function NetworkPage() {
         </div>
         <UsersRound className="title-symbol" size={28} />
       </div>
+      <NetworkSections />
       <SearchField
         value={query}
         onChange={setQuery}
@@ -517,6 +521,12 @@ export function NetworkPage() {
             <h3>{member.role}</h3>
             <p>{member.city}</p>
             <p>{member.bio}</p>
+            <Link
+              className="action secondary"
+              href={`/espace/organiser?invite=${member.id}`}
+            >
+              Inviter à jouer
+            </Link>
             <Button className="action primary" onClick={() => message(member)}>
               Commencer une conversation <MessageCircle size={17} />
             </Button>

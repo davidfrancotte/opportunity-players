@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { SupportersSection } from '@/components/supporters';
 import { AppShowcase } from '@/components/app-showcase';
+import { WebWorkspacePreview } from '@/components/web-workspace-preview';
 import { AthleteImage } from '@/components/athlete-image';
 import {
   ArrowUpRight,
@@ -15,7 +16,6 @@ import {
   AudienceCards,
   FAQ,
   JoinBand,
-  ProductDemo,
   SectionHead,
   SportCard,
 } from '@/components/arena';
@@ -102,12 +102,14 @@ export default function Home() {
             ↗
           </span>
           <p>
-            Présentez votre parcours, partagez vos compétences et développez
-            votre réseau dans un espace entièrement dédié au sport. Pour vous
-            faire connaître. Trouver les bons interlocuteurs. Et avancer.
+            Sur ordinateur comme sur mobile, votre réseau sportif prend vie.
+            Mettez votre parcours en valeur, suivez les publications de votre
+            communauté et découvrez de nouvelles opportunités. Puis passez du
+            contact au terrain : invitez vos partenaires, trouvez un créneau
+            commun et organisez votre prochain match.
           </p>
         </div>
-        <ProductDemo />
+        <WebWorkspacePreview />
         <div className="section-bottom">
           <span>VOTRE PROFIL. VOTRE RÉSEAU. VOS OPPORTUNITÉS.</span>
           <Link className="text-link" href="/plateforme">
