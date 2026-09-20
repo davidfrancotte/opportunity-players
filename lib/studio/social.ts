@@ -1,75 +1,126 @@
-import type { Category } from './model';
-import { moderateText } from './trust.ts';
+import type { Category } from "./model";
+import { moderateText } from "./trust.ts";
 export type Member = {
   id: string;
   name: string;
-  kind: 'Joueurs' | 'Professionnels' | 'Collectives';
+  kind: "Joueurs" | "Professionnels" | "Collectives";
   role: string;
   sport: string;
   city: string;
+  country: string;
+  gender?: string;
+  accountType?: string;
   image: string;
   bio: string;
 };
 export const members: Member[] = [
   {
-    id: 'lea',
-    name: 'Léa Moreau',
-    kind: 'Joueurs',
-    role: 'Joueuse de tennis',
-    sport: 'Tennis',
-    city: 'Bruxelles',
-    image: '/studio-images/tennis-color.webp',
-    bio: 'Passionnée de compétition et de doubles. À la recherche de partenaires pour progresser ensemble.',
+    id: "ines",
+    name: "Inès Martin",
+    kind: "Joueurs",
+    role: "Gardienne · Football",
+    sport: "Football",
+    city: "Lille",
+    country: "France",
+    gender: "Femme",
+    image: "/studio-images/football-color.webp",
+    bio: "Profil fictif : gardienne à la recherche d’un collectif et de séances spécifiques.",
   },
   {
-    id: 'noah',
-    name: 'Noah Laurent',
-    kind: 'Joueurs',
-    role: 'Ailier · Basketball',
-    sport: 'Basketball',
-    city: 'Liège',
-    image: '/studio-images/basketball-color.webp',
-    bio: 'Le collectif avant tout. J’aime les projets qui rassemblent sur le parquet et en dehors.',
+    id: "camille",
+    name: "Camille Roy",
+    kind: "Professionnels",
+    role: "Entraîneur de gardiens",
+    accountType: "Entraîneur de gardiens",
+    sport: "Football",
+    city: "Montréal",
+    country: "Canada",
+    image: "/studio-images/coach.webp",
+    bio: "Profil fictif : accompagnement technique des gardiens et gardiennes.",
   },
   {
-    id: 'horizon',
-    name: 'Horizon Padel',
-    kind: 'Collectives',
-    role: 'Club & communauté',
-    sport: 'Padel',
-    city: 'Namur',
-    image: '/studio-images/padel-color.webp',
-    bio: 'Un club fictif ouvert à tous les niveaux. Entraînements, rencontres et projets sportifs locaux.',
+    id: "academie",
+    name: "Académie du Nord",
+    kind: "Collectives",
+    role: "Formation sportive",
+    accountType: "Académie",
+    sport: "Football",
+    city: "Lille",
+    country: "France",
+    image: "/studio-images/football-color.webp",
+    bio: "Structure fictive dédiée à la formation et aux rencontres sportives.",
   },
   {
-    id: 'sam',
-    name: 'Sam Delcourt',
-    kind: 'Professionnels',
-    role: 'Préparateur physique',
-    sport: 'Athlétisme',
-    city: 'Louvain',
-    image: '/studio-images/athletics-color.webp',
-    bio: 'Préparation physique, mobilité et retour à la pratique. Je souhaite collaborer avec des clubs.',
+    id: "lea",
+    country: "Belgique",
+    gender: "Femme",
+    name: "Léa Moreau",
+    kind: "Joueurs",
+    role: "Joueuse de tennis",
+    sport: "Tennis",
+    city: "Bruxelles",
+    image: "/studio-images/tennis-color.webp",
+    bio: "Passionnée de compétition et de doubles. À la recherche de partenaires pour progresser ensemble.",
   },
   {
-    id: 'united',
-    name: 'United Sport',
-    kind: 'Collectives',
-    role: 'Collectif de football',
-    sport: 'Football',
-    city: 'Charleroi',
-    image: '/studio-images/football-color.webp',
-    bio: 'Un collectif fictif de passionnés. Notre ambition : créer des occasions de jouer et de se rencontrer.',
+    id: "noah",
+    country: "Belgique",
+    gender: "Homme",
+    name: "Noah Laurent",
+    kind: "Joueurs",
+    role: "Ailier · Basketball",
+    sport: "Basketball",
+    city: "Liège",
+    image: "/studio-images/basketball-color.webp",
+    bio: "Le collectif avant tout. J’aime les projets qui rassemblent sur le parquet et en dehors.",
   },
   {
-    id: 'marc',
-    name: 'Marc Petit',
-    kind: 'Professionnels',
-    role: 'Coach de padel',
-    sport: 'Padel',
-    city: 'Bruxelles',
-    image: '/studio-images/coach.webp',
-    bio: 'Des séances construites autour du plaisir et de la progression, pour débutants et compétiteurs.',
+    id: "horizon",
+    country: "Belgique",
+    accountType: "Club",
+    name: "Horizon Padel",
+    kind: "Collectives",
+    role: "Club & communauté",
+    sport: "Padel",
+    city: "Namur",
+    image: "/studio-images/padel-color.webp",
+    bio: "Un club fictif ouvert à tous les niveaux. Entraînements, rencontres et projets sportifs locaux.",
+  },
+  {
+    id: "sam",
+    country: "Belgique",
+    accountType: "Préparateur physique",
+    name: "Sam Delcourt",
+    kind: "Professionnels",
+    role: "Préparateur physique",
+    sport: "Athlétisme",
+    city: "Louvain",
+    image: "/studio-images/athletics-color.webp",
+    bio: "Préparation physique, mobilité et retour à la pratique. Je souhaite collaborer avec des clubs.",
+  },
+  {
+    id: "united",
+    country: "Belgique",
+    accountType: "Équipe",
+    name: "United Sport",
+    kind: "Collectives",
+    role: "Collectif de football",
+    sport: "Football",
+    city: "Charleroi",
+    image: "/studio-images/football-color.webp",
+    bio: "Un collectif fictif de passionnés. Notre ambition : créer des occasions de jouer et de se rencontrer.",
+  },
+  {
+    id: "marc",
+    country: "Belgique",
+    accountType: "Entraîneur",
+    name: "Marc Petit",
+    kind: "Professionnels",
+    role: "Coach de padel",
+    sport: "Padel",
+    city: "Bruxelles",
+    image: "/studio-images/coach.webp",
+    bio: "Des séances construites autour du plaisir et de la progression, pour débutants et compétiteurs.",
   },
 ];
 export type Post = {
@@ -105,71 +156,71 @@ export type Opportunity = {
 };
 export const opportunities: Opportunity[] = [
   {
-    id: 'coach',
-    title: 'Un coach pour faire grandir notre équipe.',
-    owner: 'Horizon Padel',
-    sport: 'Padel',
-    type: 'Coaching',
-    city: 'Namur',
-    format: 'Mission · Sur place',
-    image: '/studio-images/padel-color.webp',
+    id: "coach",
+    title: "Un coach pour faire grandir notre équipe.",
+    owner: "Horizon Padel",
+    sport: "Padel",
+    type: "Coaching",
+    city: "Namur",
+    format: "Mission · Sur place",
+    image: "/studio-images/padel-color.webp",
     description:
-      'Un exemple de mission pour accompagner un groupe de joueurs intermédiaires. Pédagogie et esprit collectif au premier plan.',
+      "Un exemple de mission pour accompagner un groupe de joueurs intermédiaires. Pédagogie et esprit collectif au premier plan.",
     details: [
-      'Deux séances hebdomadaires',
-      'Expérience en encadrement souhaitée',
-      'Modalités à discuter · annonce fictive',
+      "Deux séances hebdomadaires",
+      "Expérience en encadrement souhaitée",
+      "Modalités à discuter · annonce fictive",
     ],
   },
   {
-    id: 'double',
-    title: 'Votre prochain partenaire de double.',
-    owner: 'Léa Moreau',
-    sport: 'Tennis',
-    type: 'Partenariat',
-    city: 'Bruxelles',
-    format: 'Rencontre sportive',
-    image: '/studio-images/tennis-color.webp',
+    id: "double",
+    title: "Votre prochain partenaire de double.",
+    owner: "Léa Moreau",
+    sport: "Tennis",
+    type: "Partenariat",
+    city: "Bruxelles",
+    format: "Rencontre sportive",
+    image: "/studio-images/tennis-color.webp",
     description:
-      'Un exemple de recherche de partenaire pour s’entraîner et participer à des rencontres amicales.',
+      "Un exemple de recherche de partenaire pour s’entraîner et participer à des rencontres amicales.",
     details: [
-      'Niveau intermédiaire',
-      'Disponibilité en soirée',
-      'Rencontre fictive · aucune réservation',
+      "Niveau intermédiaire",
+      "Disponibilité en soirée",
+      "Rencontre fictive · aucune réservation",
     ],
   },
   {
-    id: 'tryout',
-    title: 'De nouveaux talents sur le parquet.',
-    owner: 'Collectif Arena',
-    sport: 'Basketball',
-    type: 'Recrutement',
-    city: 'Liège',
-    format: 'Détection · Amateur',
-    image: '/studio-images/basketball-color.webp',
+    id: "tryout",
+    title: "De nouveaux talents sur le parquet.",
+    owner: "Collectif Arena",
+    sport: "Basketball",
+    type: "Recrutement",
+    city: "Liège",
+    format: "Détection · Amateur",
+    image: "/studio-images/basketball-color.webp",
     description:
-      'Un exemple de détection pour compléter un collectif amateur. Venez avec votre énergie et votre envie de jouer en équipe.',
+      "Un exemple de détection pour compléter un collectif amateur. Venez avec votre énergie et votre envie de jouer en équipe.",
     details: [
-      'Postes extérieurs et intérieurs',
-      'Essai collectif à organiser',
-      'Aucune sélection réelle dans cette démo',
+      "Postes extérieurs et intérieurs",
+      "Essai collectif à organiser",
+      "Aucune sélection réelle dans cette démo",
     ],
   },
   {
-    id: 'sponsor',
-    title: 'Une marque, un club, une même ambition.',
-    owner: 'United Sport',
-    sport: 'Football',
-    type: 'Sponsoring',
-    city: 'Charleroi',
-    format: 'Collaboration locale',
-    image: '/studio-images/football-color.webp',
+    id: "sponsor",
+    title: "Une marque, un club, une même ambition.",
+    owner: "United Sport",
+    sport: "Football",
+    type: "Sponsoring",
+    city: "Charleroi",
+    format: "Collaboration locale",
+    image: "/studio-images/football-color.webp",
     description:
-      'Un exemple de collaboration entre une structure sportive et une marque locale autour d’un projet de club.',
+      "Un exemple de collaboration entre une structure sportive et une marque locale autour d’un projet de club.",
     details: [
-      'Visibilité sur les événements du club',
-      'Projet local et collectif',
-      'Budget et calendrier fictifs à définir',
+      "Visibilité sur les événements du club",
+      "Projet local et collectif",
+      "Budget et calendrier fictifs à définir",
     ],
   },
 ];
@@ -189,58 +240,58 @@ export function createSocialState(): SocialState {
     paidCategory: null,
     sentByMonth: {},
     gate: null,
-    following: ['horizon'],
+    following: ["horizon"],
     saved: [],
     interested: [],
     activeChat: null,
     posts: [
       {
-        id: 'post-padel',
-        author: 'horizon',
-        name: 'Horizon Padel',
-        role: 'Club & communauté · Namur',
-        avatar: '/studio-images/padel-color.webp',
-        sport: 'Padel',
-        text: 'Le meilleur point de la semaine ? Celui qu’on construit ensemble. Une belle session pour notre collectif, entre intensité et plaisir de jouer. Et vous, quel est votre prochain objectif sur le terrain ?',
-        image: '/studio-images/padel-color.webp',
+        id: "post-padel",
+        author: "horizon",
+        name: "Horizon Padel",
+        role: "Club & communauté · Namur",
+        avatar: "/studio-images/padel-color.webp",
+        sport: "Padel",
+        text: "Le meilleur point de la semaine ? Celui qu’on construit ensemble. Une belle session pour notre collectif, entre intensité et plaisir de jouer. Et vous, quel est votre prochain objectif sur le terrain ?",
+        image: "/studio-images/padel-color.webp",
         likes: 24,
         liked: false,
         comments: [],
       },
       {
-        id: 'post-tennis',
-        author: 'lea',
-        name: 'Léa Moreau',
-        role: 'Joueuse de tennis · Bruxelles',
-        avatar: '/studio-images/tennis-color.webp',
-        sport: 'Tennis',
-        text: 'Nouvelle saison, nouvelles rencontres. Je cherche des partenaires pour des doubles à Bruxelles. Qui a envie de partager le court ?',
-        image: '/studio-images/tennis-color.webp',
+        id: "post-tennis",
+        author: "lea",
+        name: "Léa Moreau",
+        role: "Joueuse de tennis · Bruxelles",
+        avatar: "/studio-images/tennis-color.webp",
+        sport: "Tennis",
+        text: "Nouvelle saison, nouvelles rencontres. Je cherche des partenaires pour des doubles à Bruxelles. Qui a envie de partager le court ?",
+        image: "/studio-images/tennis-color.webp",
         likes: 18,
         liked: false,
         comments: [],
       },
       {
-        id: 'post-running',
-        author: 'sam',
-        name: 'Sam Delcourt',
-        role: 'Préparateur physique · Louvain',
-        avatar: '/studio-images/athletics-color.webp',
-        sport: 'Athlétisme',
-        text: 'La régularité fait la différence. Aujourd’hui : mobilité, technique et récupération. Trois fondamentaux que j’aime intégrer à chaque préparation.',
+        id: "post-running",
+        author: "sam",
+        name: "Sam Delcourt",
+        role: "Préparateur physique · Louvain",
+        avatar: "/studio-images/athletics-color.webp",
+        sport: "Athlétisme",
+        text: "La régularité fait la différence. Aujourd’hui : mobilité, technique et récupération. Trois fondamentaux que j’aime intégrer à chaque préparation.",
         likes: 12,
         liked: false,
         comments: [],
       },
       {
-        id: 'post-basket',
-        author: 'noah',
-        name: 'Noah Laurent',
-        role: 'Ailier · Liège',
-        avatar: '/studio-images/basketball-color.webp',
-        sport: 'Basketball',
-        text: 'De l’énergie, de la confiance et un collectif qui avance. Heureux de retrouver le parquet et de préparer la suite avec l’équipe.',
-        image: '/studio-images/basketball-color.webp',
+        id: "post-basket",
+        author: "noah",
+        name: "Noah Laurent",
+        role: "Ailier · Liège",
+        avatar: "/studio-images/basketball-color.webp",
+        sport: "Basketball",
+        text: "De l’énergie, de la confiance et un collectif qui avance. Heureux de retrouver le parquet et de préparer la suite avec l’équipe.",
+        image: "/studio-images/basketball-color.webp",
         likes: 31,
         liked: false,
         comments: [],
@@ -248,29 +299,29 @@ export function createSocialState(): SocialState {
     ],
     conversations: [
       {
-        memberId: 'horizon',
+        memberId: "horizon",
         unread: true,
         messages: [
           {
-            id: 'h1',
+            id: "h1",
             mine: false,
-            text: 'Bonjour Alex ! Votre approche du coaching nous intéresse. Partant pour échanger sur un projet de club ? (Exemple fictif)',
+            text: "Bonjour Alex ! Votre approche du coaching nous intéresse. Partant pour échanger sur un projet de club ? (Exemple fictif)",
           },
         ],
       },
       {
-        memberId: 'lea',
+        memberId: "lea",
         unread: false,
         messages: [
           {
-            id: 'l1',
+            id: "l1",
             mine: true,
-            text: 'Bonjour Léa, au plaisir d’échanger autour des sports de raquette !',
+            text: "Bonjour Léa, au plaisir d’échanger autour des sports de raquette !",
           },
           {
-            id: 'l2',
+            id: "l2",
             mine: false,
-            text: 'Avec plaisir ! J’aimerais découvrir le padel. (Conversation fictive)',
+            text: "Avec plaisir ! J’aimerais découvrir le padel. (Conversation fictive)",
           },
         ],
       },
@@ -278,87 +329,71 @@ export function createSocialState(): SocialState {
   };
 }
 export type SocialAction =
-  | { type: 'subscription'; category: Category | null }
-  | { type: 'gate'; reason: AccessReason | null }
-  | { type: 'post'; post: Post }
-  | { type: 'like'; id: string }
+  | { type: "subscription"; category: Category | null }
+  | { type: "gate"; reason: AccessReason | null }
+  | { type: "post"; post: Post }
+  | { type: "like"; id: string }
   | {
-      type: 'comment';
+      type: "comment";
       id: string;
       comment: { id: string; name: string; text: string };
     }
-  | { type: 'follow'; id: string }
-  | { type: 'open-chat'; id: string }
-  | { type: 'close-chat' }
-  | { type: 'message'; id: string; message: ChatMessage }
-  | { type: 'save' | 'interest'; id: string }
-  | { type: 'reset' };
+  | { type: "follow"; id: string }
+  | { type: "open-chat"; id: string }
+  | { type: "close-chat" }
+  | { type: "message"; id: string; message: ChatMessage }
+  | { type: "save" | "interest"; id: string }
+  | { type: "reset" };
 function toggle(list: string[], id: string) {
   return list.includes(id) ? list.filter((x) => x !== id) : [...list, id];
 }
-export function socialReducer(
-  state: SocialState,
-  action: SocialAction,
-): SocialState {
+export function socialReducer(state: SocialState, action: SocialAction): SocialState {
   switch (action.type) {
-    case 'subscription':
+    case "subscription":
       return { ...state, paidCategory: action.category, gate: null };
-    case 'gate':
+    case "gate":
       return { ...state, gate: action.reason };
-    case 'post': {
+    case "post": {
       const text = action.post.text.trim();
-      if (
-        !text ||
-        text.length > 1200 ||
-        state.posts.some((p) => p.id === action.post.id)
-      )
+      if (!text || text.length > 1200 || state.posts.some((p) => p.id === action.post.id))
         return state;
       return { ...state, posts: [{ ...action.post, text }, ...state.posts] };
     }
-    case 'like':
+    case "like":
       return {
         ...state,
         posts: state.posts.map((p) =>
-          p.id === action.id
-            ? { ...p, liked: !p.liked, likes: p.likes + (p.liked ? -1 : 1) }
-            : p,
+          p.id === action.id ? { ...p, liked: !p.liked, likes: p.likes + (p.liked ? -1 : 1) } : p,
         ),
       };
-    case 'comment': {
+    case "comment": {
       const text = action.comment.text.trim();
       if (!text || text.length > 400) return state;
       return {
         ...state,
         posts: state.posts.map((p) =>
-          p.id === action.id
-            ? { ...p, comments: [...p.comments, { ...action.comment, text }] }
-            : p,
+          p.id === action.id ? { ...p, comments: [...p.comments, { ...action.comment, text }] } : p,
         ),
       };
     }
-    case 'follow':
+    case "follow":
       return members.some((m) => m.id === action.id)
         ? { ...state, following: toggle(state.following, action.id) }
         : state;
-    case 'open-chat': {
+    case "open-chat": {
       if (!members.some((m) => m.id === action.id)) return state;
       const exists = state.conversations.some((c) => c.memberId === action.id);
       return {
         ...state,
         activeChat: action.id,
         conversations: exists
-          ? state.conversations.map((c) =>
-              c.memberId === action.id ? { ...c, unread: false } : c,
-            )
-          : [
-              { memberId: action.id, unread: false, messages: [] },
-              ...state.conversations,
-            ],
+          ? state.conversations.map((c) => (c.memberId === action.id ? { ...c, unread: false } : c))
+          : [{ memberId: action.id, unread: false, messages: [] }, ...state.conversations],
       };
     }
-    case 'close-chat':
+    case "close-chat":
       return { ...state, activeChat: null };
-    case 'message': {
+    case "message": {
       const text = action.message.text.trim();
       if (!text || text.length > 1000) return state;
       return {
@@ -370,34 +405,29 @@ export function socialReducer(
         ),
       };
     }
-    case 'save':
+    case "save":
       return opportunities.some((o) => o.id === action.id)
         ? { ...state, saved: toggle(state.saved, action.id) }
         : state;
-    case 'interest':
+    case "interest":
       return opportunities.some((o) => o.id === action.id)
         ? { ...state, interested: toggle(state.interested, action.id) }
         : state;
-    case 'reset':
+    case "reset":
       return createSocialState();
   }
 }
 export function matchesQuery(text: string, query: string) {
   const normalize = (s: string) =>
     s
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLocaleLowerCase('fr');
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLocaleLowerCase("fr");
   return normalize(text).includes(normalize(query.trim()));
 }
 
-export type AccessReason =
-  | 'publish'
-  | 'player-contact'
-  | 'receive'
-  | 'quota'
-  | 'recipient';
-export type AccessFeature = 'publish' | 'message' | 'comment' | 'receive';
+export type AccessReason = "publish" | "player-contact" | "receive" | "quota" | "recipient";
+export type AccessFeature = "publish" | "message" | "comment" | "receive";
 export type AccessContext = {
   category: Category;
   month: string;
@@ -405,24 +435,22 @@ export type AccessContext = {
 };
 export const FREE_MESSAGES = 5;
 // Fictional recipient plans, not subscription data from the real platform.
-export const unpaidRecipients = ['sam', 'united'];
+export const unpaidRecipients = ["sam", "united"];
 export function monthKey(date = new Date()) {
-  const parts = new Intl.DateTimeFormat('en', {
-    timeZone: 'Europe/Brussels',
-    year: 'numeric',
-    month: '2-digit',
+  const parts = new Intl.DateTimeFormat("en", {
+    timeZone: "Europe/Brussels",
+    year: "numeric",
+    month: "2-digit",
   }).formatToParts(date);
   return (
-    parts.find((p) => p.type === 'year')!.value +
-    '-' +
-    parts.find((p) => p.type === 'month')!.value
+    parts.find((p) => p.type === "year")!.value + "-" + parts.find((p) => p.type === "month")!.value
   );
 }
 export function isPremium(state: SocialState, category: Category) {
   return state.paidCategory === category;
 }
 export function canReceive(state: SocialState, category: Category) {
-  return category === 'Sportif' || isPremium(state, category);
+  return category === "Sportif" || isPremium(state, category);
 }
 export function remainingMessages(state: SocialState, month: string) {
   return Math.max(0, FREE_MESSAGES - (state.sentByMonth[month] || 0));
@@ -434,21 +462,19 @@ export function accessReason(
   targetId?: string,
 ): AccessReason | null {
   const premium = isPremium(state, context.category);
-  if (feature === 'publish')
-    return context.category === 'Sportif' && !premium ? 'publish' : null;
-  if (feature === 'receive')
-    return canReceive(state, context.category) ? null : 'receive';
+  if (feature === "publish") return context.category === "Sportif" && !premium ? "publish" : null;
+  if (feature === "receive") return canReceive(state, context.category) ? null : "receive";
   const target = members.find((m) => m.id === targetId);
-  if (target && unpaidRecipients.includes(target.id)) return 'recipient';
-  if (target?.kind === 'Joueurs' && context.category !== 'Sportif' && !premium)
-    return 'player-contact';
+  if (target && unpaidRecipients.includes(target.id)) return "recipient";
+  if (target?.kind === "Joueurs" && context.category !== "Sportif" && !premium)
+    return "player-contact";
   if (
-    feature === 'message' &&
-    context.category === 'Sportif' &&
+    feature === "message" &&
+    context.category === "Sportif" &&
     !premium &&
     !remainingMessages(state, context.month)
   )
-    return 'quota';
+    return "quota";
   return null;
 }
 export function visibleMessages(
@@ -460,23 +486,13 @@ export function visibleMessages(
     ? conversation.messages
     : conversation.messages.filter((m) => m.mine);
 }
-export function visibleComments(
-  state: SocialState,
-  context: AccessContext,
-  post: Post,
-) {
-  return post.author === 'self' && !canReceive(state, context.category)
-    ? []
-    : post.comments;
+export function visibleComments(state: SocialState, context: AccessContext, post: Post) {
+  return post.author === "self" && !canReceive(state, context.category) ? [] : post.comments;
 }
-export function commentReason(
-  state: SocialState,
-  context: AccessContext,
-  post: Post,
-) {
-  return post.author === 'self'
-    ? accessReason(state, context, 'receive')
-    : accessReason(state, context, 'comment', post.author);
+export function commentReason(state: SocialState, context: AccessContext, post: Post) {
+  return post.author === "self"
+    ? accessReason(state, context, "receive")
+    : accessReason(state, context, "comment", post.author);
 }
 // This central gate protects every UI entry point, including direct message forms.
 // Production must reimplement the checks and monthly counters server-side.
@@ -486,22 +502,22 @@ export function guardedSocialReducer(
 ): SocialState {
   const { action, context } = command;
   const text =
-    action.type === 'message'
+    action.type === "message"
       ? action.message.text
-      : action.type === 'post'
+      : action.type === "post"
         ? action.post.text
-        : action.type === 'comment'
+        : action.type === "comment"
           ? action.comment.text
-          : '';
+          : "";
   if (moderateText(text)) return state;
   if (
-    (action.type === 'message' || action.type === 'open-chat') &&
+    (action.type === "message" || action.type === "open-chat") &&
     context.blocked?.includes(action.id)
   )
     return state;
   let reason: AccessReason | null = null;
-  if (action.type === 'post') reason = accessReason(state, context, 'publish');
-  if (action.type === 'message') {
+  if (action.type === "post") reason = accessReason(state, context, "publish");
+  if (action.type === "message") {
     if (
       !members.some((m) => m.id === action.id) ||
       !state.conversations.some((c) => c.memberId === action.id) ||
@@ -510,10 +526,10 @@ export function guardedSocialReducer(
     )
       return state;
     reason = action.message.mine
-      ? accessReason(state, context, 'message', action.id)
-      : accessReason(state, context, 'receive');
+      ? accessReason(state, context, "message", action.id)
+      : accessReason(state, context, "receive");
   }
-  if (action.type === 'comment') {
+  if (action.type === "comment") {
     const post = state.posts.find((p) => p.id === action.id);
     if (!post) return state;
     reason = commentReason(state, context, post);
@@ -521,9 +537,9 @@ export function guardedSocialReducer(
   if (reason) return { ...state, gate: reason };
   const next = socialReducer(state, action);
   if (
-    action.type === 'message' &&
+    action.type === "message" &&
     action.message.mine &&
-    context.category === 'Sportif' &&
+    context.category === "Sportif" &&
     !isPremium(state, context.category)
   ) {
     return {

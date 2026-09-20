@@ -42,6 +42,8 @@ import {
 import { useDemo } from './demo-provider';
 import { PlanStatus } from './subscription-ui';
 import { ProfileExtensions } from './trust-screens';
+import { ProfileDirectoryFields } from './directory-fields';
+import { normalizeMeasurement } from '@/lib/studio/athlete';
 import { moderateText } from '@/lib/studio/trust';
 import { EventHeader } from './event-navigation';
 import {
@@ -796,10 +798,10 @@ export function EditProfile() {
   const { profile, setProfile, notify } = useDemo();
   const router = useRouter();
   const [draft, setDraft] = useState<Profile>(structuredClone(profile));
-  const [skills, setSkills] = useState(profile.skills.join(', '));
+  const [skills, setSkills] = useState(profile.skills.join(", "));
   const [errors, setErrors] = useState<Issues>({});
   function update(key: keyof Profile, value: string) {
-    setDraft({ ...draft, [key]: value });
+    setDraft({ ...draft, [key]: value, ...(key === "category" ? { accountType: "" } : {}) });
   }
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -811,9 +813,9 @@ export function EditProfile() {
             ...draft.disciplines,
             {
               sport: draft.sport,
-              level: 'Loisir',
-              ranking: '',
-              federation: '',
+              level: "Loisir",
+              ranking: "",
+              federation: "",
               clubs: [],
             },
           ],
@@ -821,13 +823,18 @@ export function EditProfile() {
       lastName: draft.lastName.trim(),
       headline: draft.headline.trim(),
       city: draft.city.trim(),
+      country: draft.country.trim(),
+      weightKg: draft.category === "Sportif" ? normalizeMeasurement(draft.weightKg) : "",
+      heightCm: draft.category === "Sportif" ? normalizeMeasurement(draft.heightCm) : "",
+      accountType: draft.category === "Sportif" ? "" : draft.accountType,
+      gender: draft.category === "Sportif" ? draft.gender : "",
       organisation: draft.organisation.trim(),
       bio: draft.bio.trim(),
       objective: draft.objective.trim(),
       skills: [
         ...new Set(
           skills
-            .split(',')
+            .split(",")
             .map((s) => s.trim())
             .filter(Boolean),
         ),
@@ -835,16 +842,13 @@ export function EditProfile() {
     };
     const issues = validateProfile(next);
     if (moderateText(JSON.stringify(next)))
-      issues.bio =
-        'Contenu bloqué par le filtre de démonstration. Reformulez les informations.';
+      issues.bio = "Contenu bloqué par le filtre de démonstration. Reformulez les informations.";
     setErrors(issues);
     focusError(issues);
     if (Object.keys(issues).length) return;
     setProfile(next);
-    notify(
-      'Modifications enregistrées pour cette visite. Rien n’a été publié.',
-    );
-    router.push('/espace/profil');
+    notify("Modifications enregistrées pour cette visite. Rien n’a été publié.");
+    router.push("/espace/profil");
   }
   return (
     <ProfileLayout back="/espace/profil" title="À votre image.">
@@ -853,9 +857,7 @@ export function EditProfile() {
           <Pencil size={21} />
           <p>
             Les bonnes rencontres commencent par un profil qui vous ressemble.
-            <small>
-              Utilisez des informations fictives pour cette démonstration.
-            </small>
+            <small>Utilisez des informations fictives pour cette démonstration.</small>
           </p>
         </div>
         <FormErrors errors={errors} />
@@ -871,7 +873,7 @@ export function EditProfile() {
               required
               maxLength={60}
               value={draft.firstName}
-              onChange={(e) => update('firstName', e.target.value)}
+              onChange={(e) => update("firstName", e.target.value)}
               error={errors.firstName}
             />
             <Field
@@ -881,7 +883,7 @@ export function EditProfile() {
               required
               maxLength={60}
               value={draft.lastName}
-              onChange={(e) => update('lastName', e.target.value)}
+              onChange={(e) => update("lastName", e.target.value)}
               error={errors.lastName}
             />
           </div>
@@ -891,20 +893,20 @@ export function EditProfile() {
               name="category"
               className="select-field"
               value={draft.category}
-              onChange={(e) => update('category', e.target.value)}
+              onChange={(e) => update("category", e.target.value)}
             >
               {categories.map((c) => (
                 <NativeSelectOption key={c}>{c}</NativeSelectOption>
               ))}
             </NativeSelect>
           </Field>
-          {draft.category === 'Organisation' && (
+          {draft.category === "Organisation" && (
             <Field
               label="Organisation fictive"
               name="organisation"
               autoComplete="organization"
               value={draft.organisation}
-              onChange={(e) => update('organisation', e.target.value)}
+              onChange={(e) => update("organisation", e.target.value)}
               maxLength={100}
               error={errors.organisation}
             />
@@ -928,7 +930,7 @@ export function EditProfile() {
             name="headline"
             autoComplete="organization-title"
             value={draft.headline}
-            onChange={(e) => update('headline', e.target.value)}
+            onChange={(e) => update("headline", e.target.value)}
             required
             maxLength={90}
             error={errors.headline}
@@ -940,7 +942,7 @@ export function EditProfile() {
                 name="sport"
                 className="select-field"
                 value={draft.sport}
-                onChange={(e) => update('sport', e.target.value)}
+                onChange={(e) => update("sport", e.target.value)}
               >
                 {sports.map((s) => (
                   <NativeSelectOption key={s}>{s}</NativeSelectOption>
@@ -954,10 +956,11 @@ export function EditProfile() {
               required
               maxLength={90}
               value={draft.city}
-              onChange={(e) => update('city', e.target.value)}
+              onChange={(e) => update("city", e.target.value)}
               error={errors.city}
             />
           </div>
+          <ProfileDirectoryFields profile={draft} onChange={setDraft} errors={errors} />
           <Field
             label="Compétences"
             name="skills"
@@ -978,7 +981,7 @@ export function EditProfile() {
               id="bio"
               name="bio"
               value={draft.bio}
-              onChange={(e) => update('bio', e.target.value)}
+              onChange={(e) => update("bio", e.target.value)}
               rows={5}
               maxLength={600}
             />
@@ -990,7 +993,7 @@ export function EditProfile() {
               id="objective"
               name="objective"
               value={draft.objective}
-              onChange={(e) => update('objective', e.target.value)}
+              onChange={(e) => update("objective", e.target.value)}
               maxLength={250}
               rows={3}
               placeholder="Qu’aimeriez-vous construire dans le sport ?"

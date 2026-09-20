@@ -12,7 +12,8 @@ body:has(.studio-surface) .auth-editorial--workspace .editorial-caption {font-si
 @media (min-width: 1100px) {
   body:has(.studio-surface) .trust-profile {display:grid;grid-template-columns:1fr 1fr;gap:0 24px;}
   body:has(.studio-surface) .trust-profile > .mini-kicker,
-  body:has(.studio-surface) .trust-profile > .trust-sport-pills {grid-column:1 / -1;}
+  body:has(.studio-surface) .trust-profile > .trust-sport-pills,
+  body:has(.studio-surface) .trust-profile > .athlete-profile-facts {grid-column:1 / -1;}
   body:has(.studio-surface) .trust-filters[open] {display:block;}
   body:has(.studio-surface) .trust-filter-fields {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;}
   body:has(.studio-surface) .trust-filter-fields > button {grid-column:1 / -1;justify-self:start;}
@@ -786,3 +787,16 @@ body:has(.studio-surface) .action {
     min-width: 42px;
   }
 }
+/* The directory stays a desktop workspace, with the mobile app's data model. */
+body:has(.studio-surface) .directory-filter-grid label { font-size: 14px; }
+body:has(.studio-surface) .directory-panel .field-hint { font-size: 14px; }
+body:has(.studio-surface) .athlete-profile-facts dt { font-size: 14px; }
+body:has(.studio-surface) .directory-fields .field-hint { font-size: 14px; }
+@media (min-width: 1100px) {
+  body:has(.studio-surface) .directory-filter-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  body:has(.studio-surface) .directory-filter-grid .directory-wide { grid-column: auto; }
+  body:has(.studio-surface) .athlete-profile-facts dl { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  body:has(.studio-surface) .athlete-profile-facts dl > div:last-child { grid-column: auto; }
+}
+body:has(.studio-surface[data-theme="light"]) .directory-filter-grid input,
+body:has(.studio-surface[data-theme="light"]) .directory-filter-grid select { color-scheme: light; }

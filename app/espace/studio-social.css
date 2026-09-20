@@ -695,3 +695,140 @@ body:has(.studio-surface) .profile-subnav a[aria-current='page'] {
     margin-left: 52px;
   }
 }
+/* Category-aware directory: generous touch targets, no fixed-width controls. */
+body:has(.studio-surface) .directory-panel {
+  margin: 20px 0 24px;
+  padding: 20px;
+  border: 1px solid #364139;
+  border-radius: 20px;
+  background: #171d1e;
+}
+body:has(.studio-surface) .directory-panel h2 {
+  font-size: 18px;
+  margin: 0 0 18px;
+}
+body:has(.studio-surface) .directory-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 14px;
+}
+body:has(.studio-surface) .directory-filter-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: #c6cebf;
+  min-width: 0;
+}
+body:has(.studio-surface) .directory-filter-grid input,
+body:has(.studio-surface) .directory-filter-grid select {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid #526057;
+  border-radius: 10px;
+  background: #101415;
+  color: #f1f3ed;
+  font: inherit;
+  font-size: 16px;
+  color-scheme: dark;
+}
+body:has(.studio-surface) .directory-filter-grid input:focus-visible,
+body:has(.studio-surface) .directory-filter-grid select:focus-visible {
+  outline: 2px solid #d1f94c;
+  outline-offset: 3px;
+}
+body:has(.studio-surface) .directory-filter-grid .directory-wide {
+  grid-column: 1 / -1;
+}
+body:has(.studio-surface) .directory-extra {
+  margin: 18px 0;
+}
+body:has(.studio-surface) .directory-extra summary {
+  cursor: pointer;
+  padding: 10px 0;
+  font-size: 14px;
+}
+body:has(.studio-surface) .directory-extra .directory-filter-grid {
+  margin-top: 12px;
+}
+body:has(.studio-surface) .directory-panel > button {
+  margin-top: 16px;
+  white-space: normal;
+  height: auto;
+  min-height: 44px;
+}
+body:has(.studio-surface) .directory-fields {
+  min-width: 0;
+}
+body:has(.studio-surface) .directory-fields .field {
+  min-width: 0;
+}
+body:has(.studio-surface) .athlete-measurements {
+  border: 0;
+  padding: 0;
+  margin: 0 0 24px;
+  min-width: 0;
+}
+body:has(.studio-surface) .athlete-measurements legend {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+body:has(.studio-surface) .athlete-profile-facts {
+  padding: 18px 0;
+  border-bottom: 1px solid #364139;
+}
+body:has(.studio-surface) .athlete-profile-facts h3 {
+  font-size: 16px;
+  margin: 0 0 16px;
+}
+body:has(.studio-surface) .athlete-profile-facts dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+}
+body:has(.studio-surface) .athlete-profile-facts dl > div:last-child {
+  grid-column: 1 / -1;
+}
+body:has(.studio-surface) .athlete-profile-facts dt {
+  color: #aab5ac;
+  font-size: 12px;
+}
+body:has(.studio-surface) .athlete-profile-facts dd {
+  margin: 5px 0 0;
+  font-size: 18px;
+  overflow-wrap: anywhere;
+}
+body:has(.studio-surface) .athlete-profile-facts a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  margin-top: 12px;
+  color: #d1f94c;
+  font-size: 14px;
+}
+body:has(.studio-surface) .athlete-profile-facts a svg { flex-shrink: 0; }
+body:has(.studio-surface) .directory-fields [data-slot="native-select-wrapper"] {
+  width: 100%;
+  min-width: 0;
+}
+body:has(.studio-surface) .directory-fields select {
+  padding-right: 38px;
+}
+body:has(.studio-surface) .directory-profile-summary,
+body:has(.studio-surface) .trust-sport-pills span {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 480px) {
+  body:has(.studio-surface) .directory-panel {
+    padding: 18px 16px;
+  }
+  body:has(.studio-surface) .directory-filter-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

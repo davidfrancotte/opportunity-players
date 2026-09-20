@@ -1,7 +1,8 @@
 'use client';
+import { changeDirectoryKind, collectiveTypes, countrySuggestions, dominantSides, emptyDirectoryFilters, genders, levels, matchesDirectory, positionsFor, professionalTypes, sideLabel, type DirectoryFilters } from "@/lib/studio/directory";
 import Link from 'next/link';
 import { MemberDossier, SafetyActions } from './trust-screens';
-import { memberSports, matchesSportRecords, levels } from '@/lib/studio/trust';
+import { memberSports } from "@/lib/studio/trust";
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
@@ -398,43 +399,22 @@ export function FeedPage() {
 export function NetworkPage() {
   const { social, dispatchSocial, requestAccess, trust } = useDemo();
   const router = useRouter();
-  const [query, setQuery] = useState('');
-  const [kind, setKind] = useState('Tous');
-  const [sport, setSport] = useState('Tous');
+  const [filters, setFilters] = useState<DirectoryFilters>({ ...emptyDirectoryFilters });
+  const { query, kind, sport } = filters;
+  const updateFilter = (key: keyof DirectoryFilters, value: string) =>
+    setFilters((f) => ({ ...f, [key]: value }));
   const [onlyFollowed, setOnlyFollowed] = useState(false);
   const [member, setMember] = useState<Member | null>(null);
-  const [level, setLevel] = useState('Tous');
-  const [club, setClub] = useState('');
-  const [ranking, setRanking] = useState('');
   const filtered = members.filter(
     (m) =>
-      (kind === 'Tous' || m.kind === kind) &&
       !trust.blocked.includes(m.id) &&
-      (memberSports[m.id]
-        ? matchesSportRecords(memberSports[m.id], sport, level, club, ranking)
-        : (sport === 'Tous' || m.sport === sport) &&
-          level === 'Tous' &&
-          !club.trim() &&
-          !ranking.trim()) &&
       (!onlyFollowed || social.following.includes(m.id)) &&
-      matchesQuery(
-        [
-          m.name,
-          m.role,
-          m.city,
-          m.sport,
-          ...(memberSports[m.id] || []).flatMap((r) => [
-            r.sport,
-            ...r.clubs.map((c) => c.name),
-          ]),
-        ].join(' '),
-        query,
-      ),
+      matchesDirectory(m, memberSports[m.id] || [], filters),
   );
   function message(m: Member) {
-    if (!requestAccess('message', m.id)) return;
-    dispatchSocial({ type: 'open-chat', id: m.id });
-    router.push('/espace/messages');
+    if (!requestAccess("message", m.id)) return;
+    dispatchSocial({ type: "open-chat", id: m.id });
+    router.push("/espace/messages");
   }
   return (
     <ProfileLayout>
@@ -450,17 +430,21 @@ export function NetworkPage() {
       <NetworkSections />
       <SearchField
         value={query}
-        onChange={setQuery}
+        onChange={(v) => updateFilter("query", v)}
         label="Nom, rôle, club ou ville…"
       />
       <Chips
         label="Types de membres"
-        values={['Tous', 'Joueurs', 'Professionnels', 'Collectives']}
+        values={["Tous", "Joueurs", "Professionnels", "Collectives"]}
         value={kind}
-        onChange={setKind}
+        onChange={(v) => setFilters((f) => changeDirectoryKind(f, v))}
       />
       <div className="network-controls">
-        <SportSelect id="network-sport" value={sport} onChange={setSport} />
+        <SportSelect
+          id="network-sport"
+          value={sport}
+          onChange={(v) => setFilters((f) => ({ ...f, sport: v, position: "" }))}
+        />
         <Button
           variant="ghost"
           className="followed-filter"
@@ -470,63 +454,164 @@ export function NetworkPage() {
           Suivis · {social.following.length}
         </Button>
       </div>
-      <div className="list-caption">
-        <details className="trust-filters">
-          <summary>Niveau et parcours sportif</summary>
-          <div className="trust-filter-fields">
+      <section className="directory-panel" aria-label="Filtres du réseau">
+        <h2>
+          {kind === "Joueurs"
+            ? "Trouver un sportif"
+            : kind === "Professionnels"
+              ? "Trouver un professionnel"
+              : kind === "Collectives"
+                ? "Trouver un collectif"
+                : "Affiner votre recherche"}
+        </h2>
+        <div className="directory-filter-grid">
           <label>
-            Niveau
-            <select
-              aria-label="Filtrer par niveau"
-              value={level}
-              onChange={(e) => setLevel(e.target.value)}
-            >
-              {['Tous', ...levels].map((l) => (
-                <option key={l}>{l}</option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Club actuel ou passé
+            Pays
             <input
-              aria-label="Filtrer par club"
-              value={club}
-              onChange={(e) => setClub(e.target.value)}
-              placeholder="Nom du club"
+              aria-label="Filtrer par pays"
+              value={filters.country}
+              onChange={(e) => updateFilter("country", e.target.value)}
+              list="filter-countries"
+              placeholder="Tous les pays"
             />
           </label>
+          <datalist id="filter-countries">
+            {countrySuggestions.map((c) => (
+              <option key={c} value={c} />
+            ))}
+          </datalist>
           <label>
-            Classement
+            Ville
             <input
-              aria-label="Filtrer par classement"
-              value={ranking}
-              onChange={(e) => setRanking(e.target.value)}
-              placeholder="Ex. C15.2, P200…"
+              aria-label="Filtrer par ville"
+              value={filters.city}
+              onChange={(e) => updateFilter("city", e.target.value)}
+              placeholder="Toutes les villes"
             />
           </label>
-          <Button
-            variant="ghost"
-            onClick={() => {
-              setLevel('Tous');
-              setClub('');
-              setRanking('');
-              setSport('Tous');
-            }}
-          >
-            Réinitialiser ces filtres
-          </Button>
-          </div>
-        </details>
-      </div>
+          {kind === "Joueurs" && (
+            <>
+              <label>
+                Genre
+                <select
+                  aria-label="Filtrer par genre"
+                  value={filters.gender}
+                  onChange={(e) => updateFilter("gender", e.target.value)}
+                >
+                  <option value="Tous">Tous les genres</option>
+                  {genders.map((v) => (
+                    <option key={v}>{v}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Niveau
+                <select
+                  aria-label="Filtrer par niveau"
+                  value={filters.level}
+                  onChange={(e) => updateFilter("level", e.target.value)}
+                >
+                  <option value="Tous">Tous les niveaux</option>
+                  {levels.map((v) => (
+                    <option key={v}>{v}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Position / poste
+                <input
+                  aria-label="Filtrer par position"
+                  value={filters.position}
+                  onChange={(e) => updateFilter("position", e.target.value)}
+                  list="filter-positions"
+                  placeholder="Tous les postes"
+                />
+              </label>
+              <datalist id="filter-positions">
+                {positionsFor(sport).map((v) => (
+                  <option key={v} value={v} />
+                ))}
+              </datalist>
+              <label>
+                {sideLabel(sport)}
+                <select
+                  aria-label="Filtrer par côté dominant"
+                  value={filters.dominantSide}
+                  onChange={(e) => updateFilter("dominantSide", e.target.value)}
+                >
+                  <option value="Tous">Tous les côtés</option>
+                  {dominantSides.map((v) => (
+                    <option key={v}>{v}</option>
+                  ))}
+                </select>
+              </label>
+            </>
+          )}
+          {["Professionnels", "Collectives"].includes(kind) && (
+            <label className="directory-wide">
+              Type de compte
+              <select
+                aria-label="Filtrer par type de compte"
+                value={filters.accountType}
+                onChange={(e) => updateFilter("accountType", e.target.value)}
+              >
+                <option value="Tous">Tous les types de compte</option>
+                {(kind === "Professionnels" ? professionalTypes : collectiveTypes).map((v) => (
+                  <option key={v}>{v}</option>
+                ))}
+              </select>
+            </label>
+          )}
+        </div>
+        {kind === "Tous" && (
+          <p className="field-hint">
+            Choisissez Joueurs, Professionnels ou Collectives pour afficher les critères
+            spécifiques.
+          </p>
+        )}
+        {kind === "Joueurs" && (
+          <details className="directory-extra">
+            <summary>Club et classement</summary>
+            <div className="directory-filter-grid">
+              <label>
+                Club actuel ou passé
+                <input
+                  aria-label="Filtrer par club"
+                  value={filters.club}
+                  onChange={(e) => updateFilter("club", e.target.value)}
+                  placeholder="Nom du club"
+                />
+              </label>
+              <label>
+                Classement
+                <input
+                  aria-label="Filtrer par classement"
+                  value={filters.ranking}
+                  onChange={(e) => updateFilter("ranking", e.target.value)}
+                  placeholder="Ex. C15.2, P200…"
+                />
+              </label>
+            </div>
+          </details>
+        )}
+        <Button
+          variant="ghost"
+          onClick={() => {
+            setFilters({ ...emptyDirectoryFilters, kind });
+            setOnlyFollowed(false);
+          }}
+        >
+          Réinitialiser les filtres
+        </Button>
+      </section>
       <div className="list-caption">
-        <span>
-          {onlyFollowed ? 'Vous les suivez' : 'Des profils à découvrir'}
+        <span>{onlyFollowed ? "Vous les suivez" : "Des profils à découvrir"}</span>
+        <span role="status" aria-live="polite">
+          {filtered.length} résultats
         </span>
-        <span>{filtered.length} résultats</span>
       </div>
       <p className="demo-context">
-        Tous les membres sont fictifs. « Collectives » : clubs, équipes et
-        organisations.
+        Tous les membres sont fictifs. « Collectives » : clubs, équipes et organisations.
       </p>
       <div className="network-list">
         {filtered.map((m) => (
@@ -535,41 +620,38 @@ export function NetworkPage() {
               <img src={m.image} alt="" />
               <span>
                 <small>
-                  {m.kind} ·{' '}
-                  {memberSports[m.id]?.map((r) => r.sport).join(' / ') ||
-                    m.sport}
+                  {m.kind} · {memberSports[m.id]?.map((r) => r.sport).join(" / ") || m.sport}
                 </small>
                 <strong>{m.name}</strong>
                 <span>{m.role}</span>
+                <span>{[m.gender, m.accountType].filter(Boolean).join(" · ")}</span>
                 {memberSports[m.id] && (
                   <span className="trust-filter-hint">
                     {memberSports[m.id]
-                      .filter((r) => sport === 'Tous' || r.sport === sport)
-                      .map((r) => r.sport + ' · ' + r.level + ' · ' + r.ranking)
-                      .join(' / ')}
+                      .filter((r) => sport === "Tous" || r.sport === sport)
+                      .map((r) =>
+                        [r.sport, r.level, r.ranking, r.position, r.dominantSide]
+                          .filter(Boolean)
+                          .join(" · "),
+                      )
+                      .join(" / ")}
                   </span>
                 )}
                 <span className="member-location">
                   <MapPin size={12} />
-                  {m.city}
+                  {m.city}, {m.country}
                 </span>
               </span>
               <ArrowUpRight size={17} />
             </button>
             <div className="member-actions">
               <Button
-                variant={
-                  social.following.includes(m.id) ? 'secondary' : 'default'
-                }
+                variant={social.following.includes(m.id) ? "secondary" : "default"}
                 aria-pressed={social.following.includes(m.id)}
-                onClick={() => dispatchSocial({ type: 'follow', id: m.id })}
+                onClick={() => dispatchSocial({ type: "follow", id: m.id })}
               >
-                {social.following.includes(m.id) ? (
-                  <Check size={16} />
-                ) : (
-                  <Plus size={16} />
-                )}
-                {social.following.includes(m.id) ? 'Suivi' : 'Suivre'}
+                {social.following.includes(m.id) ? <Check size={16} /> : <Plus size={16} />}
+                {social.following.includes(m.id) ? "Suivi" : "Suivre"}
               </Button>
               <Button variant="outline" onClick={() => message(m)}>
                 <MessageCircle size={16} />
@@ -590,24 +672,24 @@ export function NetworkPage() {
         onOpenChange={(v) => {
           if (!v) setMember(null);
         }}
-        title={member?.name || 'Profil'}
+        title={member?.name || "Profil"}
         description="Profil fictif de démonstration, sans lien avec une personne ou un club réel."
       >
         {member && (
           <div className="member-detail">
-            <img src={member.image} alt={'Illustration · ' + member.sport} />
+            <img src={member.image} alt={"Illustration · " + member.sport} />
             <span className="sport-chip">
               {member.kind} · {member.sport}
             </span>
             <h3>{member.role}</h3>
-            <p>{member.city}</p>
+            <p>
+              {member.city}, {member.country}
+            </p>
+            <p>{[member.gender, member.accountType].filter(Boolean).join(" · ")}</p>
             <p>{member.bio}</p>
             <MemberDossier key={member.id} member={member} />
             <SafetyActions memberId={member.id} />
-            <Link
-              className="action secondary"
-              href={`/espace/organiser?invite=${member.id}`}
-            >
+            <Link className="action secondary" href={`/espace/organiser?invite=${member.id}`}>
               Inviter à jouer
             </Link>
             <Button className="action primary" onClick={() => message(member)}>

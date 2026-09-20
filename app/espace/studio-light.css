@@ -634,6 +634,32 @@ body:has(.studio-surface[data-theme="light"]) .profile-subnav a[aria-current='pa
   background: var(--studio-tint);
   color: var(--studio-accent-ink);
 }
+body:has(.studio-surface[data-theme="light"]) .directory-panel {
+  border: 1px solid var(--studio-line);
+  background: var(--studio-panel);
+}
+body:has(.studio-surface[data-theme="light"]) .directory-filter-grid label {
+  color: var(--studio-muted);
+}
+body:has(.studio-surface[data-theme="light"]) .directory-filter-grid input,
+body:has(.studio-surface[data-theme="light"]) .directory-filter-grid select {
+  border: 1px solid var(--studio-line);
+  background: var(--studio-panel);
+  color: var(--studio-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .directory-filter-grid input:focus-visible,
+body:has(.studio-surface[data-theme="light"]) .directory-filter-grid select:focus-visible {
+  outline: 2px solid var(--studio-accent-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .athlete-profile-facts {
+  border-bottom: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .athlete-profile-facts dt {
+  color: var(--studio-muted);
+}
+body:has(.studio-surface[data-theme="light"]) .athlete-profile-facts a {
+  color: var(--studio-accent-ink);
+}
 body:has(.studio-surface[data-theme="light"]) .free-plan-note {
   border: 1px solid var(--studio-line);
   background: var(--studio-tint);

@@ -1,9 +1,12 @@
-'use client';
-import { FreePlanNote } from './subscription-ui';
-import { moderateText } from '@/lib/studio/trust';
-import { useState, type FormEvent } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+"use client";
+import { FreePlanNote } from "./subscription-ui";
+import { ProfileDirectoryFields } from "./directory-fields";
+import { athleteIssues, normalizeMeasurement } from "@/lib/studio/athlete";
+import { directoryIssues, primaryRecord } from "@/lib/studio/directory";
+import { moderateText } from "@/lib/studio/trust";
+import { useState, type FormEvent } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   Check,
@@ -12,23 +15,12 @@ import {
   UserRound,
   BriefcaseBusiness,
   Building2,
-} from 'lucide-react';
-import { Button } from '@/components/studio/ui/button';
-import { Textarea } from '@/components/studio/ui/textarea';
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from '@/components/studio/ui/native-select';
-import { useDemo } from './demo-provider';
-import {
-  AuthLayout,
-  Field,
-  Password,
-  Submit,
-  Guard,
-  FormErrors,
-  focusError,
-} from './studio-ui';
+} from "lucide-react";
+import { Button } from "@/components/studio/ui/button";
+import { Textarea } from "@/components/studio/ui/textarea";
+import { NativeSelect, NativeSelectOption } from "@/components/studio/ui/native-select";
+import { useDemo } from "./demo-provider";
+import { AuthLayout, Field, Password, Submit, Guard, FormErrors, focusError } from "./studio-ui";
 import {
   DEMO_CODE,
   DEMO_PASSWORD,
@@ -44,42 +36,38 @@ import {
   validEmail,
   type Category,
   type Issues,
-} from '@/lib/studio/model';
-const value = (form: FormData, key: string) =>
-  String(form.get(key) || '').trim();
+  type Profile,
+} from "@/lib/studio/model";
+const value = (form: FormData, key: string) => String(form.get(key) || "").trim();
 
 export function Signup() {
   const { draft, setDraft, setEmailVerified, dispatchTrust } = useDemo();
+  const [identityDefaults] = useState(draft);
   const router = useRouter();
   const [errors, setErrors] = useState<Issues>({});
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const identity = {
-      firstName: value(data, 'firstName'),
-      lastName: value(data, 'lastName'),
-      email: value(data, 'email'),
+      firstName: value(data, "firstName"),
+      lastName: value(data, "lastName"),
+      email: value(data, "email"),
     };
-    const issues = validateIdentity(
-      identity,
-      String(data.get('password') || ''),
-    );
-    if (!data.get('policy'))
-      issues.policy = 'Prenez connaissance de la notice de confidentialité.';
-    if (!data.get('accuracy'))
-      issues.accuracy =
-        'Confirmez l’exactitude des informations et le respect de la charte.';
+    const issues = validateIdentity(identity, String(data.get("password") || ""));
+    if (!data.get("policy")) issues.policy = "Prenez connaissance de la notice de confidentialité.";
+    if (!data.get("accuracy"))
+      issues.accuracy = "Confirmez l’exactitude des informations et le respect de la charte.";
     if (moderateText(JSON.stringify(identity)))
-      issues.firstName = 'Reformulez les informations de manière respectueuse.';
+      issues.firstName = "Reformulez les informations de manière respectueuse.";
     setErrors(issues);
     focusError(issues);
     if (Object.keys(issues).length) return;
-    dispatchTrust({ type: 'reset' });
-    dispatchTrust({ type: 'consent', policy: true, accuracy: true });
+    dispatchTrust({ type: "reset" });
+    dispatchTrust({ type: "consent", policy: true, accuracy: true });
     setDraft(createProfile(identity));
     setEmailVerified(false);
     e.currentTarget.reset();
-    router.push('/espace/verification');
+    router.push("/espace/verification");
   }
   return (
     <AuthLayout
@@ -102,7 +90,7 @@ export function Signup() {
             autoComplete="given-name"
             required
             maxLength={60}
-            defaultValue={draft?.firstName}
+            defaultValue={identityDefaults?.firstName}
             placeholder="Alex"
             error={errors.firstName}
           />
@@ -112,7 +100,7 @@ export function Signup() {
             autoComplete="family-name"
             required
             maxLength={60}
-            defaultValue={draft?.lastName}
+            defaultValue={identityDefaults?.lastName}
             placeholder="Dupont"
             error={errors.lastName}
           />
@@ -127,7 +115,7 @@ export function Signup() {
           inputMode="email"
           required
           maxLength={254}
-          defaultValue={draft?.email}
+          defaultValue={identityDefaults?.email}
           placeholder="alex@demo.example"
           error={errors.email}
         />
@@ -135,21 +123,16 @@ export function Signup() {
         <div className="trust-consents">
           <label>
             <input id="policy" name="policy" type="checkbox" required />
-            J’ai pris connaissance de la{' '}
-            <Link
-              href="/espace/confidentialite"
-              target="_blank"
-              rel="noreferrer"
-            >
+            J’ai pris connaissance de la{" "}
+            <Link href="/espace/confidentialite" target="_blank" rel="noreferrer">
               notice de confidentialité de la démo
             </Link>
             .
           </label>
           <label>
             <input id="accuracy" name="accuracy" type="checkbox" required />
-            J’atteste l’exactitude de mes informations dans le service réel et
-            j’accepte la charte de respect. Pour cette démo, j’utilise
-            uniquement des données fictives.
+            J’atteste l’exactitude de mes informations dans le service réel et j’accepte la charte
+            de respect. Pour cette démo, j’utilise uniquement des données fictives.
           </label>
         </div>
         <div className="inline-note">
@@ -162,7 +145,7 @@ export function Signup() {
         <Submit>Continuer</Submit>
       </form>
       <p className="switch-auth">
-        Déjà membre ?{' '}
+        Déjà membre ?{" "}
         <Link href="/espace/connexion">
           Se connecter <ArrowRight size={14} />
         </Link>
@@ -174,8 +157,8 @@ export function Signup() {
 export function VerifyEmail() {
   const { draft, setEmailVerified, notify } = useDemo();
   const router = useRouter();
-  const [code, setCode] = useState('');
-  const [error, setError] = useState('');
+  const [code, setCode] = useState("");
+  const [error, setError] = useState("");
   const [resends, setResends] = useState(0);
   const [attempts, setAttempts] = useState(0);
   const [expires, setExpires] = useState(() => Date.now() + 600000);
@@ -183,16 +166,16 @@ export function VerifyEmail() {
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (attempts >= 5 || Date.now() > expires) {
-      setError('Code expiré ou trop de tentatives. Simulez un nouvel envoi.');
+      setError("Code expiré ou trop de tentatives. Simulez un nouvel envoi.");
       return;
     }
     setAttempts(attempts + 1);
     if (!validDemoCode(code)) {
-      setError('Le code de démonstration est 246810.');
+      setError("Le code de démonstration est 246810.");
       return;
     }
     setEmailVerified(true);
-    router.push('/espace/double-facteur');
+    router.push("/espace/double-facteur");
   }
   return (
     <AuthLayout
@@ -230,8 +213,8 @@ export function VerifyEmail() {
           className="code-input"
           value={code}
           onChange={(e) => {
-            setCode(e.target.value.replace(/\D/g, ''));
-            setError('');
+            setCode(e.target.value.replace(/\D/g, ""));
+            setError("");
           }}
           placeholder="000000"
           error={error}
@@ -250,8 +233,8 @@ export function VerifyEmail() {
           setResends(resends + 1);
           setAttempts(0);
           setExpires(Date.now() + 600000);
-          setError('');
-          notify('Renvoi simulé : aucun e-mail envoyé. Le code reste 246810.');
+          setError("");
+          notify("Renvoi simulé : aucun e-mail envoyé. Le code reste 246810.");
         }}
       >
         <RefreshCw size={15} /> Simuler un nouvel envoi
@@ -268,10 +251,11 @@ export function VerifyEmail() {
 export function Personalise() {
   const { draft, setDraft, emailVerified, trust } = useDemo();
   const router = useRouter();
-  const [category, setCategory] = useState<Category>(
-    draft?.category || 'Sportif',
-  );
+  const [category, setCategory] = useState<Category>(draft?.category || "Sportif");
   const [errors, setErrors] = useState<Issues>({});
+  const [discovery, setDiscovery] = useState<Profile>(() =>
+    structuredClone(draft || initialProfile),
+  );
   if (!draft) return <Guard />;
   if (!emailVerified) return <Guard verification />;
   if (!trust.securityStep || !trust.policy || !trust.accuracy)
@@ -280,10 +264,7 @@ export function Personalise() {
         title="Terminez la validation."
         intro="Les validations de la démo sont nécessaires avant de poursuivre."
       >
-        <Link
-          className="action primary"
-          href={trust.policy ? '/espace/double-facteur' : '/espace/inscription'}
-        >
+        <Link className="action primary" href={trust.policy ? "/espace/double-facteur" : "/espace/inscription"}>
           Reprendre la validation
         </Link>
       </AuthLayout>
@@ -291,43 +272,45 @@ export function Personalise() {
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-    const issues: Issues = {};
-    if (!value(data, 'headline'))
-      issues.headline = 'Indiquez votre rôle dans le sport.';
-    if (!value(data, 'city')) issues.city = 'Indiquez une ville fictive.';
-    if (category === 'Organisation' && !value(data, 'organisation'))
-      issues.organisation = 'Indiquez le nom de l’organisation fictive.';
+    const issues: Issues = {
+      ...directoryIssues({ ...discovery, category }),
+      ...athleteIssues({ ...discovery, category }),
+    };
+    if (!value(data, "headline")) issues.headline = "Indiquez votre rôle dans le sport.";
+    if (!value(data, "city")) issues.city = "Indiquez une ville fictive.";
+    if (category === "Organisation" && !value(data, "organisation"))
+      issues.organisation = "Indiquez le nom de l’organisation fictive.";
     if (
       moderateText(
         [
-          value(data, 'headline'),
-          value(data, 'city'),
-          value(data, 'organisation'),
-        ].join(' '),
+          value(data, "headline"),
+          value(data, "city"),
+          value(data, "organisation"),
+          JSON.stringify(discovery),
+        ].join(" "),
       )
     )
-      issues.headline = 'Utilisez des informations respectueuses.';
+      issues.headline = "Utilisez des informations respectueuses.";
     setErrors(issues);
     focusError(issues);
     if (Object.keys(issues).length) return;
     setDraft({
       ...draft!,
       category,
-      sport: value(data, 'sport'),
-      disciplines: [
-        {
-          sport: value(data, 'sport'),
-          level: value(data, 'level'),
-          ranking: value(data, 'ranking'),
-          federation: '',
-          clubs: [],
-        },
-      ],
-      headline: value(data, 'headline'),
-      city: value(data, 'city'),
-      organisation: value(data, 'organisation'),
+      country: discovery.country.trim(),
+      weightKg: category === "Sportif" ? normalizeMeasurement(discovery.weightKg) : "",
+      heightCm: category === "Sportif" ? normalizeMeasurement(discovery.heightCm) : "",
+      gender: category === "Sportif" ? discovery.gender : "",
+      accountType: category === "Sportif" ? "" : discovery.accountType,
+      sport: discovery.sport,
+      disciplines: discovery.disciplines.some((r) => r.sport === discovery.sport)
+        ? discovery.disciplines
+        : [...discovery.disciplines, primaryRecord(discovery)],
+      headline: value(data, "headline"),
+      city: value(data, "city"),
+      organisation: value(data, "organisation"),
     });
-    router.push('/espace/presentation');
+    router.push("/espace/presentation");
   }
   const icons = [UserRound, BriefcaseBusiness, Building2];
   return (
@@ -350,13 +333,17 @@ export function Personalise() {
           {categories.map((cat, i) => {
             const Icon = icons[i];
             return (
-              <label key={cat} className={category === cat ? 'selected' : ''}>
+              <label key={cat} className={category === cat ? "selected" : ""}>
                 <input
                   type="radio"
                   name="category"
                   value={cat}
                   checked={category === cat}
-                  onChange={() => setCategory(cat)}
+                  onChange={() => {
+                    setCategory(cat);
+                    setDiscovery((p) => ({ ...p, category: cat, accountType: "" }));
+                    setErrors({});
+                  }}
                 />
                 <Icon size={21} />
                 <span>{cat}</span>
@@ -366,12 +353,12 @@ export function Personalise() {
           })}
         </fieldset>
         <FreePlanNote category={category} />
-        {category === 'Organisation' && (
+        {category === "Organisation" && (
           <Field
             label="Nom de l’organisation fictive"
             name="organisation"
             autoComplete="organization"
-            defaultValue={draft.organisation}
+            defaultValue={discovery.organisation}
             error={errors.organisation}
             maxLength={100}
           />
@@ -380,7 +367,8 @@ export function Personalise() {
           <NativeSelect
             id="sport"
             name="sport"
-            defaultValue={draft.sport}
+            value={discovery.sport}
+            onChange={(e) => setDiscovery((p) => ({ ...p, sport: e.target.value }))}
             className="select-field"
           >
             {sports.map((s) => (
@@ -390,44 +378,33 @@ export function Personalise() {
             ))}
           </NativeSelect>
         </Field>
-        <Field label="Niveau dans cette discipline" name="level">
-          <NativeSelect id="level" name="level" defaultValue="Loisir">
-            {[
-              'Débutant',
-              'Loisir',
-              'Intermédiaire',
-              'Compétition',
-              'Professionnel',
-            ].map((l) => (
-              <NativeSelectOption key={l}>{l}</NativeSelectOption>
-            ))}
-          </NativeSelect>
-        </Field>
-        <Field
-          label="Classement (facultatif)"
-          name="ranking"
-          maxLength={80}
-          placeholder="Ex. P200 ou C15.2, pays et saison"
+        <ProfileDirectoryFields
+          profile={{ ...discovery, category }}
+          onChange={(p) => {
+            setDiscovery(p);
+            setErrors((previous) => {
+              const next = { ...previous };
+              delete next.country;
+              delete next.gender;
+              delete next.accountType;
+              delete next.weightKg;
+              delete next.heightCm;
+              return next;
+            });
+          }}
+          errors={errors}
         />
-        <p className="field-hint">
-          Vous pourrez ajouter d’autres sports, leurs niveaux et leurs clubs
-          dans Profil → Sports, niveaux & clubs.
-        </p>
         <Field
-          label={
-            category === 'Organisation'
-              ? 'Votre activité'
-              : 'Votre rôle ou spécialité'
-          }
+          label={category === "Organisation" ? "Votre activité" : "Votre rôle ou spécialité"}
           name="headline"
-          defaultValue={draft.headline}
+          defaultValue={discovery.headline}
           autoComplete="organization-title"
           placeholder={
-            category === 'Professionnel'
-              ? 'Coach de padel'
-              : category === 'Organisation'
-                ? 'Club de padel'
-                : 'Joueur de padel'
+            category === "Professionnel"
+              ? "Coach de padel"
+              : category === "Organisation"
+                ? "Club de padel"
+                : "Joueur de padel"
           }
           maxLength={90}
           error={errors.headline}
@@ -435,9 +412,9 @@ export function Personalise() {
         <Field
           label="Ville"
           name="city"
-          defaultValue={draft.city}
+          defaultValue={discovery.city}
           autoComplete="address-level2"
-          placeholder="Liège, Belgique"
+          placeholder="Liège"
           maxLength={90}
           error={errors.city}
         />
@@ -448,19 +425,11 @@ export function Personalise() {
 }
 
 export function Presentation() {
-  const {
-    draft,
-    setDraft,
-    emailVerified,
-    setProfile,
-    notify,
-    dispatchSocial,
-    trust,
-  } = useDemo();
+  const { draft, setDraft, emailVerified, setProfile, notify, dispatchSocial, trust } = useDemo();
   const router = useRouter();
   const [photo, setPhoto] = useState(draft?.photo || photos[0].src);
-  const [bio, setBio] = useState(draft?.bio || '');
-  const [bioError, setBioError] = useState('');
+  const [bio, setBio] = useState(draft?.bio || "");
+  const [bioError, setBioError] = useState("");
   if (!draft) return <Guard />;
   if (!emailVerified) return <Guard verification />;
   if (!trust.securityStep || !trust.policy || !trust.accuracy)
@@ -469,10 +438,7 @@ export function Presentation() {
         title="Terminez la validation."
         intro="Votre parcours d’inscription n’est pas terminé."
       >
-        <Link
-          className="action primary"
-          href={trust.policy ? '/espace/double-facteur' : '/espace/inscription'}
-        >
+        <Link className="action primary" href={trust.policy ? "/espace/double-facteur" : "/espace/inscription"}>
           Reprendre la validation
         </Link>
       </AuthLayout>
@@ -480,16 +446,14 @@ export function Presentation() {
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (moderateText(bio)) {
-      setBioError('Reformulez votre présentation de manière respectueuse.');
+      setBioError("Reformulez votre présentation de manière respectueuse.");
       return;
     }
     setProfile({ ...draft!, bio: bio.trim(), photo });
-    dispatchSocial({ type: 'reset' });
+    dispatchSocial({ type: "reset" });
     setDraft(null);
-    notify(
-      'Votre profil de démonstration est prêt. Aucun compte réel n’a été créé.',
-    );
-    router.push('/espace/accueil');
+    notify("Votre profil de démonstration est prêt. Aucun compte réel n’a été créé.");
+    router.push("/espace/accueil");
   }
   return (
     <AuthLayout
@@ -511,12 +475,10 @@ export function Presentation() {
         )}
         <fieldset className="photo-choices">
           <legend>Choisir une illustration de profil</legend>
-          <p className="field-hint">
-            Personnages fictifs, images de démonstration.
-          </p>
+          <p className="field-hint">Personnages fictifs, images de démonstration.</p>
           <div>
             {photos.slice(0, 4).map((p) => (
-              <label key={p.src} className={photo === p.src ? 'selected' : ''}>
+              <label key={p.src} className={photo === p.src ? "selected" : ""}>
                 <input
                   type="radio"
                   name="photo"
@@ -565,20 +527,15 @@ export function Login() {
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-    const email = value(data, 'email').toLowerCase();
-    const issues = validateDemoLogin(
-      email,
-      String(data.get('password') || ''),
-      profile.email,
-    );
+    const email = value(data, "email").toLowerCase();
+    const issues = validateDemoLogin(email, String(data.get("password") || ""), profile.email);
     setErrors(issues);
     focusError(issues);
     if (Object.keys(issues).length) return;
-    if (email !== profile.email.toLowerCase())
-      setProfile(structuredClone(initialProfile));
+    if (email !== profile.email.toLowerCase()) setProfile(structuredClone(initialProfile));
     e.currentTarget.reset();
-    notify('Vous explorez une session fictive, sans authentification réelle.');
-    router.push('/espace/accueil');
+    notify("Vous explorez une session fictive, sans authentification réelle.");
+    router.push("/espace/accueil");
   }
   return (
     <AuthLayout
@@ -589,8 +546,7 @@ export function Login() {
           vous revoir<span className="lime">.</span>
         </>
       }
-      intro="Retrouvez votre réseau, vos matchs et votre dossier multisport : niveaux, clubs, agent et références. Vos signalements et votre parrainage ont aussi leur espace."
-      back="/"
+      intro="Votre parcours, vos ambitions, votre prochain chapitre."
     >
       <form onSubmit={submit} noValidate id="login-form">
         <FormErrors errors={errors} />
@@ -614,8 +570,7 @@ export function Login() {
         <Submit>Se connecter à la démo</Submit>
       </form>
       <p className="switch-auth">
-        Pas encore de profil ?{' '}
-        <Link href="/espace/inscription">Créer un compte gratuit</Link>
+        Pas encore de profil ? <Link href="/espace/inscription">Créer un compte gratuit</Link>
       </p>
       <div className="demo-access">
         <span className="eyebrow">POUR ESSAYER EN UN CLIC</span>
@@ -626,8 +581,8 @@ export function Login() {
           variant="secondary"
           onClick={() => {
             setProfile(structuredClone(initialProfile));
-            notify('Profil fictif d’Alex ouvert.');
-            router.push('/espace/accueil');
+            notify("Profil fictif d’Alex ouvert.");
+            router.push("/espace/accueil");
           }}
         >
           Entrer dans l’espace web démo <ArrowRight size={17} />
@@ -642,15 +597,15 @@ export function Login() {
 
 export function ForgotPassword() {
   const [sent, setSent] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const email = value(new FormData(e.currentTarget), 'email');
+    const email = value(new FormData(e.currentTarget), "email");
     if (!validEmail(email)) {
-      setError('Indiquez une adresse au format nom@exemple.com.');
+      setError("Indiquez une adresse au format nom@exemple.com.");
       return;
     }
-    setError('');
+    setError("");
     setSent(true);
   }
   return (
@@ -658,7 +613,7 @@ export function ForgotPassword() {
       back="/espace/connexion"
       title={
         sent ? (
-          'Votre accès, en toute simplicité.'
+          "Votre accès, en toute simplicité."
         ) : (
           <>
             On vous remet
@@ -669,8 +624,8 @@ export function ForgotPassword() {
       }
       intro={
         sent
-          ? 'Vous venez de tester le parcours de récupération.'
-          : 'Indiquez une adresse fictive pour découvrir la récupération de compte.'
+          ? "Vous venez de tester le parcours de récupération."
+          : "Indiquez une adresse fictive pour découvrir la récupération de compte."
       }
     >
       {sent ? (
@@ -678,7 +633,7 @@ export function ForgotPassword() {
           <Mail size={32} />
           <h2>Envoi simulé.</h2>
           <p>
-            Aucun e-mail n’a été envoyé. Dans cette démo, le mot de passe reste{' '}
+            Aucun e-mail n’a été envoyé. Dans cette démo, le mot de passe reste{" "}
             <strong>{DEMO_PASSWORD}</strong>.
           </p>
           <Link href="/espace/connexion" className="action primary">
