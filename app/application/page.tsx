@@ -11,6 +11,9 @@ import {
   Check,
   ShieldCheck,
   Gift,
+  BriefcaseBusiness,
+  CalendarDays,
+  ClipboardCheck,
 } from 'lucide-react';
 import { AppPhone } from '@/components/app-showcase';
 import { AppPhoneStage } from '@/components/app-phone-stage';
@@ -19,7 +22,7 @@ import './application.css';
 export const metadata: Metadata = {
   title: 'L’application — Opportunity Players',
   description:
-    'Accueil sportif, réseau, messages, opportunités et profil : découvrez l’application Arena Studio et ses bénéfices pour les sportifs, professionnels et collectifs.',
+    'Recommandations, candidatures, essais, recrutement et rendez-vous : découvrez Arena Studio et ses bénéfices pour les sportifs, professionnels et collectifs.',
 };
 const features = [
   {
@@ -27,16 +30,17 @@ const features = [
     name: 'Accueil',
     icon: House,
     title: 'Votre sport fait l’actualité.',
-    text: 'Un fil de publications pour suivre les acteurs de votre discipline. Filtrez par sport, réagissez et partagez les moments qui font avancer votre parcours.',
+    text: 'Un fil sportif et des recommandations de personnes et d’opportunités selon vos sports, votre ville et votre pays. Comprenez pourquoi un profil vous est proposé, ajustez vos préférences et suivez les contacts qui correspondent à votre projet.',
     tools: [
       'Filtrer par sport',
       'Aimer et commenter',
       'Publier du texte et une image',
+      'Recommandations expliquées et préférences modifiables',
     ],
     benefits: [
-      'Inspirez-vous de votre communauté et, avec Premium, partagez vos progrès et vos temps forts.',
-      'Partagez vos méthodes et votre expertise. Avec Premium, ouvrez la discussion sous vos publications.',
-      'Faites vivre la vie du club et vos projets. Avec Premium, recueillez les commentaires de votre communauté.',
+      'Découvrez des personnes et des recherches liées à votre pratique. Avec Premium, partagez aussi vos progrès.',
+      'Repérez des missions pertinentes et développez votre réseau autour de vos disciplines et de votre localisation.',
+      'Découvrez des acteurs de votre écosystème et faites connaître la vie du club. Avec Premium, ouvrez les échanges.',
     ],
     limit:
       'Sportifs : publication réservée au Premium. Professionnels et collectifs : publication possible gratuitement ; réception de commentaires réservée au Premium.',
@@ -55,6 +59,7 @@ const features = [
       'Invitations avec +1 et effectif total ajustable',
       'Matchs ouverts à 50 km, sur candidature',
       'Agenda, confirmations et notifications',
+      'Demande de rendez-vous depuis un profil professionnel',
     ],
     benefits: [
       'Trouvez des partenaires d’un niveau adapté, y compris dans votre deuxième sport. Invitez vos contacts, répondez à plusieurs dates et venez avec un ami si les +1 sont autorisés.',
@@ -90,11 +95,12 @@ const features = [
     name: 'Opportunities',
     icon: Compass,
     title: 'Votre prochain chapitre se trouve ici.',
-    text: 'Explorez une sélection d’opportunités de coaching, de recrutement, de partenariat et de sponsoring. Filtrez par discipline et type, ouvrez les détails et gardez vos favoris.',
+    text: 'Explorez des opportunités de coaching, de recrutement, de partenariat et de sponsoring. Gardez vos favoris et, pour les recherches ouvertes à votre catégorie de profil, candidatez avec votre dossier. Retrouvez ensuite la réponse et les éventuelles invitations à un essai dans votre suivi.',
     tools: [
       'Filtres par sport et type',
       'Détail des opportunités',
       'Enregistrement en favoris',
+      'Candidatures structurées et suivi des réponses',
     ],
     benefits: [
       'Repérez une opportunité pertinente pour progresser ou rejoindre un nouveau projet.',
@@ -102,7 +108,67 @@ const features = [
       'Identifiez des projets et des partenaires susceptibles d’accompagner le développement de votre collectif.',
     ],
     limit:
-      'Dans cette démo, les annonces sont fictives et l’expression d’intérêt est simulée : aucune candidature n’est transmise.',
+      'Les candidatures et leurs statuts sont interactifs dans la démo, sans envoi réel. Les annonces de partenariat et de sponsoring conservent une expression d’intérêt simulée.',
+  },
+  {
+    id: 'candidatures',
+    name: 'Candidatures',
+    icon: ClipboardCheck,
+    title: 'Du dossier à votre prochain essai.',
+    text: 'Partagez un résumé de votre parcours avec le recruteur, suivez votre candidature puis répondez à une invitation. Une fois votre présence confirmée, retrouvez l’essai, sa date et son lieu dans votre agenda.',
+    tools: [
+      'Dossier partagé après confirmation',
+      'Statuts : envoyé, présélectionné, invité, confirmé',
+      'Date et lieu de l’essai',
+      'Retrait de candidature et notifications',
+    ],
+    benefits: [
+      'Présentez votre expérience sans tout ressaisir et sachez où en est votre candidature.',
+      'Candidatez aux missions de votre catégorie et centralisez le suivi de vos démarches.',
+      'Recevez des dossiers structurés et préparez une rencontre avec les candidats retenus.',
+    ],
+    limit:
+      'Seuls le nom et le résumé sportif sont partagés dans cette démo, sans coordonnées, date de naissance ni numéro de licence. Aucun dossier n’est envoyé à un recruteur réel.',
+  },
+  {
+    id: 'recrutement',
+    name: 'Recrutement',
+    icon: BriefcaseBusiness,
+    title: 'Les bons profils. Une sélection plus claire.',
+    text: 'Clubs et professionnels : publiez une recherche en précisant sport, ville, niveau et poste souhaités. Consultez les dossiers reçus, présélectionnez les candidats, proposez un essai et suivez les confirmations depuis un espace commun.',
+    tools: [
+      'Création et clôture des recherches',
+      'Dossiers reçus et filtres par statut',
+      'Présélection et invitations aux essais',
+      'Confirmation du candidat dans l’agenda',
+    ],
+    benefits: [
+      'Répondez à un besoin explicite et recevez une invitation concrète plutôt qu’un simple contact sans suite.',
+      'Structurez votre recherche de talents et préparez vos essais avec les personnes présélectionnées.',
+      'Centralisez vos recherches et les réponses pour mieux préparer la constitution de votre équipe.',
+    ],
+    limit:
+      'Gestion du recrutement réservée aux professionnels et collectifs Premium. La démonstration permet de tester les deux côtés avec des profils fictifs ; elle ne déclenche aucune sélection réelle.',
+  },
+  {
+    id: 'rendez-vous',
+    name: 'Rendez-vous',
+    icon: CalendarDays,
+    title: 'Un accord. Puis le bon créneau.',
+    text: 'Depuis le profil d’un professionnel, demandez un rendez-vous en précisant l’objet de l’échange. Le professionnel accepte ou décline. Après son accord seulement, vous accédez aux disponibilités et choisissez votre séance.',
+    tools: [
+      'Demande depuis le réseau',
+      'Acceptation préalable du professionnel',
+      'Créneaux disponibles de 30 minutes',
+      'Réservation, annulation et notifications',
+    ],
+    benefits: [
+      'Trouvez un moment pour parler de votre progression avec un professionnel, sans multiplier les messages.',
+      'Gardez la main sur les demandes reçues et proposez vos disponibilités uniquement après acceptation.',
+      'Demandez un échange à un professionnel pour préparer l’accompagnement de votre structure.',
+    ],
+    limit:
+      'Le professionnel doit être Premium pour recevoir et gérer les demandes. La réservation évite les doublons dans la démo ; aucun paiement ni rendez-vous réel n’est engagé. Les créneaux n’apparaissent jamais avant acceptation.',
   },
   {
     id: 'profil',
@@ -131,13 +197,20 @@ const features = [
     icon: ShieldCheck,
     title: 'Un réseau sportif. Un cadre de respect.',
     text: 'L’expérience prévoit le filtrage des contenus abusifs et des photos sans lien avec le sport, avec un recours humain. Dans la démo, testez les alertes, signalez un comportement et gérez vos blocages depuis un espace dédié.',
-    tools: ['Signalements et suivi', 'Blocage des échanges', 'Photos en attente avant publication', 'Vérification e-mail et seconde validation', 'Notice de confidentialité et attestation'],
+    tools: [
+      'Signalements et suivi',
+      'Blocage des échanges',
+      'Photos en attente avant publication',
+      'Vérification e-mail et seconde validation',
+      'Notice de confidentialité et attestation',
+    ],
     benefits: [
       'Gardez la main sur les personnes qui peuvent échanger avec vous et signalez un comportement abusif.',
       'Distinguez les informations déclarées des liens et expériences qui devront être vérifiés.',
       'Présentez votre structure dans un cadre commun : contenus sportifs, informations sincères et règles de respect.',
     ],
-    limit: 'Aucune protection de production n’est active. Le filtre de texte reconnaît seulement quelques exemples ; les photos ne sont pas analysées et restent non publiées. Vérification e-mail, second facteur et traitement des signalements sont simulés. La politique définitive et les contrôles serveur restent à mettre en place.',
+    limit:
+      'Aucune protection de production n’est active. Le filtre de texte reconnaît seulement quelques exemples ; les photos ne sont pas analysées et restent non publiées. Vérification e-mail, second facteur et traitement des signalements sont simulés. La politique définitive et les contrôles serveur restent à mettre en place.',
   },
   {
     id: 'parrainage',
@@ -145,13 +218,19 @@ const features = [
     icon: Gift,
     title: 'Votre réseau grandit. Vos possibilités aussi.',
     text: 'Invitez d’autres membres à rejoindre le réseau et suivez leur progression : e-mail vérifié, profil complété, première connexion. La proposition de parrainage prévoit trois mois Premium pour chaque nouveau membre qualifié.',
-    tools: ['Lien d’invitation personnel', 'Suivi des étapes du filleul', 'Trois mois Premium simulés', 'Un seul crédit par filleul'],
+    tools: [
+      'Lien d’invitation personnel',
+      'Suivi des étapes du filleul',
+      'Trois mois Premium simulés',
+      'Un seul crédit par filleul',
+    ],
     benefits: [
       'Invitez vos partenaires de jeu et découvrez les possibilités Premium grâce à votre réseau.',
       'Faites découvrir votre espace sportif à vos contacts, sans récompense attribuée au simple clic.',
       'Mobilisez votre communauté autour de la plateforme et visualisez les étapes des invitations.',
     ],
-    limit: 'Offre proposée, conditions commerciales et antifraude à valider. Le lien ne suit aucune inscription réelle. Les étapes, les mois gagnés et l’activation Premium sont simulés, sans effet sur un abonnement facturé.',
+    limit:
+      'Offre proposée, conditions commerciales et antifraude à valider. Le lien ne suit aucune inscription réelle. Les étapes, les mois gagnés et l’activation Premium sont simulés, sans effet sur un abonnement facturé.',
   },
 ];
 const roles = ['Sportifs', 'Professionnels', 'Collectifs'];
@@ -172,8 +251,8 @@ export default function Page() {
           <p>
             Un réseau professionnel pensé pour celles et ceux qui font le sport.
             Du premier contact à la prochaine opportunité, gardez votre
-            communauté à portée de main. Vos disciplines, vos références et votre
-            agent vous suivent dans un même profil.
+            communauté à portée de main. Des recommandations pertinentes, un
+            dossier pour candidater, des essais et des rendez-vous pour avancer.
           </p>
           <div className="application-actions">
             <Link href="/espace/connexion" className="action">
@@ -214,7 +293,7 @@ export default function Page() {
       >
         {features.map(({ id, name, icon: Icon }, i) => (
           <Link key={id} href={`#${id}`}>
-            <span>0{i + 1}</span>
+            <span>{String(i + 1).padStart(2, '0')}</span>
             <Icon size={18} />
             {name}
           </Link>
@@ -242,19 +321,21 @@ export default function Page() {
               <figure className="application-capture">
                 <Image
                   unoptimized
-                  src={`/app-visuals/studio-${id === 'reseau' ? 'reseau-niveaux' : id === 'profil' ? 'disciplines' : id}.png`}
+                  src={`/app-visuals/studio-${id === 'accueil' ? 'recommandations' : id === 'reseau' ? 'reseau-niveaux' : id === 'profil' ? 'disciplines' : id}.png`}
                   alt={`Écran ${name} de l’application Arena Studio : capture réelle de la démo mobile`}
                   width={390}
                   height={844}
                   loading="lazy"
                 />
                 <figcaption>
-                  0{i + 1} / {name.toUpperCase()} · ÉCRAN DE DÉMONSTRATION
+                  {String(i + 1).padStart(2, '0')} / {name.toUpperCase()} ·
+                  ÉCRAN DE DÉMONSTRATION
                 </figcaption>
               </figure>
               <div className="application-feature-copy">
                 <span className="section-label">
-                  <Icon size={17} /> 0{i + 1} / {name.toUpperCase()}
+                  <Icon size={17} /> {String(i + 1).padStart(2, '0')} /{' '}
+                  {name.toUpperCase()}
                 </span>
                 <h2>{title}</h2>
                 <p className="feature-description">{text}</p>
@@ -305,8 +386,9 @@ export default function Page() {
         <p>
           Créez votre profil gratuitement. Choisissez ensuite les échanges et
           les possibilités de publication adaptés à votre activité avec une
-          formule Premium. Invitez également votre réseau et explorez le
-          parrainage depuis votre profil.
+          formule Premium. Professionnels et collectifs : découvrez aussi les
+          outils de recrutement et, pour les professionnels, la gestion des
+          demandes de rendez-vous.
         </p>
         <div className="application-actions">
           <Link href="/espace/inscription" className="action">

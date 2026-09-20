@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { Bell, CalendarDays, ArrowUpRight } from 'lucide-react';
 import { useDemo } from './demo-provider';
 export function EventHeader() {
-  const { events } = useDemo();
-  const unread = events.notices.filter(
-    (n) => n.recipient === 'me' && !n.read,
-  ).length;
+  const { events, career, careerActor } = useDemo();
+  const unread =
+    events.notices.filter((n) => n.recipient === 'me' && !n.read).length +
+    career.notices.filter((n) => n.recipient === careerActor.id && !n.read)
+      .length;
   return (
     <div className="event-header">
       <Link href="/espace/agenda" className="icon-link" aria-label="Mon agenda">
@@ -44,6 +45,7 @@ export function NetworkSections({
         <T>{'Jouer ensemble'}</T>
         <span>NEW</span>
       </Link>
+      <Link href="/espace/rendez-vous">Rendez-vous</Link>
     </nav>
   );
 }

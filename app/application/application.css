@@ -45,7 +45,7 @@
 .application-index {
   border-block: 1px solid var(--border);
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   padding: 0 5%;
   background: #171b1c;
 }
@@ -210,7 +210,7 @@
   }
   .application-index {
     overflow-x: auto;
-    grid-template-columns: repeat(7, minmax(145px, 1fr));
+    grid-template-columns: repeat(10, minmax(150px, 1fr));
     padding-inline: 12px;
   }
 }

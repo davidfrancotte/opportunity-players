@@ -1159,13 +1159,107 @@ body:has(.studio-surface[data-theme="light"]) .web-theme-switch button {
 body:has(.studio-surface[data-theme="light"]) .web-mobile-appearance {
   color: var(--studio-muted);
 }
-body:has(.studio-surface[data-theme="light"]) .locale-switch select{border:1px solid var(--studio-line)}
-body:has(.studio-surface[data-theme="light"]) .sport-extra-fields{border:1px solid var(--studio-line)}
-body:has(.studio-surface[data-theme="light"]) .sport-extra-fields select,body:has(.studio-surface[data-theme="light"]) .portfolio-form select{border:1px solid var(--studio-line);background:var(--studio-tint);color:var(--studio-ink)}
-body:has(.studio-surface[data-theme="light"]) .portfolio-panel{border-top:1px solid var(--studio-line)}
-body:has(.studio-surface[data-theme="light"]) .portfolio-record{border:1px solid var(--studio-line)}
-body:has(.studio-surface[data-theme="light"]) .portfolio-panel video{background:var(--studio-panel)}
-body:has(.studio-surface[data-theme="light"]) .child-mode-note{border:1px solid var(--studio-line)}
+body:has(.studio-surface[data-theme="light"]) .locale-switch select {
+  border: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .sport-extra-fields {
+  border: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .sport-extra-fields select,
+body:has(.studio-surface[data-theme="light"]) .portfolio-form select {
+  border: 1px solid var(--studio-line);
+  background: var(--studio-tint);
+  color: var(--studio-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .portfolio-panel {
+  border-top: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .portfolio-record {
+  border: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .portfolio-panel video {
+  background: var(--studio-panel);
+}
+body:has(.studio-surface[data-theme="light"]) .child-mode-note {
+  border: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .career-nav a {
+  border: 1px solid var(--studio-line);
+  color: var(--studio-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .career-nav a:hover {
+  border-color: var(--studio-accent-ink);
+  color: var(--studio-accent-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .career-recommendations {
+  border: 1px solid var(--studio-line);
+  background: var(--studio-panel);
+}
+body:has(.studio-surface[data-theme="light"]) .career-note {
+  color: var(--studio-muted);
+}
+body:has(.studio-surface[data-theme="light"]) .career-person {
+  border-top: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .career-name {
+  color: var(--studio-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .career-person p {
+  color: var(--studio-muted);
+}
+body:has(.studio-surface[data-theme="light"]) .career-person small,
+body:has(.studio-surface[data-theme="light"]) .career-suggestion small {
+  color: var(--studio-muted);
+}
+body:has(.studio-surface[data-theme="light"]) .career-suggestion {
+  border-top: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .career-suggestion svg {
+  color: var(--studio-accent-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .career-unread {
+  border-left: 3px solid var(--studio-accent-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .career-card {
+  border: 1px solid var(--studio-line);
+  background: var(--studio-panel);
+}
+body:has(.studio-surface[data-theme="light"]) .career-card p {
+  color: var(--studio-muted);
+}
+body:has(.studio-surface[data-theme="light"]) .career-status {
+  border: 1px solid var(--studio-line);
+  color: var(--studio-accent-ink);
+  background: var(--studio-tint);
+}
+body:has(.studio-surface[data-theme="light"]) .career-status.status-declined,
+body:has(.studio-surface[data-theme="light"]) .career-status.status-withdrawn,
+body:has(.studio-surface[data-theme="light"]) .career-status.status-cancelled {
+  color: var(--studio-muted);
+  background: var(--studio-tint);
+}
+body:has(.studio-surface[data-theme="light"]) .career-empty {
+  border: 1px dashed var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .career-empty p {
+  color: var(--studio-muted);
+}
+body:has(.studio-surface[data-theme="light"]) .career-demo {
+  border: 1px dashed var(--studio-line);
+  color: var(--studio-muted);
+}
+body:has(.studio-surface[data-theme="light"]) .career-feedback {
+  border: 1px solid var(--studio-danger);
+  background: #fff0ee;
+  color: var(--studio-danger);
+}
+body:has(.studio-surface[data-theme="light"]) .career-trial {
+  background: var(--studio-tint);
+  color: var(--studio-ink) !important;
+}
+body:has(.studio-surface[data-theme="light"]) .career-slots small {
+  color: var(--studio-muted);
+}
 /* Small brand and portal adjustments, outside the color migration. */
 body:has(.studio-surface[data-theme="light"]) .web-content-area { background: var(--studio-canvas); }
 body:has(.studio-surface[data-theme="light"]) .web-sidebar { box-shadow: 1px 0 0 var(--studio-line); }

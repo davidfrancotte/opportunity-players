@@ -1,4 +1,10 @@
 'use client';
+import {
+  PersonalizedRecommendations,
+  CareerNav,
+  ApplyButton,
+  AppointmentRequestButton,
+} from './career-screens';
 import { ExtraDirectoryFilters } from './sport-profile-fields';
 import { ageOn } from '@/lib/studio/sport-profile';
 import { T } from './locale';
@@ -181,6 +187,7 @@ export function FeedPage() {
       </div>
       <PlanStatus compact />
       <PlayHomeCard />
+      <PersonalizedRecommendations />
       <button
         type="button"
         className="compose-launch"
@@ -807,6 +814,7 @@ export function NetworkPage() {
             <p>{member.bio}</p>
             <MemberDossier key={member.id} member={member} />
             <SafetyActions memberId={member.id} />
+            <AppointmentRequestButton member={member} />
             <Link
               className="action secondary"
               href={`/espace/organiser?invite=${member.id}`}
@@ -1106,6 +1114,7 @@ export function OpportunitiesPage() {
         <br />
         <T>{'Trouvez ce qui vous fait avancer.'}</T>
       </p>
+      <CareerNav />
       <SearchField
         value={query}
         onChange={setQuery}
@@ -1221,23 +1230,27 @@ export function OpportunitiesPage() {
                 <li key={d}>{d}</li>
               ))}
             </ul>
-            <Button
-              className="action primary"
-              aria-pressed={social.interested.includes(selected.id)}
-              onClick={() => {
-                dispatchSocial({ type: 'interest', id: selected.id });
-                notify(
-                  social.interested.includes(selected.id)
-                    ? 'Intérêt retiré de la démo.'
-                    : 'Intérêt enregistré dans la démo. Aucune candidature n’a été envoyée.',
-                );
-              }}
-            >
-              {social.interested.includes(selected.id)
-                ? 'Intérêt enregistré · annuler'
-                : 'Ça m’intéresse · simuler'}
-              <Check size={17} />
-            </Button>
+            {['coach', 'tryout'].includes(selected.id) ? (
+              <ApplyButton offerId={selected.id} />
+            ) : (
+              <Button
+                className="action primary"
+                aria-pressed={social.interested.includes(selected.id)}
+                onClick={() => {
+                  dispatchSocial({ type: 'interest', id: selected.id });
+                  notify(
+                    social.interested.includes(selected.id)
+                      ? 'Intérêt retiré de la démo.'
+                      : 'Intérêt enregistré dans la démo. Aucune candidature n’a été envoyée.',
+                  );
+                }}
+              >
+                {social.interested.includes(selected.id)
+                  ? 'Intérêt enregistré · annuler'
+                  : 'Ça m’intéresse · simuler'}
+                <Check size={17} />
+              </Button>
+            )}
           </div>
         )}
       </Modal>

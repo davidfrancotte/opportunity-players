@@ -18,6 +18,8 @@ import {
   Bell,
   ShieldCheck,
   Gift,
+  BriefcaseBusiness,
+  ClipboardCheck,
 } from 'lucide-react';
 import { EventHeader } from './event-navigation';
 import { WebThemeSwitch } from './web-theme';
@@ -48,7 +50,15 @@ const authRoutes = [
 export function WebShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const page = pathname.split('/')[2] || 'accueil';
-  const { profile, social, dispatchSocial, reset, events } = useDemo();
+  const {
+    profile,
+    social,
+    dispatchSocial,
+    reset,
+    events,
+    career,
+    careerActor,
+  } = useDemo();
   const current = [
     'dossier-sportif',
     'parcours',
@@ -61,9 +71,16 @@ export function WebShell({ children }: { children: ReactNode }) {
     ? 'profil'
     : ['jouer', 'organiser', 'match'].includes(page)
       ? 'reseau'
-      : page;
+      : ['candidatures', 'recrutement'].includes(page)
+        ? 'opportunities'
+        : page === 'rendez-vous'
+          ? 'reseau'
+          : page;
   const eventUnread = events.notices.filter(
     (n) => n.recipient === 'me' && !n.read,
+  ).length;
+  const careerUnread = career.notices.filter(
+    (n) => n.recipient === careerActor.id && !n.read,
   ).length;
   const unread = social.conversations.filter((c) => c.unread).length;
   const progress = completion(profile);
@@ -110,6 +127,29 @@ export function WebShell({ children }: { children: ReactNode }) {
         </nav>
         <div className="web-sidebar-secondary">
           <Link
+            href="/espace/candidatures"
+            aria-current={page === 'candidatures' ? 'page' : undefined}
+          >
+            <ClipboardCheck size={19} />
+            <span>Candidatures & essais</span>
+          </Link>
+          {profile.category !== 'Sportif' && (
+            <Link
+              href="/espace/recrutement"
+              aria-current={page === 'recrutement' ? 'page' : undefined}
+            >
+              <BriefcaseBusiness size={19} />
+              <span>Espace recrutement</span>
+            </Link>
+          )}
+          <Link
+            href="/espace/rendez-vous"
+            aria-current={page === 'rendez-vous' ? 'page' : undefined}
+          >
+            <CalendarDays size={19} />
+            <span>Mes rendez-vous</span>
+          </Link>
+          <Link
             href="/espace/securite"
             aria-current={page === 'securite' ? 'page' : undefined}
           >
@@ -143,7 +183,9 @@ export function WebShell({ children }: { children: ReactNode }) {
           >
             <Bell size={19} />
             <T>{'Notifications'}</T>
-            {eventUnread > 0 && <small>{eventUnread}</small>}
+            {eventUnread + careerUnread > 0 && (
+              <small>{eventUnread + careerUnread}</small>
+            )}
           </Link>
           <Link
             href="/espace/abonnement"
@@ -198,6 +240,9 @@ export function WebShell({ children }: { children: ReactNode }) {
                   match: 'Votre match',
                   agenda: 'Mon agenda',
                   notifications: 'Notifications',
+                  candidatures: 'Candidatures et essais',
+                  recrutement: 'Espace recrutement',
+                  'rendez-vous': 'Mes rendez-vous',
                   disciplines: 'Sports, niveaux et clubs',
                   agent: 'Mon agent',
                   documents: 'CV et références',

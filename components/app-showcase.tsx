@@ -52,7 +52,8 @@ export function AppPhone({
         ) : (
           <div className="app-screen-placeholder" data-app-screen="placeholder">
             <span className="app-screen-brand">
-              op<i className="op-angle" aria-hidden="true" />
+              op
+              <i className="op-angle" aria-hidden="true" />
             </span>
             <span className="app-screen-kicker">FUTURE APP ARENA</span>
             <strong>
@@ -105,10 +106,12 @@ export function AppShowcase({ variant = 'home' }: AppShowcaseProps) {
           )}
         </h2>
         <p>
-          Retrouvez votre fil sportif, vos matchs et votre réseau dans la poche.
-          La nouvelle expérience Arena ajoute un parcours multisport, vos niveaux
-          et clubs, votre agent et vos références, ainsi que des espaces dédiés
-          aux signalements et au parrainage.
+          Retrouvez votre fil sportif et des recommandations de personnes et
+          d’opportunités selon vos sports et votre localisation. Candidatez,
+          confirmez un essai ou demandez un rendez-vous à un professionnel :
+          après son accord, choisissez parmi ses disponibilités. Vos matchs,
+          votre dossier multisport et vos échanges restent réunis au même
+          endroit.
         </p>
         <Link href="/application" className="app-demo-link">
           Explorer l’application <ArrowUpRight size={20} aria-hidden="true" />

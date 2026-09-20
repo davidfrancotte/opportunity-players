@@ -100,7 +100,7 @@ function BottomNav() {
           '/espace/agenda',
         ].includes(pathname)
       ? '/espace/reseau'
-      : pathname;
+      : ['/espace/candidatures', '/espace/recrutement'].includes(pathname) ? '/espace/opportunities' : pathname === '/espace/rendez-vous' ? '/espace/reseau' : pathname;
   return (
     <nav className="bottom-nav" aria-label="Navigation de l’application">
       {navigation.map(({ href, label, icon: Icon }) => (

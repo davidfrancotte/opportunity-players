@@ -103,11 +103,13 @@ export default function Home() {
           </span>
           <p>
             Plusieurs sports. Un seul réseau. Présentez vos niveaux et vos clubs
-            pour chaque discipline, ajoutez votre CV et vos références, et rendez
-            visible votre lien avec un agent. Trouvez les bons profils grâce aux
-            filtres de niveau et de parcours, échangez et organisez votre prochain
-            match. Sur ordinateur comme sur mobile, chaque rencontre part de ce
-            qui vous rapproche.
+            pour chaque discipline, ajoutez votre CV et vos références, et
+            rendez visible votre lien avec un agent. Découvrez des profils et
+            des opportunités recommandés, candidatez et confirmez un essai.
+            Clubs et professionnels disposent d’un espace de recrutement. Pour
+            un rendez-vous, demandez l’accord du professionnel avant de choisir
+            un créneau. Sur ordinateur comme sur mobile, donnez une suite
+            concrète à chaque rencontre.
           </p>
         </div>
         <WebWorkspacePreview />
