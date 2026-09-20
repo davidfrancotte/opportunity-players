@@ -11,6 +11,7 @@ import './studio-events.css';
 import './studio-trust.css';
 import './studio-web.css';
 import './studio-theme.css';
+import './studio-sport-profile.css';
 import './studio-light.css';
 export const metadata: Metadata = {
   title: 'Espace membre · Démo Arena',

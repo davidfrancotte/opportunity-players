@@ -1,13 +1,15 @@
 'use client';
+import { SportsPortfolioPage } from './sport-portfolio';
 import { Suspense } from 'react';
-import {DisciplinesPage,AgentPage,DocumentsPage,SafetyPage,ReferralPage,PoliciesPage,SecondFactorPage} from './trust-screens';
 import {
-  PlayPage,
-  CreateMatchPage,
-  MatchPage,
-  AgendaPage,
-  NotificationsPage,
-} from './play-screens';
+  DisciplinesPage,
+  AgentPage,
+  DocumentsPage,
+  SafetyPage,
+  ReferralPage,
+  PoliciesPage,
+  SecondFactorPage,
+} from './trust-screens';
 import {
   Signup,
   VerifyEmail,
@@ -29,15 +31,31 @@ import {
   MessagesPage,
   OpportunitiesPage,
 } from './social-screens';
+import {
+  PlayPage,
+  CreateMatchPage,
+  MatchPage,
+  AgendaPage,
+  NotificationsPage,
+} from './play-screens';
 export function StudioScreen({ screen }: { screen: string }) {
   switch (screen) {
-    case 'disciplines': return <DisciplinesPage />;
-    case 'agent': return <AgentPage />;
-    case 'documents': return <DocumentsPage />;
-    case 'securite': return <SafetyPage />;
-    case 'parrainage': return <ReferralPage />;
-    case 'confidentialite': return <PoliciesPage />;
-    case 'double-facteur': return <SecondFactorPage />;
+    case 'dossier-sportif':
+      return <SportsPortfolioPage />;
+    case 'disciplines':
+      return <DisciplinesPage />;
+    case 'agent':
+      return <AgentPage />;
+    case 'documents':
+      return <DocumentsPage />;
+    case 'securite':
+      return <SafetyPage />;
+    case 'parrainage':
+      return <ReferralPage />;
+    case 'confidentialite':
+      return <PoliciesPage />;
+    case 'double-facteur':
+      return <SecondFactorPage />;
     case 'jouer':
       return <PlayPage />;
     case 'organiser':

@@ -1,4 +1,5 @@
 'use client';
+import { T } from './locale';
 import Link from 'next/link';
 import { Bell, CalendarDays, ArrowUpRight } from 'lucide-react';
 import { useDemo } from './demo-provider';
@@ -34,13 +35,14 @@ export function NetworkSections({
         href="/espace/reseau"
         aria-current={active === 'members' ? 'page' : undefined}
       >
-        Les membres
+        <T>{'Les membres'}</T>
       </Link>
       <Link
         href="/espace/jouer"
         aria-current={active === 'play' ? 'page' : undefined}
       >
-        Jouer ensemble <span>NEW</span>
+        <T>{'Jouer ensemble'}</T>
+        <span>NEW</span>
       </Link>
     </nav>
   );
@@ -72,15 +74,22 @@ export function PlayHomeCard() {
   ).length;
   return (
     <section className="play-home">
-      <span className="mini-kicker">DU RÉSEAU AU TERRAIN</span>
+      <span className="mini-kicker">
+        <T>{'DU RÉSEAU AU TERRAIN'}</T>
+      </span>
       <div>
-        <h2>On joue quand ?</h2>
+        <h2>
+          <T>{'On joue quand ?'}</T>
+        </h2>
         <CalendarDays size={27} />
       </div>
-      <p>Un sport. Vos contacts. Le bon créneau.</p>
+      <p>
+        <T>{'Un sport. Vos contacts. Le bon créneau.'}</T>
+      </p>
       <div className="play-home-links">
         <Link href="/espace/organiser">
-          Organiser un match <ArrowUpRight size={17} />
+          <T>{'Organiser un match'}</T>
+          <ArrowUpRight size={17} />
         </Link>
         <Link href="/espace/jouer">
           {invitations
@@ -93,7 +102,9 @@ export function PlayHomeCard() {
           className="play-upcoming"
           href={`/espace/match?id=${upcoming.m.id}`}
         >
-          <small>PROCHAIN RENDEZ-VOUS</small>
+          <small>
+            <T>{'PROCHAIN RENDEZ-VOUS'}</T>
+          </small>
           <strong>{upcoming.m.title}</strong>
           <span>
             {new Intl.DateTimeFormat('fr-BE', {

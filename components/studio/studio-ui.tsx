@@ -1,4 +1,5 @@
 'use client';
+import { T, LanguageSwitch, useLocale } from './locale';
 import Link from 'next/link';
 import {
   useEffect,
@@ -24,7 +25,8 @@ export function Brand({ href = '/espace/connexion' }: { href?: string }) {
       className="brand"
       aria-label="Opportunity Players — accueil"
     >
-      op<i className="op-angle" aria-hidden="true" />
+      op
+      <i className="op-angle" aria-hidden="true" />
       <small>Opportunity Players</small>
     </Link>
   );
@@ -32,7 +34,8 @@ export function Brand({ href = '/espace/connexion' }: { href?: string }) {
 export function DemoPill() {
   return (
     <span className="demo-pill">
-      <i /> DÉMO INTERACTIVE
+      <i />
+      <T>{'DÉMO INTERACTIVE'}</T>
     </span>
   );
 }
@@ -68,13 +71,15 @@ export function Field({
   hint?: string;
   children?: ReactNode;
 }) {
+  const { t } = useLocale();
   const id = props.id || props.name;
   return (
     <div className="field">
-      <Label htmlFor={id}>{label}</Label>
+      <Label htmlFor={id}>{t(label)}</Label>
       {children || (
         <Input
           {...props}
+          placeholder={props.placeholder ? t(props.placeholder) : undefined}
           id={id}
           aria-invalid={!!error}
           aria-describedby={
@@ -84,12 +89,12 @@ export function Field({
       )}{' '}
       {hint && (
         <p id={`${id}-hint`} className="field-hint">
-          {hint}
+          {t(hint)}
         </p>
       )}
       {error && (
         <p id={`${id}-error`} className="field-error">
-          {error}
+          {t(error)}
         </p>
       )}
     </div>
@@ -105,7 +110,9 @@ export function Password({
   const [visible, setVisible] = useState(false);
   return (
     <div className="field">
-      <Label htmlFor="password">Mot de passe de démonstration</Label>
+      <Label htmlFor="password">
+        <T>{'Mot de passe de démonstration'}</T>
+      </Label>
       <div className="password-input">
         <Input
           id="password"
@@ -134,8 +141,8 @@ export function Password({
       <p className={error ? 'field-error' : 'field-hint'} id="password-help">
         {error || (
           <>
-            Utilisez <strong>ArenaDemo2026!</strong>, jamais votre vrai mot de
-            passe.
+            <T>{'Utilisez'}</T> <strong>ArenaDemo2026!</strong>
+            <T>{', jamais votre vrai mot de passe.'}</T>
           </>
         )}
       </p>
@@ -191,7 +198,8 @@ export function AuthLayout({
           alt="Capture de la démo web : profil multisport, niveaux, clubs, agent et références"
         />
         <span className="editorial-caption">
-          INTERFACE RÉELLE DE LA DÉMO · DONNÉES FICTIVES <ArrowUpRight size={19} />
+          INTERFACE RÉELLE DE LA DÉMO · DONNÉES FICTIVES{' '}
+          <ArrowUpRight size={19} />
         </span>
       </aside>
       <section className="auth-content">
@@ -207,13 +215,20 @@ export function AuthLayout({
         </header>
         <div className="auth-form-wrap">
           {step && <Stepper step={step} />}
-          <h1>{title}</h1>
-          {intro && <p className="form-intro">{intro}</p>}
+          <h1>{typeof title === 'string' ? <T>{title}</T> : title}</h1>
+          {intro && (
+            <p className="form-intro">
+              <T>{intro}</T>
+            </p>
+          )}
           {children}
           <p className="auth-disclosure">
-            <ShieldCheck size={15} /> Mode démo : aucune création de compte
-            réel, aucun e-mail envoyé. Données fictives uniquement ; effacées au
-            rechargement.
+            <ShieldCheck size={15} />
+            <T>
+              {
+                'Mode démo : aucune création de compte réel, aucun e-mail envoyé. Données fictives uniquement ; effacées au rechargement.'
+              }
+            </T>
           </p>
         </div>
         <footer className="auth-footer">
@@ -240,7 +255,7 @@ export function Guard({ verification = false }: { verification?: boolean }) {
         <ArrowRight size={18} />
       </Link>
       <Link href="/espace/profil" className="text-link">
-        Explorer le profil de démonstration
+        <T>{'Explorer le profil de démonstration'}</T>
       </Link>
     </AuthLayout>
   );
@@ -248,7 +263,7 @@ export function Guard({ verification = false }: { verification?: boolean }) {
 export function FormErrors({ errors }: { errors: Record<string, string> }) {
   return Object.keys(errors).length ? (
     <p className="form-error-summary" role="alert">
-      Vérifiez les champs indiqués ci-dessous.
+      <T>{'Vérifiez les champs indiqués ci-dessous.'}</T>
     </p>
   ) : null;
 }

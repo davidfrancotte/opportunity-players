@@ -1,4 +1,5 @@
 'use client';
+import { T } from './locale';
 import { useEffect, useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -171,14 +172,16 @@ export function PlayPage() {
       <div className="event-title">
         <span className="mini-kicker">VOTRE RÉSEAU, SUR LE TERRAIN</span>
         <h1>
-          Jouer ensemble<span>.</span>
+          <T>{'Jouer ensemble'}</T>
+          <span>.</span>
         </h1>
         <p>Moins de messages pour s’organiser. Plus de moments à partager.</p>
       </div>
       <NetworkSections active="play" />
       <Link className="action primary" href="/espace/organiser">
         <Plus size={18} />
-        Organiser un match{!ctx.premium && <LockKeyhole size={15} />}
+        <T>{'Organiser un match'}</T>
+        {!ctx.premium && <LockKeyhole size={15} />}
       </Link>
       <div className="event-tabs" role="group" aria-label="Filtrer les matchs">
         {[
@@ -202,13 +205,15 @@ export function PlayPage() {
       ) : (
         <>
           <label className="event-select-label">
-            Sport
+            <T>{'Sport'}</T>
             <NativeSelect
               aria-label="Sport"
               value={sport}
               onChange={(e) => setSport(e.target.value)}
             >
-              <NativeSelectOption>Tous</NativeSelectOption>
+              <NativeSelectOption value="Tous">
+                <T>{'Tous'}</T>
+              </NativeSelectOption>
               {sports.map((s) => (
                 <NativeSelectOption key={s}>{s}</NativeSelectOption>
               ))}
@@ -376,7 +381,7 @@ export function CreateMatchPage() {
                   placeholder="Un padel après le boulot ?"
                 />
                 <label>
-                  Sport
+                  <T>{'Sport'}</T>
                   <NativeSelect
                     aria-label="Sport du match"
                     value={sport}
@@ -619,7 +624,7 @@ export function CreateMatchPage() {
                   variant="outline"
                   onClick={() => setStep(step - 1)}
                 >
-                  Retour
+                  <T>{'Retour'}</T>
                 </Button>
               )}
               <Button type="submit" className="action primary">
@@ -1068,7 +1073,8 @@ export function AgendaPage() {
       <div className="event-title">
         <span className="mini-kicker">VOTRE TEMPS DE JEU</span>
         <h1>
-          Mon agenda<span>.</span>
+          <T>{'Mon agenda'}</T>
+          <span>.</span>
         </h1>
         <p>Vos matchs, sans perdre le fil.</p>
       </div>
@@ -1150,7 +1156,8 @@ export function NotificationsPage() {
       <div className="event-title">
         <span className="mini-kicker">NE MANQUEZ PAS LE RENDEZ-VOUS</span>
         <h1>
-          Notifications<span>.</span>
+          <T>{'Notifications'}</T>
+          <span>.</span>
         </h1>
       </div>
       <div className="notification-controls">

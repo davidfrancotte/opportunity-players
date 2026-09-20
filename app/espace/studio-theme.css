@@ -31,6 +31,8 @@ body:has(.studio-surface) .web-theme-switch button:focus-visible {
 }
 body:has(.studio-surface) .web-mobile-appearance {
   display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
@@ -40,6 +42,9 @@ body:has(.studio-surface) .web-mobile-appearance {
   color: #aab8a6;
   font-size: 12px;
 }
+body:has(.studio-surface) .web-mobile-appearance > span { display: none; }
+body:has(.studio-surface) .locale-switch > span { white-space: nowrap; }
+body:has(.studio-surface) .web-topbar-actions { flex-wrap: wrap; }
 body:has(.studio-surface) .studio-web-return {
   flex-wrap: wrap;
   align-items: center;

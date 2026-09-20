@@ -1,10 +1,12 @@
 'use client';
+import { LocaleProvider } from './locale';
 import {
   createContext,
   useContext,
   useState,
   useReducer,
   useEffect,
+  useRef,
   type Dispatch,
   type ReactNode,
 } from 'react';
@@ -56,8 +58,27 @@ type Context = {
 };
 const DemoContext = createContext<Context | null>(null);
 export function DemoProvider({ children }: { children: ReactNode }) {
+  return (
+    <LocaleProvider>
+      <DemoStateProvider>{children}</DemoStateProvider>
+    </LocaleProvider>
+  );
+}
+function DemoStateProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile>(
     structuredClone(initialProfile),
+  );
+  const videoURLs = useRef<string[]>([]);
+  useEffect(() => {
+    const next = profile.videos.map((v) => v.url);
+    videoURLs.current
+      .filter((url) => !next.includes(url))
+      .forEach((url) => URL.revokeObjectURL(url));
+    videoURLs.current = next;
+  }, [profile.videos]);
+  useEffect(
+    () => () => videoURLs.current.forEach((url) => URL.revokeObjectURL(url)),
+    [],
   );
   const [draft, setDraft] = useState<Profile | null>(null);
   const [emailVerified, setEmailVerified] = useState(false);

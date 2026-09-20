@@ -1,19 +1,30 @@
-"use client";
-import { PlayerSportFields } from "./directory-fields";
-import { measurementLabel, sideNames } from "@/lib/studio/athlete";
-import { primaryRecord } from "@/lib/studio/directory";
-import { useState, type FormEvent } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { ShieldCheck, Plus, FileText, UsersRound, ArrowUpRight, Star, Trash2 } from "lucide-react";
-import { Button } from "./ui/button";
-import { NativeSelect, NativeSelectOption } from "./ui/native-select";
-import { Textarea } from "./ui/textarea";
-import { Field, AuthLayout, Guard } from "./studio-ui";
-import { ProfileLayout, Modal } from "./profile-screens";
-import { useDemo } from "./demo-provider";
-import { sports, displayName } from "@/lib/studio/model";
-import { members, type Member } from "@/lib/studio/social";
+'use client';
+import { T } from './locale';
+import { SportProfileSummary } from './sport-portfolio';
+import { sportProfileIssues } from '@/lib/studio/sport-profile';
+import { PlayerSportFields } from './directory-fields';
+import { measurementLabel, sideNames } from '@/lib/studio/athlete';
+import { primaryRecord } from '@/lib/studio/directory';
+import { useState, type FormEvent } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import {
+  ShieldCheck,
+  Plus,
+  FileText,
+  UsersRound,
+  ArrowUpRight,
+  Star,
+  Trash2,
+} from 'lucide-react';
+import { Button } from './ui/button';
+import { NativeSelect, NativeSelectOption } from './ui/native-select';
+import { Textarea } from './ui/textarea';
+import { Field, AuthLayout, Guard } from './studio-ui';
+import { ProfileLayout, Modal } from './profile-screens';
+import { useDemo } from './demo-provider';
+import { sports, displayName } from '@/lib/studio/model';
+import { members, type Member } from '@/lib/studio/social';
 import {
   levels,
   memberSports,
@@ -21,7 +32,7 @@ import {
   fileDecision,
   type SportRecord,
   type DocumentRecord,
-} from "@/lib/studio/trust";
+} from '@/lib/studio/trust';
 
 function TrustError() {
   const { trust } = useDemo();
@@ -35,90 +46,121 @@ export function ProfileExtensions() {
   const { profile } = useDemo();
   return (
     <section className="trust-profile">
+      <SportProfileSummary />
       <span className="mini-kicker">VOTRE DOSSIER SPORTIF</span>
       <p className="directory-profile-summary">
         {[
           profile.city,
           profile.country,
-          profile.category === "Sportif" ? profile.gender : profile.accountType,
+          profile.category === 'Sportif' ? profile.gender : profile.accountType,
         ]
           .filter(Boolean)
-          .join(" · ")}
+          .join(' · ')}
       </p>
       <div className="trust-sport-pills">
         {profile.disciplines.map((s) => (
           <span key={s.sport}>
             {s.sport} · {s.level}
-            {s.ranking ? ` · ${s.ranking}` : ""}
-            {profile.category === "Sportif" && s.position ? ` · ${s.position}` : ""}
-            {profile.category === "Sportif" && s.dominantSide ? ` · ${s.dominantSide}` : ""}
+            {s.ranking ? ` · ${s.ranking}` : ''}
+            {profile.category === 'Sportif' && s.position
+              ? ` · ${s.position}`
+              : ''}
+            {profile.category === 'Sportif' && s.dominantSide
+              ? ` · ${s.dominantSide}`
+              : ''}
           </span>
         ))}
       </div>
-      {profile.category === "Sportif" && (
+      {profile.category === 'Sportif' && (
         <div className="athlete-profile-facts">
-          <h3>Caractéristiques du sportif</h3>
+          <h3>
+            <T>{'Caractéristiques du sportif'}</T>
+          </h3>
           <dl>
             <div>
-              <dt>Poids</dt>
-              <dd>{measurementLabel(profile.weightKg, "kg")}</dd>
+              <dt>
+                <T>{'Poids'}</T>
+              </dt>
+              <dd>{measurementLabel(profile.weightKg, 'kg')}</dd>
             </div>
             <div>
-              <dt>Taille</dt>
-              <dd>{measurementLabel(profile.heightCm, "cm")}</dd>
+              <dt>
+                <T>{'Taille'}</T>
+              </dt>
+              <dd>{measurementLabel(profile.heightCm, 'cm')}</dd>
             </div>
             <div>
               <dt>Côté dominant · {profile.sport}</dt>
-              <dd>{sideNames[primaryRecord(profile).dominantSide || ""] || "Non renseigné"}</dd>
+              <dd>
+                {sideNames[primaryRecord(profile).dominantSide || ''] ||
+                  'Non renseigné'}
+              </dd>
             </div>
           </dl>
           <Link href="/espace/modifier-profil">
-            Modifier mes caractéristiques <ArrowUpRight size={16} />
+            <T>{'Modifier mes caractéristiques'}</T>
+            <ArrowUpRight size={16} />
           </Link>
-          <p className="field-hint">Côté dominant précisé par sport dans votre dossier.</p>
+          <p className="field-hint">
+            <T>{'Côté dominant précisé par sport dans votre dossier.'}</T>
+          </p>
         </div>
       )}
       <Link href="/espace/disciplines">
         <span>
-          <strong>Sports, niveaux & clubs</strong>
-          <small>Un parcours distinct par discipline</small>
+          <strong>
+            <T>{'Sports, niveaux & clubs'}</T>
+          </strong>
+          <small>
+            <T>{'Un parcours distinct par discipline'}</T>
+          </small>
         </span>
         <ArrowUpRight size={18} />
       </Link>
       <Link href="/espace/agent">
         <span>
           <strong>
-            {profile.agent.status === "none" ? "Mon agent" : `Agent : ${profile.agent.name}`}
+            {profile.agent.status === 'none'
+              ? 'Mon agent'
+              : `Agent : ${profile.agent.name}`}
           </strong>
           <small>
-            {profile.agent.status === "confirmed"
-              ? "Lien confirmé dans la démo"
-              : profile.agent.status === "pending"
-                ? "Confirmation de l’agent en attente"
-                : profile.agent.status === "declared"
-                  ? "Relation déclarée, non vérifiée"
-                  : "Indiquer si vous êtes représenté"}
+            {profile.agent.status === 'confirmed'
+              ? 'Lien confirmé dans la démo'
+              : profile.agent.status === 'pending'
+                ? 'Confirmation de l’agent en attente'
+                : profile.agent.status === 'declared'
+                  ? 'Relation déclarée, non vérifiée'
+                  : 'Indiquer si vous êtes représenté'}
           </small>
         </span>
         <ArrowUpRight size={18} />
       </Link>
       <Link href="/espace/documents">
         <span>
-          <strong>CV & références</strong>
-          <small>Documents et justificatifs du parcours</small>
+          <strong>
+            <T>{'CV & références'}</T>
+          </strong>
+          <small>
+            <T>{'Documents et justificatifs du parcours'}</T>
+          </small>
         </span>
         <FileText size={18} />
       </Link>
       <Link href="/espace/parrainage">
         <span>
-          <strong>Inviter mon réseau</strong>
+          <strong>
+            <T>{'Inviter mon réseau'}</T>
+          </strong>
           <small>Gagner des mois Premium · simulation</small>
         </span>
         <UsersRound size={18} />
       </Link>
       <Link href="/espace/securite">
         <span>
-          <strong>Sécurité & modération</strong>
+          <strong>
+            <T>{'Sécurité & modération'}</T>
+          </strong>
           <small>Signalements, blocages et confidentialité</small>
         </span>
         <ShieldCheck size={18} />
@@ -129,39 +171,53 @@ export function ProfileExtensions() {
 
 export function DisciplinesPage() {
   const { profile, setProfile, notify } = useDemo();
-  const [records, setRecords] = useState<SportRecord[]>(structuredClone(profile.disciplines));
-  const [sport, setSport] = useState("Tennis");
-  const [error, setError] = useState("");
+  const [records, setRecords] = useState<SportRecord[]>(
+    structuredClone(profile.disciplines),
+  );
+  const [sport, setSport] = useState('Tennis');
+  const [error, setError] = useState('');
   function update(index: number, patch: Partial<SportRecord>) {
     setRecords(records.map((r, i) => (i === index ? { ...r, ...patch } : r)));
   }
   function save(e: FormEvent) {
     e.preventDefault();
     if (!records.length) {
-      setError("Ajoutez au moins une discipline.");
+      setError('Ajoutez au moins une discipline.');
       return;
     }
-    if (records.some((r) => r.clubs.some((c) => !c.name.trim() || !c.period.trim()))) {
-      setError("Précisez le nom et la période de chaque club.");
+    if (
+      records.some((r) =>
+        r.clubs.some((c) => !c.name.trim() || !c.period.trim()),
+      )
+    ) {
+      setError('Précisez le nom et la période de chaque club.');
       return;
     }
     if (moderateText(JSON.stringify(records))) {
-      setError("Reformulez les informations de manière respectueuse.");
+      setError('Reformulez les informations de manière respectueuse.');
+      return;
+    }
+    const issues = sportProfileIssues({ ...profile, disciplines: records });
+    if (Object.keys(issues).length) {
+      setError(Object.values(issues)[0]);
       return;
     }
     setProfile({
       ...profile,
       disciplines: records,
-      sport: records.some((r) => r.sport === profile.sport) ? profile.sport : records[0].sport,
+      sport: records.some((r) => r.sport === profile.sport)
+        ? profile.sport
+        : records[0].sport,
     });
-    setError("");
-    notify("Sports, niveaux et clubs enregistrés dans la démo.");
+    setError('');
+    notify('Sports, niveaux et clubs enregistrés dans la démo.');
   }
   return (
     <ProfileLayout back="/espace/profil" title="Mes disciplines">
       <p className="event-note">
-        Chaque sport garde son niveau, son classement et ses clubs. Un classement déclaré n’est pas
-        une note professionnelle ni une certification fédérale.
+        Chaque sport garde son niveau, son classement et ses clubs. Un
+        classement déclaré n’est pas une note professionnelle ni une
+        certification fédérale.
       </p>
       <form className="event-form" onSubmit={save}>
         {records.map((r, i) => (
@@ -188,22 +244,17 @@ export function DisciplinesPage() {
               value={r.ranking}
               maxLength={80}
               placeholder={
-                r.sport === "Tennis"
-                  ? "Ex. classement fédéral, pays et saison"
-                  : r.sport === "Padel"
-                    ? "Ex. P200, pays et saison"
-                    : "Ex. division, ligue, catégorie"
+                r.sport === 'Tennis'
+                  ? 'Ex. classement fédéral, pays et saison'
+                  : r.sport === 'Padel'
+                    ? 'Ex. P200, pays et saison'
+                    : 'Ex. division, ligue, catégorie'
               }
               onChange={(e) => update(i, { ranking: e.target.value })}
             />
-            <Field
-              label="Fédération / référentiel"
-              id={`federation-${i}`}
-              value={r.federation}
-              maxLength={100}
-              onChange={(e) => update(i, { federation: e.target.value })}
-            />
-            <h3>Clubs actuels et précédents</h3>
+            <h3>
+              <T>{'Clubs actuels et précédents'}</T>
+            </h3>
             {r.clubs.map((c, n) => (
               <fieldset className="trust-club" key={c.id}>
                 <legend>Club {n + 1}</legend>
@@ -243,7 +294,9 @@ export function DisciplinesPage() {
                     onChange={(e) =>
                       update(i, {
                         clubs: r.clubs.map((x) =>
-                          x.id === c.id ? { ...x, current: e.target.checked } : x,
+                          x.id === c.id
+                            ? { ...x, current: e.target.checked }
+                            : x,
                         ),
                       })
                     }
@@ -253,7 +306,9 @@ export function DisciplinesPage() {
                 <Button
                   type="button"
                   variant="ghost"
-                  onClick={() => update(i, { clubs: r.clubs.filter((x) => x.id !== c.id) })}
+                  onClick={() =>
+                    update(i, { clubs: r.clubs.filter((x) => x.id !== c.id) })
+                  }
                 >
                   Retirer ce club
                 </Button>
@@ -268,8 +323,8 @@ export function DisciplinesPage() {
                     ...r.clubs,
                     {
                       id: crypto.randomUUID(),
-                      name: "",
-                      period: "",
+                      name: '',
+                      period: '',
                       current: true,
                     },
                   ],
@@ -277,7 +332,7 @@ export function DisciplinesPage() {
               }
             >
               <Plus size={16} />
-              Ajouter un club
+              <T>{'Ajouter un club'}</T>
             </Button>
           </section>
         ))}
@@ -302,16 +357,17 @@ export function DisciplinesPage() {
               ...records,
               {
                 sport,
-                level: "Loisir",
-                ranking: "",
-                federation: "",
+                level: 'Loisir',
+                ranking: '',
+                federation: '',
                 clubs: [],
               },
             ])
           }
         >
           <Plus size={17} />
-          Ajouter {sport}
+          <T>{'Ajouter'}</T>
+          {sport}
         </Button>
         {error && (
           <p role="alert" className="event-error">
@@ -328,14 +384,14 @@ export function DisciplinesPage() {
 
 export function AgentPage() {
   const { profile, setProfile, notify } = useDemo();
-  const [hasAgent, setHasAgent] = useState(profile.agent.status !== "none");
+  const [hasAgent, setHasAgent] = useState(profile.agent.status !== 'none');
   const [name, setName] = useState(profile.agent.name);
   const [id, setId] = useState(profile.agent.memberId);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   function save(e: FormEvent) {
     e.preventDefault();
     if (hasAgent && (!name.trim() || moderateText(name))) {
-      setError("Indiquez un nom valide et respectueux.");
+      setError('Indiquez un nom valide et respectueux.');
       return;
     }
     setProfile({
@@ -344,15 +400,15 @@ export function AgentPage() {
         ? {
             name: name.trim(),
             memberId: id,
-            status: id ? "pending" : "declared",
+            status: id ? 'pending' : 'declared',
           }
-        : { name: "", memberId: "", status: "none" },
+        : { name: '', memberId: '', status: 'none' },
     });
-    setError("");
+    setError('');
     notify(
       id
-        ? "Demande de lien simulée. L’agent devra confirmer."
-        : "Situation enregistrée dans la démo.",
+        ? 'Demande de lien simulée. L’agent devra confirmer.'
+        : 'Situation enregistrée dans la démo.',
     );
   }
   return (
@@ -375,7 +431,7 @@ export function AgentPage() {
               maxLength={100}
               onChange={(e) => {
                 setName(e.target.value);
-                setId("");
+                setId('');
               }}
             />
             <label>
@@ -385,12 +441,15 @@ export function AgentPage() {
                 value={id}
                 onChange={(e) => {
                   setId(e.target.value);
-                  if (e.target.value) setName(members.find((m) => m.id === e.target.value)!.name);
+                  if (e.target.value)
+                    setName(members.find((m) => m.id === e.target.value)!.name);
                 }}
               >
-                <NativeSelectOption value="">Non inscrit / nom uniquement</NativeSelectOption>
+                <NativeSelectOption value="">
+                  Non inscrit / nom uniquement
+                </NativeSelectOption>
                 {members
-                  .filter((m) => m.kind === "Professionnels")
+                  .filter((m) => m.kind === 'Professionnels')
                   .map((m) => (
                     <NativeSelectOption key={m.id} value={m.id}>
                       {m.name} · profil démo
@@ -399,28 +458,31 @@ export function AgentPage() {
               </NativeSelect>
             </label>
             <p className="event-note">
-              La relation ne sera indiquée comme confirmée qu’après validation par l’autre membre.
-              Un nom saisi librement reste « déclaré, non vérifié ».
+              La relation ne sera indiquée comme confirmée qu’après validation
+              par l’autre membre. Un nom saisi librement reste « déclaré, non
+              vérifié ».
             </p>
           </>
         )}
         {error && <p role="alert">{error}</p>}
         <Button className="action primary" type="submit">
-          Enregistrer
+          <T>{'Enregistrer'}</T>
         </Button>
       </form>
-      {profile.agent.status !== "none" && (
+      {profile.agent.status !== 'none' && (
         <section className="trust-card">
           <h2>{profile.agent.name}</h2>
           <p className="event-note">
-            {profile.agent.status === "confirmed"
-              ? "Relation confirmée · simulation"
-              : profile.agent.status === "pending"
-                ? "Demande de confirmation en attente"
-                : "Relation déclarée, non vérifiée"}
+            {profile.agent.status === 'confirmed'
+              ? 'Relation confirmée · simulation'
+              : profile.agent.status === 'pending'
+                ? 'Demande de confirmation en attente'
+                : 'Relation déclarée, non vérifiée'}
           </p>
-          {profile.agent.memberId && <AgentMember id={profile.agent.memberId} />}{" "}
-          {profile.agent.status === "pending" && (
+          {profile.agent.memberId && (
+            <AgentMember id={profile.agent.memberId} />
+          )}{' '}
+          {profile.agent.status === 'pending' && (
             <details className="event-demo">
               <summary>Tester la réponse de l’agent</summary>
               <p>Aucun agent réel n’est contacté. Ces profils sont fictifs.</p>
@@ -429,9 +491,9 @@ export function AgentPage() {
                 onClick={() => {
                   setProfile({
                     ...profile,
-                    agent: { ...profile.agent, status: "confirmed" },
+                    agent: { ...profile.agent, status: 'confirmed' },
                   });
-                  notify("Confirmation de l’agent simulée.");
+                  notify('Confirmation de l’agent simulée.');
                 }}
               >
                 Simuler la confirmation réciproque
@@ -443,8 +505,8 @@ export function AgentPage() {
                     ...profile,
                     agent: {
                       ...profile.agent,
-                      memberId: "",
-                      status: "declared",
+                      memberId: '',
+                      status: 'declared',
                     },
                   })
                 }
@@ -484,14 +546,14 @@ function AgentMember({ id }: { id: string }) {
 
 export function DocumentsPage() {
   const { profile, trust, dispatchTrust, dispatchEvent } = useDemo();
-  const [kind, setKind] = useState<DocumentRecord["kind"]>("CV");
+  const [kind, setKind] = useState<DocumentRecord['kind']>('CV');
   const [sport, setSport] = useState(profile.sport);
-  const [club, setClub] = useState("");
-  const [error, setError] = useState("");
+  const [club, setClub] = useState('');
+  const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   async function add(file?: File) {
     if (!file) return;
-    setError("");
+    setError('');
     const rejection = fileDecision(file.name, file.type, file.size, kind);
     if (rejection) {
       setError(rejection);
@@ -499,15 +561,17 @@ export function DocumentsPage() {
     }
     setBusy(true);
     try {
-      if (kind !== "Photo") {
-        const signature = new TextDecoder().decode(await file.slice(0, 5).arrayBuffer());
-        if (signature !== "%PDF-") {
-          setError("Ce fichier ne présente pas l’en-tête d’un PDF.");
+      if (kind !== 'Photo') {
+        const signature = new TextDecoder().decode(
+          await file.slice(0, 5).arrayBuffer(),
+        );
+        if (signature !== '%PDF-') {
+          setError('Ce fichier ne présente pas l’en-tête d’un PDF.');
           return;
         }
       }
       dispatchTrust({
-        type: "document",
+        type: 'document',
         document: {
           id: crypto.randomUUID(),
           name: file.name,
@@ -515,19 +579,19 @@ export function DocumentsPage() {
           sport,
           club,
           size: file.size,
-          status: "pending",
+          status: 'pending',
           reason:
-            kind === "Photo"
-              ? "Analyse du lien au sport et de la sécurité nécessaire avant publication."
-              : "Analyse antivirus et vérification de la référence nécessaires avant diffusion.",
+            kind === 'Photo'
+              ? 'Analyse du lien au sport et de la sécurité nécessaire avant publication.'
+              : 'Analyse antivirus et vérification de la référence nécessaires avant diffusion.',
         },
       });
       dispatchEvent({
-        type: "safety-notice",
-        text: "Fichier préparé localement, non publié. Analyse serveur requise avant acceptation.",
+        type: 'safety-notice',
+        text: 'Fichier préparé localement, non publié. Analyse serveur requise avant acceptation.',
       });
     } catch {
-      setError("Lecture impossible. Choisissez un autre fichier.");
+      setError('Lecture impossible. Choisissez un autre fichier.');
     } finally {
       setBusy(false);
     }
@@ -535,9 +599,9 @@ export function DocumentsPage() {
   return (
     <ProfileLayout back="/espace/profil" title="CV & références">
       <p className="event-note">
-        Préparez un CV ou une référence associée à un sport et à un club. Dans cette démo, seul le
-        nom et les métadonnées restent en mémoire : aucun fichier n’est envoyé, stocké sur un
-        serveur ou rendu public.
+        Préparez un CV ou une référence associée à un sport et à un club. Dans
+        cette démo, seul le nom et les métadonnées restent en mémoire : aucun
+        fichier n’est envoyé, stocké sur un serveur ou rendu public.
       </p>
       <div className="event-form">
         <label>
@@ -545,9 +609,9 @@ export function DocumentsPage() {
           <NativeSelect
             aria-label="Type de fichier"
             value={kind}
-            onChange={(e) => setKind(e.target.value as DocumentRecord["kind"])}
+            onChange={(e) => setKind(e.target.value as DocumentRecord['kind'])}
           >
-            {["CV", "Référence", "Photo"].map((x) => (
+            {['CV', 'Référence', 'Photo'].map((x) => (
               <NativeSelectOption key={x}>{x}</NativeSelectOption>
             ))}
           </NativeSelect>
@@ -576,14 +640,20 @@ export function DocumentsPage() {
           <input
             type="file"
             aria-label="Choisir un fichier fictif"
-            accept={kind === "Photo" ? "image/jpeg,image/png,image/webp" : ".pdf,application/pdf"}
+            accept={
+              kind === 'Photo'
+                ? 'image/jpeg,image/png,image/webp'
+                : '.pdf,application/pdf'
+            }
             disabled={busy}
             onChange={(e) => {
               void add(e.target.files?.[0]);
-              e.target.value = "";
+              e.target.value = '';
             }}
           />
-          <small>{kind === "Photo" ? "JPG, PNG ou WebP" : "PDF"} · 10 Mo maximum</small>
+          <small>
+            {kind === 'Photo' ? 'JPG, PNG ou WebP' : 'PDF'} · 10 Mo maximum
+          </small>
         </label>
         {busy && <p role="status">Vérification du format…</p>}
         {error && (
@@ -597,13 +667,14 @@ export function DocumentsPage() {
         <ShieldCheck size={22} />
         <h2>Le sport, et rien d’autre.</h2>
         <p>
-          Photos de pratique, portraits professionnels, équipes et installations : le contexte
-          sportif doit être identifiable. Une photo hors sujet ou dangereuse sera refusée ; un cas
-          incertain devra être examiné.
+          Photos de pratique, portraits professionnels, équipes et installations
+          : le contexte sportif doit être identifiable. Une photo hors sujet ou
+          dangereuse sera refusée ; un cas incertain devra être examiné.
         </p>
         <p className="event-note">
-          La démo ne reconnaît pas les images. Tout nouveau fichier reste en attente et ne rejoint
-          jamais automatiquement le profil, le fil ou la galerie.
+          La démo ne reconnaît pas les images. Tout nouveau fichier reste en
+          attente et ne rejoint jamais automatiquement le profil, le fil ou la
+          galerie.
         </p>
       </div>
       {trust.documents.map((d) => (
@@ -612,12 +683,12 @@ export function DocumentsPage() {
           <h3>{d.name}</h3>
           <p>
             {d.kind} · {d.sport} · {Math.ceil(d.size / 1024)} Ko
-            {d.club ? ` · ${d.club}` : ""}
+            {d.club ? ` · ${d.club}` : ''}
           </p>
           <p className="event-note">{d.reason}</p>
           <Button
             variant="ghost"
-            onClick={() => dispatchTrust({ type: "remove-document", id: d.id })}
+            onClick={() => dispatchTrust({ type: 'remove-document', id: d.id })}
           >
             Retirer ce fichier
           </Button>
@@ -633,23 +704,23 @@ export function DocumentsPage() {
 export function MemberDossier({ member: m }: { member: Member }) {
   const { profile, trust, dispatchTrust, notify, requestAccess } = useDemo();
   const records = memberSports[m.id] || [];
-  const [selected, setSelected] = useState("0:0");
-  const [score, setScore] = useState("4");
-  const [text, setText] = useState("");
-  const [relation, setRelation] = useState("");
+  const [selected, setSelected] = useState('0:0');
+  const [score, setScore] = useState('4');
+  const [text, setText] = useState('');
+  const [relation, setRelation] = useState('');
   const [attest, setAttest] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const reviews = trust.reviews.filter((r) => r.memberId === m.id);
-  const professional = profile.category === "Professionnel";
+  const professional = profile.category === 'Professionnel';
   function submit(e: FormEvent) {
     e.preventDefault();
-    const [i, n] = selected.split(":").map(Number);
+    const [i, n] = selected.split(':').map(Number);
     const record = records[i],
       club = record?.clubs[n];
     if (!club || !attest) return;
-    if (!requestAccess("comment", m.id)) return;
+    if (!requestAccess('comment', m.id)) return;
     dispatchTrust({
-      type: "review",
+      type: 'review',
       professional,
       review: {
         id: crypto.randomUUID(),
@@ -660,7 +731,7 @@ export function MemberDossier({ member: m }: { member: Member }) {
         score: Number(score),
         text,
         relationship: relation,
-        status: "pending",
+        status: 'pending',
       },
     });
     setSubmitted(true);
@@ -668,18 +739,20 @@ export function MemberDossier({ member: m }: { member: Member }) {
   return (
     <section className="trust-dossier">
       {records.map((r) => {
-        const rs = reviews.filter((x) => x.sport === r.sport && x.status === "published");
+        const rs = reviews.filter(
+          (x) => x.sport === r.sport && x.status === 'published',
+        );
         return (
           <div className="trust-card" key={r.sport}>
             <h3>
               {r.sport} · {r.level}
             </h3>
             <p>{r.ranking}</p>
-            <p>{[r.position, r.dominantSide].filter(Boolean).join(" · ")}</p>
-            <small>Déclaré · {r.federation || "référentiel à préciser"}</small>
+            <p>{[r.position, r.dominantSide].filter(Boolean).join(' · ')}</p>
+            <small>Déclaré · {r.federation || 'référentiel à préciser'}</small>
             {r.clubs.map((c) => (
               <p key={c.id}>
-                {c.name} · {c.current ? "Club actuel" : "Ancien club"}
+                {c.name} · {c.current ? 'Club actuel' : 'Ancien club'}
                 <small>{c.period}</small>
               </p>
             ))}
@@ -687,12 +760,12 @@ export function MemberDossier({ member: m }: { member: Member }) {
               <Star size={16} />
               {rs.length
                 ? `${(rs.reduce((a, b) => a + b.score, 0) / rs.length).toFixed(1)} / 5 · ${rs.length} avis professionnel(s) simulé(s)`
-                : "Aucun avis professionnel publié"}
+                : 'Aucun avis professionnel publié'}
             </p>
           </div>
         );
       })}
-      {m.id === "lea" && (
+      {m.id === 'lea' && (
         <div className="trust-card">
           <strong>Agent : Marc Petit</strong>
           <p className="event-note">Relation fictive déclarée, non vérifiée.</p>
@@ -702,11 +775,11 @@ export function MemberDossier({ member: m }: { member: Member }) {
       {reviews.map((r) => (
         <article className="trust-card" key={r.id}>
           <span className="trust-badge">
-            {r.status === "pending"
-              ? "EN MODÉRATION"
-              : r.status === "contested"
-                ? "CONTESTÉ · MASQUÉ DU SCORE"
-                : "AVIS SIMULÉ"}
+            {r.status === 'pending'
+              ? 'EN MODÉRATION'
+              : r.status === 'contested'
+                ? 'CONTESTÉ · MASQUÉ DU SCORE'
+                : 'AVIS SIMULÉ'}
           </span>
           <h3>
             {r.sport} · {r.club}
@@ -716,35 +789,36 @@ export function MemberDossier({ member: m }: { member: Member }) {
           </p>
           <p>{r.text}</p>
           <small>{r.relationship}</small>
-          {r.status === "published" && (
+          {r.status === 'published' && (
             <Button
               variant="ghost"
               onClick={() => {
                 dispatchTrust({
-                  type: "review-status",
+                  type: 'review-status',
                   id: r.id,
-                  status: "contested",
+                  status: 'contested',
                 });
-                notify("Avis signalé : retiré du score dans la démo.");
+                notify('Avis signalé : retiré du score dans la démo.');
               }}
             >
               Signaler cet avis
             </Button>
           )}
-          {r.status === "pending" && (
+          {r.status === 'pending' && (
             <details className="event-demo">
               <summary>Simuler la décision de modération</summary>
               <p>
-                Validation fictive de l’identité, de la relation au club et du contenu. En
-                production, cette action sera réservée à un modérateur.
+                Validation fictive de l’identité, de la relation au club et du
+                contenu. En production, cette action sera réservée à un
+                modérateur.
               </p>
               <Button
                 variant="outline"
                 onClick={() =>
                   dispatchTrust({
-                    type: "review-status",
+                    type: 'review-status',
                     id: r.id,
-                    status: "published",
+                    status: 'published',
                   })
                 }
               >
@@ -759,8 +833,9 @@ export function MemberDossier({ member: m }: { member: Member }) {
           <details className="trust-card">
             <summary>Donner un avis professionnel</summary>
             <p className="event-note">
-              Comme les commentaires, l’envoi d’un avis nécessite un abonnement professionnel actif.
-              L’identité et l’expérience devront être vérifiées avant publication.
+              Comme les commentaires, l’envoi d’un avis nécessite un abonnement
+              professionnel actif. L’identité et l’expérience devront être
+              vérifiées avant publication.
             </p>
             <form className="event-form" onSubmit={submit}>
               <label>
@@ -819,7 +894,8 @@ export function MemberDossier({ member: m }: { member: Member }) {
                   checked={attest}
                   onChange={(e) => setAttest(e.target.checked)}
                 />
-                J’atteste avoir directement encadré ou côtoyé ce joueur dans cette expérience.
+                J’atteste avoir directement encadré ou côtoyé ce joueur dans
+                cette expérience.
               </label>
               <Button type="submit">Soumettre à la modération</Button>
               {submitted && !trust.error && (
@@ -832,8 +908,8 @@ export function MemberDossier({ member: m }: { member: Member }) {
           </details>
         ) : (
           <p className="event-note">
-            Seuls les comptes professionnels peuvent soumettre une évaluation d’expérience. Les
-            notes sont séparées par sport.
+            Seuls les comptes professionnels peuvent soumettre une évaluation
+            d’expérience. Les notes sont séparées par sport.
           </p>
         ))}
     </section>
@@ -843,7 +919,7 @@ export function MemberDossier({ member: m }: { member: Member }) {
 export function SafetyActions({ memberId }: { memberId: string }) {
   const { trust, dispatchTrust, dispatchEvent, dispatchSocial } = useDemo();
   const [open, setOpen] = useState(false);
-  const [reason, setReason] = useState("Harcèlement");
+  const [reason, setReason] = useState('Harcèlement');
   const blocked = trust.blocked.includes(memberId);
   return (
     <>
@@ -854,17 +930,17 @@ export function SafetyActions({ memberId }: { memberId: string }) {
         <Button
           variant="ghost"
           onClick={() => {
-            dispatchTrust({ type: "block", id: memberId });
-            dispatchSocial({ type: "close-chat" });
+            dispatchTrust({ type: 'block', id: memberId });
+            dispatchSocial({ type: 'close-chat' });
             dispatchEvent({
-              type: "safety-notice",
+              type: 'safety-notice',
               text: blocked
-                ? "Membre débloqué dans la démo."
-                : "Membre bloqué : les nouveaux échanges avec ce profil sont bloqués dans la démo.",
+                ? 'Membre débloqué dans la démo.'
+                : 'Membre bloqué : les nouveaux échanges avec ce profil sont bloqués dans la démo.',
             });
           }}
         >
-          {blocked ? "Débloquer" : "Bloquer ce membre"}
+          {blocked ? 'Débloquer' : 'Bloquer ce membre'}
         </Button>
       </div>
       <Modal
@@ -881,13 +957,13 @@ export function SafetyActions({ memberId }: { memberId: string }) {
             onChange={(e) => setReason(e.target.value)}
           >
             {[
-              "Harcèlement",
-              "Racisme / discrimination",
-              "Sexisme",
-              "Menaces",
-              "Spam / arnaque",
-              "Photo sans lien avec le sport",
-              "Autre comportement abusif",
+              'Harcèlement',
+              'Racisme / discrimination',
+              'Sexisme',
+              'Menaces',
+              'Spam / arnaque',
+              'Photo sans lien avec le sport',
+              'Autre comportement abusif',
             ].map((r) => (
               <NativeSelectOption key={r}>{r}</NativeSelectOption>
             ))}
@@ -897,14 +973,14 @@ export function SafetyActions({ memberId }: { memberId: string }) {
           className="action primary"
           onClick={() => {
             dispatchTrust({
-              type: "report",
+              type: 'report',
               id: crypto.randomUUID(),
               memberId,
               reason,
             });
             dispatchEvent({
-              type: "safety-notice",
-              text: "Signalement enregistré dans la démo. Consultez son suivi dans Sécurité.",
+              type: 'safety-notice',
+              text: 'Signalement enregistré dans la démo. Consultez son suivi dans Sécurité.',
             });
             setOpen(false);
           }}
@@ -918,27 +994,29 @@ export function SafetyActions({ memberId }: { memberId: string }) {
 
 export function SafetyPage() {
   const { trust, dispatchTrust, dispatchEvent } = useDemo();
-  const [sample, setSample] = useState("");
-  const [result, setResult] = useState("");
+  const [sample, setSample] = useState('');
+  const [result, setResult] = useState('');
   return (
     <ProfileLayout back="/espace/profil" title="Sécurité & modération">
       <div className="trust-card">
         <ShieldCheck size={26} />
         <h2>Un terrain respectueux.</h2>
         <p>
-          Racisme, sexisme, menaces et harcèlement n’ont pas leur place ici. Signalez un membre
-          depuis une conversation ou son profil, et bloquez-le sans attendre une décision.
+          Racisme, sexisme, menaces et harcèlement n’ont pas leur place ici.
+          Signalez un membre depuis une conversation ou son profil, et
+          bloquez-le sans attendre une décision.
         </p>
         <p className="event-note">
-          Le filtre local reconnaît quelques expressions de test. Il n’est ni exhaustif, ni une IA
-          de modération. Une absence d’alerte ne prouve pas qu’un contenu est acceptable.
+          Le filtre local reconnaît quelques expressions de test. Il n’est ni
+          exhaustif, ni une IA de modération. Une absence d’alerte ne prouve pas
+          qu’un contenu est acceptable.
         </p>
       </div>
       <details className="trust-card">
         <summary>Tester le filtre de démonstration</summary>
         <p className="event-note">
-          Utilisez [TEST RACISME], [TEST SEXISME], [TEST MENACE] ou [TEST HARCELEMENT], sans écrire
-          de véritable injure.
+          Utilisez [TEST RACISME], [TEST SEXISME], [TEST MENACE] ou [TEST
+          HARCELEMENT], sans écrire de véritable injure.
         </p>
         <Textarea
           aria-label="Texte à tester"
@@ -951,11 +1029,11 @@ export function SafetyPage() {
             setResult(
               reason
                 ? `Bloqué : ${reason}`
-                : "Aucun déclencheur de démonstration détecté. Ce résultat ne certifie pas le contenu.",
+                : 'Aucun déclencheur de démonstration détecté. Ce résultat ne certifie pas le contenu.',
             );
             if (reason)
               dispatchEvent({
-                type: "safety-notice",
+                type: 'safety-notice',
                 text: `Test de modération : ${reason.toLowerCase()} détecté. Aucun contenu transmis.`,
               });
           }}
@@ -967,21 +1045,21 @@ export function SafetyPage() {
       <div className="trust-card">
         <h2>Demander une révision</h2>
         <p>
-          Un blocage automatique peut se tromper. Une équipe humaine devra examiner les
-          contestations.
+          Un blocage automatique peut se tromper. Une équipe humaine devra
+          examiner les contestations.
         </p>
         <Button
           variant="outline"
           onClick={() => {
             dispatchTrust({
-              type: "report",
+              type: 'report',
               id: crypto.randomUUID(),
-              memberId: "moderation",
-              reason: "Demande de révision d’un filtrage automatique",
+              memberId: 'moderation',
+              reason: 'Demande de révision d’un filtrage automatique',
             });
             dispatchEvent({
-              type: "safety-notice",
-              text: "Demande de révision enregistrée dans la démo.",
+              type: 'safety-notice',
+              text: 'Demande de révision enregistrée dans la démo.',
             });
           }}
         >
@@ -995,8 +1073,8 @@ export function SafetyPage() {
             <p key={r.id}>
               <strong>{r.reason}</strong>
               <small>
-                {members.find((m) => m.id === r.memberId)?.name || "Modération"} · reçu dans la
-                simulation, non traité
+                {members.find((m) => m.id === r.memberId)?.name || 'Modération'}{' '}
+                · reçu dans la simulation, non traité
               </small>
             </p>
           ))
@@ -1010,7 +1088,10 @@ export function SafetyPage() {
           trust.blocked.map((id) => (
             <div key={id}>
               <p>{members.find((m) => m.id === id)?.name}</p>
-              <Button variant="outline" onClick={() => dispatchTrust({ type: "block", id })}>
+              <Button
+                variant="outline"
+                onClick={() => dispatchTrust({ type: 'block', id })}
+              >
                 Débloquer
               </Button>
             </div>
@@ -1022,18 +1103,19 @@ export function SafetyPage() {
       <section className="trust-card">
         <h2>Validation du compte</h2>
         <p>
-          E-mail et code d’authentification :{" "}
+          E-mail et code d’authentification :{' '}
           {trust.securityStep
-            ? "parcours simulé terminé"
-            : "à configurer via l’inscription de démonstration"}
+            ? 'parcours simulé terminé'
+            : 'à configurer via l’inscription de démonstration'}
           .
         </p>
         <p className="event-note">
-          Aucune protection d’accès réelle n’est active. Ne saisissez jamais vos codes personnels.
+          Aucune protection d’accès réelle n’est active. Ne saisissez jamais vos
+          codes personnels.
         </p>
       </section>
       <Link className="action secondary" href="/espace/confidentialite">
-        Confidentialité et charte
+        <T>{'Confidentialité et charte'}</T>
       </Link>
     </ProfileLayout>
   );
@@ -1041,7 +1123,7 @@ export function SafetyPage() {
 
 export function ReferralPage() {
   const { profile, trust, dispatchTrust, dispatchSocial, notify } = useDemo();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [copied, setCopied] = useState(false);
   return (
     <ProfileLayout back="/espace/profil" title="Invitez votre réseau">
@@ -1050,12 +1132,12 @@ export function ReferralPage() {
         <strong>3 mois</strong>
         <h2>Premium pour une rencontre de plus.</h2>
         <p>
-          Proposition de parrainage : un nouveau membre distinct, e-mail vérifié, profil complété et
-          première connexion = trois mois offerts.
+          Proposition de parrainage : un nouveau membre distinct, e-mail
+          vérifié, profil complété et première connexion = trois mois offerts.
         </p>
         <small>
-          Simulation uniquement. Règles antifraude et conditions commerciales à valider avant
-          lancement.
+          Simulation uniquement. Règles antifraude et conditions commerciales à
+          valider avant lancement.
         </small>
       </section>
       <div className="trust-card">
@@ -1070,15 +1152,17 @@ export function ReferralPage() {
               );
               setCopied(true);
             } catch {
-              notify("Copie indisponible. Code de démonstration : ARENA-ALEX-DEMO");
+              notify(
+                'Copie indisponible. Code de démonstration : ARENA-ALEX-DEMO',
+              );
             }
           }}
         >
-          {copied ? "Lien copié" : "Copier le lien de démonstration"}
+          {copied ? 'Lien copié' : 'Copier le lien de démonstration'}
         </Button>
         <p className="event-note">
-          Ce lien illustre l’attribution du parrain ; il ne suit aucune inscription réelle et
-          n’envoie aucune invitation.
+          Ce lien illustre l’attribution du parrain ; il ne suit aucune
+          inscription réelle et n’envoie aucune invitation.
         </p>
       </div>
       <form
@@ -1086,7 +1170,7 @@ export function ReferralPage() {
         onSubmit={(e) => {
           e.preventDefault();
           dispatchTrust({
-            type: "referral",
+            type: 'referral',
             ownEmail: profile.email,
             referral: {
               id: crypto.randomUUID(),
@@ -1113,22 +1197,32 @@ export function ReferralPage() {
         <section className="trust-card" key={r.id}>
           <h3>{r.email}</h3>
           <ol className="referral-steps">
-            {["Invitation", "E-mail vérifié", "Profil complété", "Première connexion"].map(
-              (s, i) => (
-                <li key={s} data-complete={r.stage >= i}>
-                  {s}
-                </li>
-              ),
-            )}
+            {[
+              'Invitation',
+              'E-mail vérifié',
+              'Profil complété',
+              'Première connexion',
+            ].map((s, i) => (
+              <li key={s} data-complete={r.stage >= i}>
+                {s}
+              </li>
+            ))}
           </ol>
           {r.credited ? (
             <p className="event-success">3 mois crédités · simulation</p>
           ) : (
             <Button
               variant="outline"
-              onClick={() => dispatchTrust({ type: "referral-step", id: r.id })}
+              onClick={() => dispatchTrust({ type: 'referral-step', id: r.id })}
             >
-              Simuler : {["vérification e-mail", "profil complété", "première connexion"][r.stage]}
+              Simuler :{' '}
+              {
+                [
+                  'vérification e-mail',
+                  'profil complété',
+                  'première connexion',
+                ][r.stage]
+              }
             </Button>
           )}
         </section>
@@ -1136,26 +1230,26 @@ export function ReferralPage() {
       <section className="trust-card">
         <h2>{trust.rewardMonths} mois gagnés · démo</h2>
         <p>
-          Un filleul n’est crédité qu’une seule fois. Les doublons et l’auto-parrainage sont refusés
-          dans cette simulation.
+          Un filleul n’est crédité qu’une seule fois. Les doublons et
+          l’auto-parrainage sont refusés dans cette simulation.
         </p>
         <Button
           disabled={trust.rewardMonths < 3 || trust.rewardActivated}
           onClick={() => {
             if (trust.rewardMonths < 3 || trust.rewardActivated) return;
-            dispatchTrust({ type: "activate-reward" });
+            dispatchTrust({ type: 'activate-reward' });
             dispatchSocial({
-              type: "subscription",
+              type: 'subscription',
               category: profile.category,
             });
             notify(
-              "Récompense activée dans cette visite uniquement. Aucun paiement ni prolongation réelle.",
+              'Récompense activée dans cette visite uniquement. Aucun paiement ni prolongation réelle.',
             );
           }}
         >
           {trust.rewardActivated
-            ? "Premium de récompense activé · démo"
-            : "Activer la récompense · démo"}
+            ? 'Premium de récompense activé · démo'
+            : 'Activer la récompense · démo'}
         </Button>
       </section>
     </ProfileLayout>
@@ -1164,49 +1258,59 @@ export function ReferralPage() {
 
 export function PoliciesPage() {
   return (
-    <ProfileLayout back="/espace/inscription" title="Confiance & confidentialité">
+    <ProfileLayout
+      back="/espace/inscription"
+      title="Confiance & confidentialité"
+    >
       <p className="trust-badge">NOTICE DE DÉMONSTRATION · VERSION 2026-09</p>
       <section className="trust-card">
         <h2>Vos données dans cette démo</h2>
         <p>
-          Les formulaires, signalements, documents et évaluations utilisent uniquement la mémoire de
-          cet onglet. Aucun document sélectionné n’est envoyé à un serveur. Tout est effacé au
-          rechargement. Utilisez des informations et fichiers fictifs.
+          Les formulaires, signalements, documents et évaluations utilisent
+          uniquement la mémoire de cet onglet. Aucun document sélectionné n’est
+          envoyé à un serveur. Tout est effacé au rechargement. Utilisez des
+          informations et fichiers fictifs.
         </p>
         <p>
-          Les contenus publiés dans une future version seront visibles selon vos réglages de
-          partage. Les signalements devront être limités aux équipes autorisées, sans communication
-          automatique de l’identité du signalant au membre signalé.
+          Les contenus publiés dans une future version seront visibles selon vos
+          réglages de partage. Les signalements devront être limités aux équipes
+          autorisées, sans communication automatique de l’identité du signalant
+          au membre signalé.
         </p>
       </section>
       <section className="trust-card">
         <h2>Des informations sincères</h2>
         <p>
-          Déclarez vos sports, niveaux, clubs, expériences et liens avec un agent avec exactitude.
-          Ne revendiquez pas une affiliation sans autorisation. Un classement déclaré ou un document
-          transmis n’est pas automatiquement vérifié.
+          Déclarez vos sports, niveaux, clubs, expériences et liens avec un
+          agent avec exactitude. Ne revendiquez pas une affiliation sans
+          autorisation. Un classement déclaré ou un document transmis n’est pas
+          automatiquement vérifié.
         </p>
         <p>
-          Les professionnels doivent avoir directement connu l’expérience évaluée et rédiger un avis
-          factuel, respectueux, sans données sensibles. Les intéressés doivent pouvoir signaler un
-          avis et demander une révision.
+          Les professionnels doivent avoir directement connu l’expérience
+          évaluée et rédiger un avis factuel, respectueux, sans données
+          sensibles. Les intéressés doivent pouvoir signaler un avis et demander
+          une révision.
         </p>
       </section>
       <section className="trust-card">
         <h2>Une communauté sportive</h2>
         <p>
-          Les propos racistes, sexistes, discriminatoires, menaçants et le harcèlement sont
-          interdits. Les photos doivent être liées au sport et ne pas porter atteinte aux personnes.
-          Une modération humaine doit pouvoir réexaminer les décisions automatiques.
+          Les propos racistes, sexistes, discriminatoires, menaçants et le
+          harcèlement sont interdits. Les photos doivent être liées au sport et
+          ne pas porter atteinte aux personnes. Une modération humaine doit
+          pouvoir réexaminer les décisions automatiques.
         </p>
       </section>
       <section className="trust-card">
         <h2>Avant le lancement réel</h2>
         <p>
-          Cette notice n’est pas la politique juridique définitive. Le responsable du traitement,
-          ses coordonnées, les finalités et bases légales, prestataires, transferts éventuels,
-          durées de conservation, droits et modalités de recours devront être renseignés et validés
-          avant toute collecte réelle. Aucun consentement marketing n’est demandé ni précoché ici.
+          Cette notice n’est pas la politique juridique définitive. Le
+          responsable du traitement, ses coordonnées, les finalités et bases
+          légales, prestataires, transferts éventuels, durées de conservation,
+          droits et modalités de recours devront être renseignés et validés
+          avant toute collecte réelle. Aucun consentement marketing n’est
+          demandé ni précoché ici.
         </p>
         <a
           href="https://www.cnil.fr/fr/conformite-rgpd-information-des-personnes-et-transparence"
@@ -1224,8 +1328,8 @@ export function PoliciesPage() {
 export function SecondFactorPage() {
   const { draft, emailVerified, dispatchTrust } = useDemo();
   const router = useRouter();
-  const [code, setCode] = useState("");
-  const [error, setError] = useState("");
+  const [code, setCode] = useState('');
+  const [error, setError] = useState('');
   if (!draft || !emailVerified) return <Guard verification />;
   return (
     <AuthLayout
@@ -1235,35 +1339,40 @@ export function SecondFactorPage() {
       intro="Après l’e-mail, un code d’application d’authentification. Parcours entièrement simulé."
     >
       <div className="demo-code-note">
-        <strong>CODE DE DÉMONSTRATION : 135790</strong>
+        <strong>
+          <T>{'CODE DE DÉMONSTRATION : 135790'}</T>
+        </strong>
         <p>
-          Aucun authentificateur, QR code ou secret réel n’est configuré. Ne saisissez jamais votre
-          propre code.
+          <T>
+            {
+              'Aucun authentificateur, QR code ou secret réel n’est configuré. Ne saisissez jamais votre propre code.'
+            }
+          </T>
         </p>
       </div>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (code !== "135790") {
-            setError("Utilisez le code fictif 135790.");
+          if (code !== '135790') {
+            setError('Utilisez le code fictif 135790.');
             return;
           }
-          dispatchTrust({ type: "security", enabled: true });
-          router.push("/espace/personnalisation");
+          dispatchTrust({ type: 'security', enabled: true });
+          router.push('/espace/personnalisation');
         }}
       >
         <Field
           label="Code d’authentification démo"
           name="authenticator-code"
           value={code}
-          onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
+          onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
           maxLength={6}
           inputMode="numeric"
           autoComplete="one-time-code"
           error={error}
         />
         <Button type="submit" className="action primary">
-          Valider la seconde étape
+          <T>{'Valider la seconde étape'}</T>
         </Button>
       </form>
     </AuthLayout>

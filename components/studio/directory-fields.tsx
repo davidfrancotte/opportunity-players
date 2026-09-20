@@ -1,9 +1,11 @@
-"use client";
-import { Field } from "./studio-ui";
-import { sideNames } from "@/lib/studio/athlete";
-import { NativeSelect, NativeSelectOption } from "./ui/native-select";
-import type { Profile, Issues } from "@/lib/studio/model";
-import type { SportRecord } from "@/lib/studio/trust";
+'use client';
+import { T } from './locale';
+import { RegistrationFields, SportExtraFields } from './sport-profile-fields';
+import { Field } from './studio-ui';
+import { sideNames } from '@/lib/studio/athlete';
+import { NativeSelect, NativeSelectOption } from './ui/native-select';
+import type { Profile, Issues } from '@/lib/studio/model';
+import type { SportRecord } from '@/lib/studio/trust';
 import {
   countrySuggestions,
   dominantSides,
@@ -14,12 +16,12 @@ import {
   sideLabel,
   typesFor,
   updatePrimaryRecord,
-} from "@/lib/studio/directory";
+} from '@/lib/studio/directory';
 
 export function PlayerSportFields({
   record,
   onChange,
-  prefix = "player",
+  prefix = 'player',
 }: {
   record: SportRecord;
   onChange: (patch: Partial<SportRecord>) => void;
@@ -35,14 +37,16 @@ export function PlayerSportFields({
           onChange={(e) => onChange({ level: e.target.value })}
         >
           {levels.map((v) => (
-            <NativeSelectOption key={v}>{v}</NativeSelectOption>
+            <NativeSelectOption key={v} value={v}>
+              <T>{v}</T>
+            </NativeSelectOption>
           ))}
         </NativeSelect>
       </Field>
       <Field
         label="Position / poste"
         name={`${prefix}-position`}
-        value={record.position || ""}
+        value={record.position || ''}
         onChange={(e) => onChange({ position: e.target.value })}
         maxLength={80}
         list={`${prefix}-positions`}
@@ -57,17 +61,20 @@ export function PlayerSportFields({
       <Field label={sideLabel(record.sport)} name={`${prefix}-side`}>
         <NativeSelect
           id={`${prefix}-side`}
-          value={record.dominantSide || ""}
+          value={record.dominantSide || ''}
           onChange={(e) => onChange({ dominantSide: e.target.value })}
         >
-          <NativeSelectOption value="">Non renseigné / non applicable</NativeSelectOption>
+          <NativeSelectOption value="">
+            <T>{'Non renseigné / non applicable'}</T>
+          </NativeSelectOption>
           {dominantSides.map((v) => (
             <NativeSelectOption key={v} value={v}>
-              {sideNames[v]}
+              <T>{sideNames[v]}</T>
             </NativeSelectOption>
           ))}
         </NativeSelect>
       </Field>
+      <SportExtraFields record={record} onChange={onChange} prefix={prefix} />
     </div>
   );
 }
@@ -101,12 +108,23 @@ export function ProfileDirectoryFields({
           <option key={c} value={c} />
         ))}
       </datalist>
-      {profile.category === "Sportif" ? (
+      {profile.category === 'Sportif' ? (
         <>
+          <RegistrationFields
+            profile={profile}
+            onChange={onChange}
+            errors={errors}
+          />
           <fieldset className="athlete-measurements">
-            <legend>Vos caractéristiques physiques</legend>
+            <legend>
+              <T>{'Vos caractéristiques physiques'}</T>
+            </legend>
             <p className="field-hint">
-              Facultatif. Ces informations seront visibles sur votre profil sportif.
+              <T>
+                {
+                  'Facultatif. Ces informations seront visibles sur votre profil sportif.'
+                }
+              </T>
             </p>
             <div className="field-pair">
               <Field
@@ -116,7 +134,9 @@ export function ProfileDirectoryFields({
                 maxLength={6}
                 placeholder="Ex. 72,5"
                 value={profile.weightKg}
-                onChange={(e) => onChange({ ...profile, weightKg: e.target.value })}
+                onChange={(e) =>
+                  onChange({ ...profile, weightKg: e.target.value })
+                }
                 error={errors.weightKg}
               />
               <Field
@@ -126,7 +146,9 @@ export function ProfileDirectoryFields({
                 maxLength={6}
                 placeholder="Ex. 180"
                 value={profile.heightCm}
-                onChange={(e) => onChange({ ...profile, heightCm: e.target.value })}
+                onChange={(e) =>
+                  onChange({ ...profile, heightCm: e.target.value })
+                }
                 error={errors.heightCm}
               />
             </div>
@@ -136,12 +158,16 @@ export function ProfileDirectoryFields({
               id="gender"
               value={profile.gender}
               aria-invalid={!!errors.gender}
-              aria-describedby={errors.gender ? "gender-error" : undefined}
+              aria-describedby={errors.gender ? 'gender-error' : undefined}
               onChange={(e) => onChange({ ...profile, gender: e.target.value })}
             >
-              <NativeSelectOption value="">Non renseigné</NativeSelectOption>
+              <NativeSelectOption value="">
+                <T>{'Non renseigné'}</T>
+              </NativeSelectOption>
               {genders.map((v) => (
-                <NativeSelectOption key={v}>{v}</NativeSelectOption>
+                <NativeSelectOption key={v} value={v}>
+                  <T>{v}</T>
+                </NativeSelectOption>
               ))}
             </NativeSelect>
           </Field>
@@ -153,38 +179,61 @@ export function ProfileDirectoryFields({
             label="Classement (facultatif)"
             name="ranking"
             value={primaryRecord(profile).ranking}
-            onChange={(e) => onChange(updatePrimaryRecord(profile, { ranking: e.target.value }))}
+            onChange={(e) =>
+              onChange(
+                updatePrimaryRecord(profile, { ranking: e.target.value }),
+              )
+            }
             maxLength={80}
             placeholder="Ex. P200, C15.2, division…"
           />
           <p className="field-hint">
-            Niveau, poste et côté dominant sont propres à chaque sport. Complétez vos autres
-            disciplines depuis Profil → Sports, niveaux &amp; clubs.
+            Niveau, poste et côté dominant sont propres à chaque sport.
+            Complétez vos autres disciplines depuis Profil → Sports, niveaux
+            &amp; clubs.
           </p>
         </>
       ) : (
-        <Field label="Type de compte" name="accountType" error={errors.accountType}>
+        <Field
+          label="Type de compte"
+          name="accountType"
+          error={errors.accountType}
+        >
           <NativeSelect
             id="accountType"
             required
             aria-invalid={!!errors.accountType}
-            aria-describedby={errors.accountType ? "accountType-error" : undefined}
-            value={
-              typesFor(profile.category).includes(profile.accountType) ? profile.accountType : ""
+            aria-describedby={
+              errors.accountType ? 'accountType-error' : undefined
             }
-            onChange={(e) => onChange({ ...profile, accountType: e.target.value })}
+            value={
+              typesFor(profile.category).includes(profile.accountType)
+                ? profile.accountType
+                : ''
+            }
+            onChange={(e) =>
+              onChange({ ...profile, accountType: e.target.value })
+            }
           >
             <NativeSelectOption value="">
-              Choisir{" "}
-              {profile.category === "Professionnel" ? "votre métier" : "le type de structure"}
+              Choisir{' '}
+              {profile.category === 'Professionnel'
+                ? 'votre métier'
+                : 'le type de structure'}
             </NativeSelectOption>
             {typesFor(profile.category).map((v) => (
-              <NativeSelectOption key={v}>{v}</NativeSelectOption>
+              <NativeSelectOption key={v} value={v}>
+                <T>{v}</T>
+              </NativeSelectOption>
             ))}
           </NativeSelect>
-          {profile.accountType && typesFor(profile.category).includes(profile.accountType) && (
-            <p className="field-hint">Sélection : {profile.accountType}</p>
-          )}
+          {profile.accountType &&
+            typesFor(profile.category).includes(profile.accountType) && (
+              <p className="field-hint">
+                <T>{'Sélection :'}</T>
+                {profile.accountType}
+              </p>
+            )}
         </Field>
       )}
     </div>

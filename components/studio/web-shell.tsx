@@ -1,8 +1,9 @@
-"use client";
-import type { ReactNode } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
+'use client';
+import { T, LanguageSwitch } from './locale';
+import type { ReactNode } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import {
   House,
   UsersRound,
@@ -17,51 +18,52 @@ import {
   Bell,
   ShieldCheck,
   Gift,
-} from "lucide-react";
-import { EventHeader } from "./event-navigation";
-import { WebThemeSwitch } from "./web-theme";
-import { useDemo } from "./demo-provider";
-import { Brand } from "./studio-ui";
-import { PlanStatus } from "./subscription-ui";
-import { displayName, completion } from "@/lib/studio/model";
-import { members, opportunities } from "@/lib/studio/social";
-import { Button } from "@/components/ui/button";
+} from 'lucide-react';
+import { EventHeader } from './event-navigation';
+import { WebThemeSwitch } from './web-theme';
+import { useDemo } from './demo-provider';
+import { Brand } from './studio-ui';
+import { PlanStatus } from './subscription-ui';
+import { displayName, completion } from '@/lib/studio/model';
+import { members, opportunities } from '@/lib/studio/social';
+import { Button } from '@/components/ui/button';
 
 const navigation = [
-  { href: "accueil", label: "Accueil", icon: House },
-  { href: "reseau", label: "Réseau", icon: UsersRound },
-  { href: "messages", label: "Messages", icon: MessageCircle },
-  { href: "opportunities", label: "Opportunities", icon: Compass },
-  { href: "profil", label: "Mon profil", icon: UserRound },
+  { href: 'accueil', label: 'Accueil', icon: House },
+  { href: 'reseau', label: 'Réseau', icon: UsersRound },
+  { href: 'messages', label: 'Messages', icon: MessageCircle },
+  { href: 'opportunities', label: 'Opportunities', icon: Compass },
+  { href: 'profil', label: 'Mon profil', icon: UserRound },
 ];
 const authRoutes = [
-  "connexion",
-  "inscription",
-  "verification",
-  "double-facteur",
-  "personnalisation",
-  "presentation",
-  "mot-de-passe-oublie",
+  'connexion',
+  'inscription',
+  'verification',
+  'double-facteur',
+  'personnalisation',
+  'presentation',
+  'mot-de-passe-oublie',
 ];
 
 export function WebShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const page = pathname.split("/")[2] || "accueil";
+  const page = pathname.split('/')[2] || 'accueil';
   const { profile, social, dispatchSocial, reset, events } = useDemo();
   const current = [
-    "parcours",
-    "medias",
-    "modifier-profil",
-    "disciplines",
-    "agent",
-    "documents",
+    'dossier-sportif',
+    'parcours',
+    'medias',
+    'modifier-profil',
+    'disciplines',
+    'agent',
+    'documents',
   ].includes(page)
-    ? "profil"
-    : ["jouer", "organiser", "match"].includes(page)
-      ? "reseau"
+    ? 'profil'
+    : ['jouer', 'organiser', 'match'].includes(page)
+      ? 'reseau'
       : page;
   const eventUnread = events.notices.filter(
-    (n) => n.recipient === "me" && !n.read,
+    (n) => n.recipient === 'me' && !n.read,
   ).length;
   const unread = social.conversations.filter((c) => c.unread).length;
   const progress = completion(profile);
@@ -70,9 +72,15 @@ export function WebShell({ children }: { children: ReactNode }) {
       <div className="studio-web-auth">
         <nav className="studio-web-return" aria-label="Retour au site vitrine">
           <Link href="/">← Retour au site</Link>
+          <LanguageSwitch />
           <WebThemeSwitch />
           <Link href="/application">Découvrir l’application ↗</Link>
         </nav>
+        {profile.registrationMode === 'child' && (
+          <p className="child-mode-note">
+            <T>Profil géré par un représentant</T>
+          </p>
+        )}
         {children}
       </div>
     );
@@ -86,11 +94,13 @@ export function WebShell({ children }: { children: ReactNode }) {
             <Link
               key={href}
               href={`/espace/${href}`}
-              aria-current={current === href ? "page" : undefined}
+              aria-current={current === href ? 'page' : undefined}
             >
               <Icon size={21} />
-              <span>{label}</span>
-              {href === "messages" && unread > 0 && (
+              <span>
+                <T>{label}</T>
+              </span>
+              {href === 'messages' && unread > 0 && (
                 <small aria-label={`${unread} conversations non lues`}>
                   {unread}
                 </small>
@@ -101,52 +111,53 @@ export function WebShell({ children }: { children: ReactNode }) {
         <div className="web-sidebar-secondary">
           <Link
             href="/espace/securite"
-            aria-current={page === "securite" ? "page" : undefined}
+            aria-current={page === 'securite' ? 'page' : undefined}
           >
             <ShieldCheck size={19} />
-            Sécurité
+            <T>{'Sécurité'}</T>
           </Link>
           <Link
             href="/espace/parrainage"
-            aria-current={page === "parrainage" ? "page" : undefined}
+            aria-current={page === 'parrainage' ? 'page' : undefined}
           >
             <Gift size={19} />
             Parrainage
           </Link>
           <Link
             href="/espace/jouer"
-            aria-current={page === "jouer" ? "page" : undefined}
+            aria-current={page === 'jouer' ? 'page' : undefined}
           >
             <UsersRound size={19} />
-            Jouer ensemble
+            <T>{'Jouer ensemble'}</T>
           </Link>
           <Link
             href="/espace/agenda"
-            aria-current={page === "agenda" ? "page" : undefined}
+            aria-current={page === 'agenda' ? 'page' : undefined}
           >
             <CalendarDays size={19} />
-            Mon agenda
+            <T>{'Mon agenda'}</T>
           </Link>
           <Link
             href="/espace/notifications"
-            aria-current={page === "notifications" ? "page" : undefined}
+            aria-current={page === 'notifications' ? 'page' : undefined}
           >
             <Bell size={19} />
-            Notifications{eventUnread > 0 && <small>{eventUnread}</small>}
+            <T>{'Notifications'}</T>
+            {eventUnread > 0 && <small>{eventUnread}</small>}
           </Link>
           <Link
             href="/espace/abonnement"
-            aria-current={page === "abonnement" ? "page" : undefined}
+            aria-current={page === 'abonnement' ? 'page' : undefined}
           >
             <Sparkles size={19} />
-            Mon abonnement
+            <T>{'Mon abonnement'}</T>
           </Link>
           <Link
             href="/espace/parametres"
-            aria-current={page === "parametres" ? "page" : undefined}
+            aria-current={page === 'parametres' ? 'page' : undefined}
           >
             <Settings size={19} />
-            Paramètres
+            <T>{'Paramètres'}</T>
           </Link>
         </div>
         <Link className="web-self" href="/espace/profil">
@@ -168,7 +179,7 @@ export function WebShell({ children }: { children: ReactNode }) {
           <Link href="/">← Le site</Link>
           <Link href="/espace/connexion" onClick={reset}>
             <LogOut size={15} />
-            Déconnexion
+            <T>{'Déconnexion'}</T>
           </Link>
         </div>
         <p className="web-demo-note">
@@ -178,28 +189,30 @@ export function WebShell({ children }: { children: ReactNode }) {
       <div className="web-content-area">
         <header className="web-topbar">
           <span>
-            OPPORTUNITY PLAYERS <i>/</i>{" "}
+            OPPORTUNITY PLAYERS <i>/</i>{' '}
             <strong>
               {(
                 {
-                  jouer: "Jouer ensemble",
-                  organiser: "Organiser un match",
-                  match: "Votre match",
-                  agenda: "Mon agenda",
-                  notifications: "Notifications",
-                  disciplines: "Sports, niveaux et clubs",
-                  agent: "Mon agent",
-                  documents: "CV et références",
-                  securite: "Sécurité et modération",
-                  parrainage: "Inviter mon réseau",
-                  confidentialite: "Confidentialité et charte",
+                  jouer: 'Jouer ensemble',
+                  organiser: 'Organiser un match',
+                  match: 'Votre match',
+                  agenda: 'Mon agenda',
+                  notifications: 'Notifications',
+                  disciplines: 'Sports, niveaux et clubs',
+                  agent: 'Mon agent',
+                  documents: 'CV et références',
+                  'dossier-sportif': 'Dossier sportif',
+                  securite: 'Sécurité et modération',
+                  parrainage: 'Inviter mon réseau',
+                  confidentialite: 'Confidentialité et charte',
                 } as Record<string, string>
               )[page] ||
                 navigation.find((n) => n.href === current)?.label ||
-                (page === "abonnement" ? "Abonnement" : "Paramètres")}
+                (page === 'abonnement' ? 'Abonnement' : 'Paramètres')}
             </strong>
           </span>
           <div className="web-topbar-actions">
+            <LanguageSwitch />
             <WebThemeSwitch />
             <EventHeader />
             <Link href="/espace/profil">
@@ -216,11 +229,12 @@ export function WebShell({ children }: { children: ReactNode }) {
         </header>
         <div className="web-mobile-appearance">
           <span>Apparence</span>
+          <LanguageSwitch />
           <WebThemeSwitch />
         </div>
         <div className="web-content-grid">
           <div className="web-main-content">{children}</div>
-          {page === "accueil" && (
+          {page === 'accueil' && (
             <aside
               className="web-context-rail"
               aria-label="Votre réseau et vos opportunités"
@@ -263,13 +277,13 @@ export function WebShell({ children }: { children: ReactNode }) {
                     <Button
                       variant="ghost"
                       size="sm"
-                      aria-label={`${social.following.includes(member.id) ? "Ne plus suivre" : "Suivre"} ${member.name}`}
+                      aria-label={`${social.following.includes(member.id) ? 'Ne plus suivre' : 'Suivre'} ${member.name}`}
                       aria-pressed={social.following.includes(member.id)}
                       onClick={() =>
-                        dispatchSocial({ type: "follow", id: member.id })
+                        dispatchSocial({ type: 'follow', id: member.id })
                       }
                     >
-                      {social.following.includes(member.id) ? "Suivi" : "+"}
+                      {social.following.includes(member.id) ? 'Suivi' : '+'}
                     </Button>
                   </div>
                 ))}
