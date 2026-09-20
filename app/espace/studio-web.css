@@ -515,26 +515,28 @@ body:has(.studio-surface) .action {
   body:has(.studio-surface) .conversation-heading h2 {
     font-size: 15px;
   }
-  body:has(.studio-surface) .studio-page-abonnement .profile-layout {
+  body:has(.studio-surface) .subscription-offer-layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 0 30px;
+    gap: 30px;
+    margin-top: 24px;
+    align-items: stretch;
   }
-  .studio-page-abonnement .subscription-hero,
-  .studio-page-abonnement .subscription-current,
-  .studio-page-abonnement .profile-footer {
-    grid-column: 1 / -1;
+  .subscription-sticky-column,
+  .subscription-details-column {
+    min-width: 0;
   }
-  .studio-page-abonnement .premium-offer {
-    grid-column: 1;
-    grid-row: 3 / 5;
-    align-self: start;
+  body:has(.studio-surface) .subscription-sticky-column .premium-offer {
+    /* The stretched column ends exactly at the bottom of all-plan-prices. */
+    margin: 0;
     position: sticky;
     top: 24px;
   }
-  .studio-page-abonnement .all-plan-prices,
-  .studio-page-abonnement .plan-comparison {
-    grid-column: 2;
+  body:has(.studio-surface) .subscription-details-column .plan-comparison {
+    margin: 0;
+  }
+  body:has(.studio-surface) .subscription-details-column .all-plan-prices {
+    margin: 24px 0 0;
   }
   body:has(.studio-surface) .subscription-hero > p {
     max-width: 600px;
@@ -544,17 +546,6 @@ body:has(.studio-surface) .action {
   }
   body:has(.studio-surface) .subscription-faq summary {
     font-size: 14px;
-  }
-  .studio-page-abonnement .plan-comparison {
-    grid-row: 3;
-  }
-  .studio-page-abonnement .all-plan-prices {
-    grid-row: 4;
-  }
-  .studio-page-abonnement .subscription-faq,
-  .studio-page-abonnement .pricing-source,
-  .studio-page-abonnement .subscription-demo-controls {
-    grid-column: 1 / -1;
   }
   .web-safety-note {
     padding: 0 0 30px;

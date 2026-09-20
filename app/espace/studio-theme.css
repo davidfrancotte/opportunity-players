@@ -1,0 +1,61 @@
+/* Web-only controls; the standalone mobile app has its own stylesheet. */
+body:has(.studio-surface) .web-theme-switch {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid #3b433e;
+  background: #171b1d;
+  border-radius: 13px;
+}
+body:has(.studio-surface) .web-theme-switch button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #aab8a6;
+  font-size: 12px;
+  font-weight: 500;
+}
+body:has(.studio-surface) .web-theme-switch button[aria-pressed="true"] {
+  background: #d1f94c;
+  color: #17200d;
+}
+body:has(.studio-surface) .web-theme-switch button:focus-visible {
+  outline-offset: 2px;
+}
+body:has(.studio-surface) .web-mobile-appearance {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px 0;
+  max-width: 600px;
+  margin: auto;
+  color: #aab8a6;
+  font-size: 12px;
+}
+body:has(.studio-surface) .studio-web-return {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+@media (min-width: 900px) {
+  body:has(.studio-surface) .web-mobile-appearance {
+    display: none;
+  }
+  body:has(.studio-surface) .web-topbar-actions {
+    flex-shrink: 0;
+  }
+}
+@media (max-width: 1100px) and (min-width: 900px) {
+  body:has(.studio-surface) .web-topbar {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+}

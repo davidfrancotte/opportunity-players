@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { WebShell } from '@/components/studio/web-shell';
+import { WebThemeProvider } from '@/components/studio/web-theme';
 import { DemoProvider } from '@/components/studio/demo-provider';
 import { UpgradeGate } from '@/components/studio/subscription-ui';
 import './studio-globals.css';
@@ -9,6 +10,8 @@ import './studio-subscription.css';
 import './studio-events.css';
 import './studio-trust.css';
 import './studio-web.css';
+import './studio-theme.css';
+import './studio-light.css';
 export const metadata: Metadata = {
   title: 'Espace membre · Démo Arena',
   description:
@@ -27,7 +30,7 @@ export const metadata: Metadata = {
 };
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="studio-surface">
+    <WebThemeProvider>
       <DemoProvider>
         <WebShell>
           <noscript>
@@ -44,6 +47,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </WebShell>
         <UpgradeGate />
       </DemoProvider>
-    </div>
+    </WebThemeProvider>
   );
 }

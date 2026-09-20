@@ -6,9 +6,9 @@ import './web-workspace-preview.css';
 import {Tabs,TabsList,TabsTrigger,TabsContent} from '@/components/ui/tabs';
 
 const previews = [
-  {id:'profil',label:'01 / Mon parcours',image:'studio-web-profil-trust',href:'/espace/profil',title:'Vos sports, vos niveaux, vos clubs.',text:'Un dossier multisport, vos références et votre agent : donnez du contexte à votre profil.',alt:'Interface web Arena : profil sportif, disciplines et classements distincts, clubs et accès aux références et à l’agent.'},
-  {id:'reseau',label:'02 / Les bons profils',image:'studio-web-reseau-trust',href:'/espace/reseau',title:'Une recherche qui connaît votre terrain.',text:'Croisez sport, niveau, classement et expérience en club pour trouver les bons interlocuteurs.',alt:'Interface web Arena : recherche de joueurs avec filtres par sport, niveau, classement et club.'},
-  {id:'securite',label:'03 / Mes échanges',image:'studio-web-securite-trust',href:'/espace/securite',title:'Gardez la main sur vos échanges.',text:'Retrouvez vos signalements, gérez les membres bloqués et demandez une révision du filtrage.',alt:'Interface web Arena : centre de sécurité, suivi des signalements et gestion des membres bloqués.'},
+  {id:'profil',label:'01 / Mon parcours',image:'studio-web-profil-light',href:'/espace/profil',title:'Vos sports, vos niveaux, vos clubs.',text:'Un dossier multisport, vos références et votre agent : donnez du contexte à votre profil.',alt:'Interface web Arena en mode clair : profil sportif, disciplines et classements distincts, clubs et accès aux références et à l’agent.'},
+  {id:'reseau',label:'02 / Les bons profils',image:'studio-web-reseau-light',href:'/espace/reseau',title:'Une recherche qui connaît votre terrain.',text:'Croisez sport, niveau, classement et expérience en club pour trouver les bons interlocuteurs.',alt:'Interface web Arena en mode clair : recherche de joueurs avec filtres par sport, niveau, classement et club.'},
+  {id:'messages',label:'03 / Mes échanges',image:'studio-web-messages-light',href:'/espace/messages',title:'Une conversation peut tout changer.',text:'Retrouvez vos conversations, échangez avec votre réseau et préparez votre prochaine rencontre sportive.',alt:'Messagerie web Arena en mode clair : trois conversations fictives avec Noah Laurent, Horizon Padel et Léa Moreau, et un échange ouvert autour d’une séance de padel.'},
 ];
 
 export function WebWorkspacePreview() {
