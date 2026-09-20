@@ -30,14 +30,15 @@ const plans: {
     line: 'Faites grandir votre parcours.',
     free: [
       'Profil, exploration du réseau et suivi de membres',
-      '5 messages envoyés par mois',
+      '3 nouvelles prises de contact par mois ; réponses gratuites',
       'Réception de messages et commentaires autorisés sur les publications ouvertes',
       'Pas de création de publications',
     ],
     premium: [
       'Tout le socle gratuit',
       'Publication de vos actualités et de vos images',
-      'Messages envoyés sans la limite de 5 par mois',
+      '30 nouvelles prises de contact par mois',
+      'Recherches favorites avec alertes, publications programmées et agenda avancé',
     ],
   },
   {
@@ -48,14 +49,14 @@ const plans: {
     free: [
       'Profil, exploration du réseau et suivi de membres',
       'Création de publications',
-      'Pas de communication avec les joueurs',
-      'Pas de réception de messages ni de commentaires',
+      '3 nouvelles prises de contact par mois, y compris avec les joueurs',
+      'Réception, réponses et commentaires gratuits',
     ],
     premium: [
       'Tout le socle gratuit',
-      'Communication avec les joueurs',
-      'Réception de messages',
-      'Réception de commentaires sur vos publications',
+      '100 nouvelles prises de contact par mois',
+      '5 offres actives, listes de talents et portefeuille avec notes privées',
+      'Essais groupés, disponibilités récurrentes et statistiques',
     ],
   },
   {
@@ -65,15 +66,15 @@ const plans: {
     line: 'Donnez de l’élan à votre communauté.',
     free: [
       'Profil, exploration du réseau et suivi de membres',
-      'Création de publications',
-      'Pas de communication avec les joueurs',
-      'Pas de réception de messages ni de commentaires',
+      '1 offre active et 1 gestionnaire ; publications avec Premium',
+      '5 nouvelles prises de contact par mois',
+      'Réception, réponses, commentaires et réactions gratuits',
     ],
     premium: [
       'Tout le socle gratuit',
-      'Communication avec les joueurs',
-      'Réception de messages',
-      'Réception de commentaires sur vos publications',
+      '200 nouvelles prises de contact par mois, partagées entre gestionnaires',
+      '10 offres actives, 5 gestionnaires et viviers de recrutement',
+      'Publications, équipes, essais groupés et coordination des entretiens',
     ],
   },
 ];
@@ -182,13 +183,13 @@ export default function Page() {
           <article>
             <span>01</span>
             <div>
-              <h3>Comment les 5 messages sont-ils comptés ?</h3>
+              <h3>Comment les nouvelles prises de contact sont-elles comptées ?</h3>
               <p>
-                Pour un sportif gratuit, chaque message envoyé compte, même dans
-                une conversation déjà ouverte. Le compteur est commun à toutes
-                les conversations et repart à cinq au début de chaque mois,
-                selon l’heure de Bruxelles. La réception de messages et les
-                commentaires ne consomment pas ce quota.
+                Seul le premier message à un nouvel interlocuteur consomme le quota.
+                Gratuit : 3 demandes par mois pour les sportifs et professionnels,
+                5 pour les collectifs. Premium : respectivement 30, 100 et 200.
+                Réceptions, réponses et conversations déjà engagées restent gratuites.
+                Les quotas se renouvellent au début du mois, heure de Bruxelles.
               </p>
             </div>
           </article>
@@ -197,12 +198,10 @@ export default function Page() {
             <div>
               <h3>Un abonnement permet-il de contacter tout le monde ?</h3>
               <p>
-                Un professionnel ou un collectif doit avoir Premium pour
-                recevoir des messages ou des commentaires. Votre propre
-                abonnement ne débloque pas la réception chez un destinataire
-                gratuit. Les professionnels et collectifs gratuits peuvent
-                écrire à d’autres professionnels ou collectifs abonnés, mais pas
-                aux joueurs.
+                Toutes les catégories peuvent recevoir des messages et poursuivre leurs
+                conversations sans abonnement. Premium augmente le nombre de nouveaux
+                contacts et ajoute des outils métier ; il ne contourne jamais un blocage
+                ou les règles de sécurité.
               </p>
             </div>
           </article>
@@ -211,10 +210,10 @@ export default function Page() {
             <div>
               <h3>Qui peut publier et commenter ?</h3>
               <p>
-                Les sportifs publient avec Premium. Les professionnels et
-                collectifs peuvent publier gratuitement, mais doivent être
-                abonnés pour recevoir des commentaires ou communiquer avec des
-                joueurs, y compris sous leurs publications.
+                Les sportifs et collectifs créent des publications avec Premium.
+                Les professionnels peuvent publier gratuitement. Pour tous les profils,
+                commentaires, réactions et partages restent gratuits. La programmation
+                des publications est une extension Premium.
               </p>
             </div>
           </article>

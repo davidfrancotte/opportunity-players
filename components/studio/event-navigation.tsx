@@ -1,14 +1,11 @@
-'use client';
-import { T } from './locale';
-import Link from 'next/link';
-import { Bell, CalendarDays, ArrowUpRight } from 'lucide-react';
-import { useDemo } from './demo-provider';
+"use client";
+import { T } from "./locale";
+import Link from "next/link";
+import { Bell, CalendarDays, ArrowUpRight } from "lucide-react";
+import { useDemo } from "./demo-provider";
 export function EventHeader() {
-  const { events, career, careerActor } = useDemo();
-  const unread =
-    events.notices.filter((n) => n.recipient === 'me' && !n.read).length +
-    career.notices.filter((n) => n.recipient === careerActor.id && !n.read)
-      .length;
+  const { events, career, careerActor,extensionWorkspace } = useDemo();
+  const unread = events.notices.filter((n) => n.recipient === "me" && !n.read).length + career.notices.filter(n => n.recipient === careerActor.id && !n.read).length + extensionWorkspace.notices.filter(n=>!n.read).length;
   return (
     <div className="event-header">
       <Link href="/espace/agenda" className="icon-link" aria-label="Mon agenda">
@@ -20,32 +17,23 @@ export function EventHeader() {
         aria-label={`Notifications, ${unread} non lues`}
       >
         <Bell size={21} />
-        {unread > 0 && <span>{unread > 9 ? '9+' : unread}</span>}
+        {unread > 0 && <span>{unread > 9 ? "9+" : unread}</span>}
       </Link>
     </div>
   );
 }
-export function NetworkSections({
-  active = 'members',
-}: {
-  active?: 'members' | 'play';
-}) {
+export function NetworkSections({ active = "members" }: { active?: "members" | "play" }) {
   return (
     <nav className="network-sections" aria-label="Rubriques du réseau">
-      <Link
-        href="/espace/reseau"
-        aria-current={active === 'members' ? 'page' : undefined}
-      >
-        <T>{'Les membres'}</T>
+      <Link href="/espace/reseau" aria-current={active === "members" ? "page" : undefined}>
+        <T>{"Les membres"}</T>
       </Link>
-      <Link
-        href="/espace/jouer"
-        aria-current={active === 'play' ? 'page' : undefined}
-      >
-        <T>{'Jouer ensemble'}</T>
+      <Link href="/espace/jouer" aria-current={active === "play" ? "page" : undefined}>
+        <T>{"Jouer ensemble"}</T>
         <span>NEW</span>
       </Link>
       <Link href="/espace/rendez-vous">Rendez-vous</Link>
+      <Link href="/espace/calendrier-avance">Agenda avancé</Link>
     </nav>
   );
 }
@@ -56,12 +44,9 @@ export function PlayHomeCard() {
       (m) =>
         m.confirmed &&
         !m.cancelled &&
-        (m.host === 'me' ||
+        (m.host === "me" ||
           m.replies.some(
-            (r) =>
-              r.user === 'me' &&
-              r.status === 'approved' &&
-              r.slots.includes(m.confirmed!),
+            (r) => r.user === "me" && r.status === "approved" && r.slots.includes(m.confirmed!),
           )),
     )
     .map((m) => ({ m, slot: m.slots.find((s) => s.id === m.confirmed)! }))
@@ -69,54 +54,49 @@ export function PlayHomeCard() {
     .sort((a, b) => Date.parse(a.slot.start) - Date.parse(b.slot.start))[0];
   const invitations = events.matches.filter(
     (m) =>
-      m.invitees.includes('me') &&
+      m.invitees.includes("me") &&
       !m.cancelled &&
       !m.confirmed &&
-      !m.replies.some((r) => r.user === 'me'),
+      !m.replies.some((r) => r.user === "me"),
   ).length;
   return (
     <section className="play-home">
       <span className="mini-kicker">
-        <T>{'DU RÉSEAU AU TERRAIN'}</T>
+        <T>{"DU RÉSEAU AU TERRAIN"}</T>
       </span>
       <div>
         <h2>
-          <T>{'On joue quand ?'}</T>
+          <T>{"On joue quand ?"}</T>
         </h2>
         <CalendarDays size={27} />
       </div>
       <p>
-        <T>{'Un sport. Vos contacts. Le bon créneau.'}</T>
+        <T>{"Un sport. Vos contacts. Le bon créneau."}</T>
       </p>
       <div className="play-home-links">
         <Link href="/espace/organiser">
-          <T>{'Organiser un match'}</T>
+          <T>{"Organiser un match"}</T>
           <ArrowUpRight size={17} />
         </Link>
         <Link href="/espace/jouer">
-          {invitations
-            ? `${invitations} invitation à découvrir`
-            : 'Trouver un match'}
+          {invitations ? `${invitations} invitation à découvrir` : "Trouver un match"}
         </Link>
       </div>
       {upcoming && (
-        <Link
-          className="play-upcoming"
-          href={`/espace/match?id=${upcoming.m.id}`}
-        >
+        <Link className="play-upcoming" href={`/espace/match?id=${upcoming.m.id}`}>
           <small>
-            <T>{'PROCHAIN RENDEZ-VOUS'}</T>
+            <T>{"PROCHAIN RENDEZ-VOUS"}</T>
           </small>
           <strong>{upcoming.m.title}</strong>
           <span>
-            {new Intl.DateTimeFormat('fr-BE', {
-              weekday: 'short',
-              day: 'numeric',
-              month: 'short',
-              hour: '2-digit',
-              minute: '2-digit',
-              timeZone: 'Europe/Brussels',
-            }).format(new Date(upcoming.slot.start))}{' '}
+            {new Intl.DateTimeFormat("fr-BE", {
+              weekday: "short",
+              day: "numeric",
+              month: "short",
+              hour: "2-digit",
+              minute: "2-digit",
+              timeZone: "Europe/Brussels",
+            }).format(new Date(upcoming.slot.start))}{" "}
             · {upcoming.m.city}
           </span>
         </Link>

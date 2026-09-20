@@ -1260,6 +1260,77 @@ body:has(.studio-surface[data-theme="light"]) .career-trial {
 body:has(.studio-surface[data-theme="light"]) .career-slots small {
   color: var(--studio-muted);
 }
+body:has(.studio-surface[data-theme="light"]) .extension-page h1 > span {
+  color: var(--studio-accent-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-nav a {
+  border: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-nav a:hover {
+  background: var(--studio-tint);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-card {
+  border: 1px solid var(--studio-line);
+  background: var(--studio-panel);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-card p {
+  color: var(--studio-muted);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-card a {
+  color: var(--studio-accent-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-form fieldset {
+  border: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-item {
+  border-bottom: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-item small {
+  color: var(--studio-muted);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-private {
+  background: var(--studio-tint);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-inline,
+body:has(.studio-surface[data-theme="light"]) .extension-simulation {
+  border: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-lock {
+  border: 1px dashed var(--studio-line);
+  background: var(--studio-tint);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-lock strong {
+  color: var(--studio-accent-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-lock a {
+  color: var(--studio-accent-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-error {
+  border: 1px solid var(--studio-danger);
+  background: #fff0ee;
+}
+body:has(.studio-surface[data-theme="light"]) .extension-metrics > div {
+  background: var(--studio-tint);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-metrics strong {
+  color: var(--studio-accent-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-table-wrap th,
+body:has(.studio-surface[data-theme="light"]) .extension-table-wrap td {
+  border-bottom: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-footnote {
+  color: var(--studio-muted);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-results > a {
+  border-bottom: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .extension-page input:focus-visible,
+body:has(.studio-surface[data-theme="light"]) .extension-page button:focus-visible,
+body:has(.studio-surface[data-theme="light"]) .extension-page a:focus-visible,
+body:has(.studio-surface[data-theme="light"]) .extension-page summary:focus-visible {
+  outline: 2px solid var(--studio-accent-ink);
+}
 /* Small brand and portal adjustments, outside the color migration. */
 body:has(.studio-surface[data-theme="light"]) .web-content-area { background: var(--studio-canvas); }
 body:has(.studio-surface[data-theme="light"]) .web-sidebar { box-shadow: 1px 0 0 var(--studio-line); }

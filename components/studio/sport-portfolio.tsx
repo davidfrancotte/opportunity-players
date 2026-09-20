@@ -1,35 +1,29 @@
-'use client';
-import { useRef, useState, useEffect, type FormEvent } from 'react';
-import Link from 'next/link';
-import { useDemo } from './demo-provider';
-import { ProfileLayout } from './profile-screens';
-import { Field, Submit } from './studio-ui';
-import { Button } from './ui/button';
-import { T, useLocale } from './locale';
-import { sports, type Profile } from '@/lib/studio/model';
-import {
-  ageOn,
-  videoFileIssue,
-  type SportVideo,
-} from '@/lib/studio/sport-profile';
-import { moderateText } from '@/lib/studio/trust';
+"use client";
+import {limits} from '@/lib/studio/entitlements';
+import {isPremium} from '@/lib/studio/social';
+import { useRef, useState, useEffect, type FormEvent } from "react";
+import Link from "next/link";
+import { useDemo } from "./demo-provider";
+import { ProfileLayout } from "./profile-screens";
+import { Field, Submit } from "./studio-ui";
+import { Button } from "./ui/button";
+import { T, useLocale } from "./locale";
+import { sports, type Profile } from "@/lib/studio/model";
+import { ageOn, videoFileIssue, type SportVideo } from "@/lib/studio/sport-profile";
+import { moderateText } from "@/lib/studio/trust";
 
-export function SportProfileSummary({
-  showLink = true,
-}: {
-  showLink?: boolean;
-}) {
+export function SportProfileSummary({ showLink = true }: { showLink?: boolean }) {
   const { profile: p } = useDemo();
   const { t, locale } = useLocale();
   const age = ageOn(p.birthDate);
   return (
     <div className="sport-profile-summary">
-      {p.category === 'Sportif' && age !== null && (
+      {p.category === "Sportif" && age !== null && (
         <span className="sport-chip">
-          {age} {locale === 'en' ? 'years old' : 'ans'}
+          {age} {locale === "en" ? "years old" : "ans"}
         </span>
       )}
-      {p.registrationMode === 'child' && (
+      {p.registrationMode === "child" && (
         <p className="inline-note">
           <T>Profil géré par un représentant</T>
         </p>
@@ -37,15 +31,14 @@ export function SportProfileSummary({
       {p.disciplines.map((r) => (
         <p key={r.sport}>
           <strong>{r.sport}</strong>
-          {r.paraSport === 'yes' && <> · {t('Handisport')}</>}
-          {r.availability && r.availability !== 'Non renseignée' && (
+          {r.paraSport === "yes" && <> · {t("Handisport")}</>}
+          {r.availability && r.availability !== "Non renseignée" && (
             <>
-              {' '}
-              · {t(r.availability)}{' '}
-              {r.availability === 'Disponible à partir du' && r.availableFrom}
+              {" "}
+              · {t(r.availability)} {r.availability === "Disponible à partir du" && r.availableFrom}
             </>
           )}
-          {r.contractStatus && r.contractStatus !== 'Non renseignée' && (
+          {r.contractStatus && r.contractStatus !== "Non renseignée" && (
             <> · {t(r.contractStatus)}</>
           )}
         </p>
@@ -60,15 +53,16 @@ export function SportProfileSummary({
 }
 
 export function SportsPortfolioPage() {
-  const { profile: p, setProfile, notify } = useDemo();
+  const { profile: p, setProfile, notify,social } = useDemo();
+  const cap=limits(p.category,isPremium(social,p.category));
   const { t, locale } = useLocale();
-  const [error, setError] = useState('');
-  const [videoError, setVideoError] = useState('');
+  const [error, setError] = useState("");
+  const [videoError, setVideoError] = useState("");
   const [pending, setPending] = useState<SportVideo | null>(null);
   const [busy, setBusy] = useState(false);
-  const [editing, setEditing] = useState('');
+  const [editing, setEditing] = useState("");
   const generation = useRef(0);
-  const pendingURL = useRef('');
+  const pendingURL = useRef("");
   const mounted = useRef(true);
   useEffect(() => {
     mounted.current = true;
@@ -78,19 +72,17 @@ export function SportsPortfolioPage() {
       if (pendingURL.current) URL.revokeObjectURL(pendingURL.current);
     };
   }, []);
-  const disciplines = p.disciplines.length
-    ? p.disciplines.map((r) => r.sport)
-    : [p.sport];
+  const disciplines = p.disciplines.length ? p.disciplines.map((r) => r.sport) : [p.sport];
   function achievement(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget,
       data = new FormData(form);
     const entry = {
       id: editing || crypto.randomUUID(),
-      sport: String(data.get('awardSport')),
-      title: String(data.get('awardTitle') || '').trim(),
-      event: String(data.get('awardEvent') || '').trim(),
-      year: String(data.get('awardYear') || ''),
+      sport: String(data.get("awardSport")),
+      title: String(data.get("awardTitle") || "").trim(),
+      event: String(data.get("awardEvent") || "").trim(),
+      year: String(data.get("awardYear") || ""),
     };
     if (
       !entry.title ||
@@ -101,17 +93,17 @@ export function SportsPortfolioPage() {
       !sports.includes(entry.sport)
     ) {
       setError(
-        locale === 'en'
-          ? 'Complete the title, competition and valid year.'
-          : 'Complétez le titre, l’épreuve et une année valide.',
+        locale === "en"
+          ? "Complete the title, competition and valid year."
+          : "Complétez le titre, l’épreuve et une année valide.",
       );
       return;
     }
-    if (moderateText(entry.title + ' ' + entry.event)) {
+    if (moderateText(entry.title + " " + entry.event)) {
       setError(
-        locale === 'en'
-          ? 'Please use respectful wording.'
-          : 'Reformulez le contenu de manière respectueuse.',
+        locale === "en"
+          ? "Please use respectful wording."
+          : "Reformulez le contenu de manière respectueuse.",
       );
       return;
     }
@@ -121,19 +113,20 @@ export function SportsPortfolioPage() {
         ? p.achievements.map((a) => (a.id === editing ? entry : a))
         : [...p.achievements, entry],
     });
-    setEditing('');
-    setError('');
+    setEditing("");
+    setError("");
     form.reset();
-    notify(t('Enregistrer'));
+    notify(t("Enregistrer"));
   }
   async function choose(file: File | undefined) {
     const token = ++generation.current;
     if (pendingURL.current) URL.revokeObjectURL(pendingURL.current);
-    pendingURL.current = '';
+    pendingURL.current = "";
     setPending(null);
-    setVideoError('');
+    setVideoError("");
     setBusy(false);
     if (!file) return;
+    if(p.videos.length>=cap.videos){setVideoError(`Votre offre permet ${cap.videos} vidéo(s). Consultez Premium pour étendre cet accès.`);return;}
     const issue = videoFileIssue(file);
     if (issue) {
       setVideoError(t(issue));
@@ -143,23 +136,19 @@ export function SportsPortfolioPage() {
     const url = URL.createObjectURL(file);
     pendingURL.current = url;
     const valid = await new Promise<boolean>((resolve) => {
-      const video = document.createElement('video');
-      video.preload = 'metadata';
+      const video = document.createElement("video");
+      video.preload = "metadata";
       const timer = setTimeout(() => finish(false), 10000);
       function finish(ok: boolean) {
         clearTimeout(timer);
         video.onloadedmetadata = null;
         video.onerror = null;
-        video.removeAttribute('src');
+        video.removeAttribute("src");
         video.load();
         resolve(ok);
       }
       video.onloadedmetadata = () =>
-        finish(
-          Number.isFinite(video.duration) &&
-            video.duration > 0 &&
-            video.duration <= 300,
-        );
+        finish(Number.isFinite(video.duration) && video.duration > 0 && video.duration <= cap.videoSeconds);
       video.onerror = () => finish(false);
       video.src = url;
     });
@@ -170,61 +159,51 @@ export function SportsPortfolioPage() {
     setBusy(false);
     if (!valid) {
       URL.revokeObjectURL(url);
-      pendingURL.current = '';
+      pendingURL.current = "";
       setVideoError(
-        locale === 'en'
-          ? 'Unreadable video or longer than 5 minutes.'
-          : 'Vidéo illisible ou de plus de 5 minutes.',
+        locale === "en"
+          ? `Unreadable video or longer than ${cap.videoSeconds / 60} minutes.`
+          : `Vidéo illisible ou de plus de ${cap.videoSeconds / 60} minutes.`,
       );
       return;
     }
-    setPending({
-      id: crypto.randomUUID(),
-      sport: p.sport,
-      title: '',
-      url,
-      size: file.size,
-    });
+    setPending({ id: crypto.randomUUID(), sport: p.sport, title: "", url, size: file.size });
   }
   function addVideo(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if(p.videos.length>=cap.videos){setVideoError(`Limite : ${cap.videos} vidéos.`);return;}
     const form = e.currentTarget,
       data = new FormData(form);
-    const title = String(data.get('videoTitle') || '').trim(),
-      sport = String(data.get('videoSport'));
-    if (
-      !pending ||
-      !title ||
-      !data.get('videoConsent') ||
-      !sports.includes(sport)
-    ) {
+    const title = String(data.get("videoTitle") || "").trim(),
+      sport = String(data.get("videoSport"));
+    if (!pending || !title || !data.get("videoConsent") || !sports.includes(sport)) {
       setVideoError(
-        locale === 'en'
-          ? 'Choose a video, add a title and confirm sharing permission.'
-          : 'Choisissez une vidéo, indiquez un titre et confirmez les autorisations.',
+        locale === "en"
+          ? "Choose a video, add a title and confirm sharing permission."
+          : "Choisissez une vidéo, indiquez un titre et confirmez les autorisations.",
       );
       return;
     }
     if (moderateText(title)) {
       setVideoError(
-        locale === 'en'
-          ? 'Please use respectful wording.'
-          : 'Reformulez le titre de manière respectueuse.',
+        locale === "en"
+          ? "Please use respectful wording."
+          : "Reformulez le titre de manière respectueuse.",
       );
       return;
     }
     setProfile({ ...p, videos: [...p.videos, { ...pending, title, sport }] });
-    pendingURL.current = '';
+    pendingURL.current = "";
     setPending(null);
-    setVideoError('');
+    setVideoError("");
     form.reset();
-    notify(t('Enregistrer'));
+    notify(t("Enregistrer"));
   }
   const current = p.achievements.find((a) => a.id === editing);
   return (
-    <ProfileLayout back="/espace/profil" title={t('Dossier sportif')}>
+    <ProfileLayout back="/espace/profil" title={t("Dossier sportif")}>
       <p className="demo-context">
-        <T>Modifications conservées pendant cette visite uniquement.</T>{' '}
+        <T>Modifications conservées pendant cette visite uniquement.</T>{" "}
         <T>Informations déclarées · aucune certification.</T>
       </p>
       <SportProfileSummary showLink={false} />
@@ -237,10 +216,10 @@ export function SportsPortfolioPage() {
             <strong>{r.sport}</strong>
             <p>
               {r.licenceNumber
-                ? `${t('Licence déclarée · non vérifiée')} · ${t('Numéro masqué')} · ••••${r.licenceNumber.slice(-2)}`
-                : t('Non renseignée')}
+                ? `${t("Licence déclarée · non vérifiée")} · ${t("Numéro masqué")} · ••••${r.licenceNumber.slice(-2)}`
+                : t("Non renseignée")}
             </p>
-            <p>{[r.federation, r.licenceSeason].filter(Boolean).join(' · ')}</p>
+            <p>{[r.federation, r.licenceSeason].filter(Boolean).join(" · ")}</p>
           </article>
         ))}
         <Link className="action secondary" href="/espace/disciplines">
@@ -268,7 +247,7 @@ export function SportsPortfolioPage() {
                 variant="outline"
                 onClick={() => {
                   setEditing(a.id);
-                  setError('');
+                  setError("");
                 }}
               >
                 <T>Modifier</T>
@@ -276,11 +255,8 @@ export function SportsPortfolioPage() {
               <Button
                 variant="ghost"
                 onClick={() => {
-                  setProfile({
-                    ...p,
-                    achievements: p.achievements.filter((x) => x.id !== a.id),
-                  });
-                  if (editing === a.id) setEditing('');
+                  setProfile({ ...p, achievements: p.achievements.filter((x) => x.id !== a.id) });
+                  if (editing === a.id) setEditing("");
                 }}
               >
                 <T>Supprimer</T>
@@ -288,20 +264,12 @@ export function SportsPortfolioPage() {
             </div>
           </article>
         ))}
-        <form
-          key={editing || 'new'}
-          onSubmit={achievement}
-          className="portfolio-form"
-        >
+        <form key={editing || "new"} onSubmit={achievement} className="portfolio-form">
           <h3>
-            <T>{editing ? 'Modifier' : 'Ajouter une distinction'}</T>
+            <T>{editing ? "Modifier" : "Ajouter une distinction"}</T>
           </h3>
           <Field label="Discipline" name="awardSport">
-            <select
-              id="awardSport"
-              name="awardSport"
-              defaultValue={current?.sport || p.sport}
-            >
+            <select id="awardSport" name="awardSport" defaultValue={current?.sport || p.sport}>
               {disciplines.map((s) => (
                 <option key={s}>{s}</option>
               ))}
@@ -339,11 +307,7 @@ export function SportsPortfolioPage() {
             <T>Enregistrer</T>
           </Submit>
           {editing && (
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => setEditing('')}
-            >
+            <Button type="button" variant="ghost" onClick={() => setEditing("")}>
               <T>Annuler</T>
             </Button>
           )}
@@ -355,8 +319,8 @@ export function SportsPortfolioPage() {
         </h2>
         <p className="field-hint">
           <T>
-            Aperçu local uniquement : MP4 ou WebM, 50 Mo et 5 minutes maximum.
-            Aucun téléversement ni analyse automatique du contenu.
+            Aperçu local uniquement : MP4 ou WebM, 50 Mo et 5 minutes maximum. Aucun téléversement
+            ni analyse automatique du contenu.
           </T>
         </p>
         {!p.videos.length && (
@@ -366,23 +330,12 @@ export function SportsPortfolioPage() {
         )}
         {p.videos.map((v) => (
           <article className="portfolio-record" key={v.id}>
-            <video
-              controls
-              playsInline
-              preload="metadata"
-              src={v.url}
-              aria-label={v.title}
-            />
+            <video controls playsInline preload="metadata" src={v.url} aria-label={v.title} />
             <h3>{v.title}</h3>
             <p>{v.sport}</p>
             <Button
               variant="ghost"
-              onClick={() =>
-                setProfile({
-                  ...p,
-                  videos: p.videos.filter((x) => x.id !== v.id),
-                })
-              }
+              onClick={() => setProfile({ ...p, videos: p.videos.filter((x) => x.id !== v.id) })}
             >
               <T>Supprimer</T>
             </Button>
@@ -397,17 +350,10 @@ export function SportsPortfolioPage() {
             onChange={(e) => void choose(e.target.files?.[0])}
           />
           {busy && (
-            <p role="status">
-              {locale === 'en' ? 'Reading video…' : 'Lecture de la vidéo…'}
-            </p>
+            <p role="status">{locale === "en" ? "Reading video…" : "Lecture de la vidéo…"}</p>
           )}
           {pending && (
-            <video
-              controls
-              playsInline
-              src={pending.url}
-              aria-label={t('Vidéos sportives')}
-            />
+            <video controls playsInline src={pending.url} aria-label={t("Vidéos sportives")} />
           )}
           <Field label="Titre" name="videoTitle" maxLength={100} required />
           <Field label="Discipline" name="videoSport">
@@ -420,8 +366,8 @@ export function SportsPortfolioPage() {
           <label className="sport-consent">
             <input type="checkbox" name="videoConsent" required />
             <T>
-              Je confirme que cette vidéo concerne le sport et que je dispose
-              des autorisations de diffusion.
+              Je confirme que cette vidéo concerne le sport et que je dispose des autorisations de
+              diffusion.
             </T>
           </label>
           {videoError && (

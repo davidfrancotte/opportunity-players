@@ -219,7 +219,7 @@ export const faqs = [
   ],
   [
     'Comment entrer en relation avec un club ou un professionnel ?',
-    'Recherchez un profil dans Réseau puis ouvrez une conversation. Les sportifs gratuits disposent de cinq messages envoyés par mois. Les professionnels et collectifs doivent être abonnés pour communiquer avec les joueurs et recevoir des messages ou des commentaires. Un destinataire professionnel ou collectif gratuit ne peut pas recevoir de message, même si l’expéditeur est abonné.',
+    'Recherchez un profil dans Réseau puis ouvrez une conversation. Gratuit : 3 nouveaux contacts par mois pour les sportifs et professionnels, 5 pour les collectifs. Premium : respectivement 30, 100 et 200. Les réceptions, réponses et conversations déjà engagées restent gratuites pour toutes les catégories, comme les commentaires, réactions et partages.',
   ],
   [
     'Faut-il être professionnel ou vivre en Europe ?',

@@ -43,7 +43,7 @@ const features = [
       'Découvrez des acteurs de votre écosystème et faites connaître la vie du club. Avec Premium, ouvrez les échanges.',
     ],
     limit:
-      'Sportifs : publication réservée au Premium. Professionnels et collectifs : publication possible gratuitement ; réception de commentaires réservée au Premium.',
+      'Sportifs et collectifs : création de publications avec Premium. Professionnels : publication gratuite. Commentaires, réactions et partages gratuits pour tous. Programmation des publications avec Premium.',
   },
   {
     id: 'reseau',
@@ -67,7 +67,7 @@ const features = [
       'Repérez des parcours pertinents pour votre collectif. Organisez vos matchs, ajustez l’effectif total et validez les candidats extérieurs.',
     ],
     limit:
-      'Découvrir et suivre des profils, ainsi que répondre à une invitation personnelle, reste gratuit. Créer un match et voir les invitations ouvertes à 50 km nécessite Premium. L’organisateur et les +1 sont compris dans l’effectif total ; les candidatures externes ne comptent qu’après acceptation. Notifications et rencontres simulées dans cette démo.',
+      'Un événement créé par mois est inclus gratuitement. La découverte des matchs ouverts est Premium pour les sportifs, gratuite à 50 km pour les professionnels et collectifs. Premium ajoute rayon personnalisable, recherches favorites avec alertes et récurrence. Organisateur et +1 comptent dans l’effectif total ; les candidatures externes nécessitent un accord. Rencontres et notifications simulées.',
   },
   {
     id: 'messages',
@@ -83,12 +83,12 @@ const features = [
       'Alerte lorsqu’un texte est filtré',
     ],
     benefits: [
-      'Présentez votre projet, demandez un conseil ou échangez avec un club : cinq messages envoyés par mois en gratuit.',
-      'Avec Premium, échangez avec les joueurs, recevez les demandes et poursuivez vos conversations.',
-      'Avec Premium, recevez les prises de contact et dialoguez avec les joueurs autour de vos projets.',
+      'Initiez trois nouvelles conversations par mois gratuitement ; poursuivez les échanges déjà engagés sans décompter chaque réponse.',
+      'Recevez et répondez gratuitement. Initiez trois nouvelles conversations par mois en gratuit, cent avec Premium.',
+      'Recevez et répondez gratuitement. Cinq nouvelles conversations par mois en gratuit, deux cents partagées entre gestionnaires avec Premium.',
     ],
     limit:
-      'Le quota sportif porte sur chaque message envoyé. Un texte bloqué ne le consomme pas. Les professionnels et collectifs doivent être abonnés pour recevoir des messages. Le filtre local est illustratif et non exhaustif ; aucune modération réelle ni aucun envoi dans cette démo.',
+      'Seul le premier message à un nouvel interlocuteur consomme un quota. Réceptions, réponses et interactions sont gratuites pour tous. Un texte bloqué ne consomme rien. Filtre local illustratif, sans modération réelle ni envoi dans la démo.',
   },
   {
     id: 'opportunities',
@@ -148,7 +148,7 @@ const features = [
       'Centralisez vos recherches et les réponses pour mieux préparer la constitution de votre équipe.',
     ],
     limit:
-      'Gestion du recrutement réservée aux professionnels et collectifs Premium. La démonstration permet de tester les deux côtés avec des profils fictifs ; elle ne déclenche aucune sélection réelle.',
+      'Un collectif gratuit peut publier une offre et traiter ses candidatures ; les offres professionnelles et le suivi avancé sont Premium. Les extensions ajoutent viviers avec notes privées, essais groupés, attribution des candidats et permissions de gestionnaires. Aucun recrutement réel dans la démo.',
   },
   {
     id: 'rendez-vous',
@@ -168,7 +168,7 @@ const features = [
       'Demandez un échange à un professionnel pour préparer l’accompagnement de votre structure.',
     ],
     limit:
-      'Le professionnel doit être Premium pour recevoir et gérer les demandes. La réservation évite les doublons dans la démo ; aucun paiement ni rendez-vous réel n’est engagé. Les créneaux n’apparaissent jamais avant acceptation.',
+      'Un professionnel gratuit peut confirmer trois rendez-vous par mois, contre cent avec Premium. Les créneaux restent masqués avant acceptation. Premium ajoute disponibilités récurrentes et agenda avancé. La connexion externe est simulée ; l’export .ics contient les événements fictifs. Aucun rendez-vous réel.',
   },
   {
     id: 'profil',
@@ -185,7 +185,7 @@ const features = [
     ],
     benefits: [
       'Montrez votre progression dans chaque discipline sans mélanger les classements. Donnez du contexte à vos expériences et à votre représentation.',
-      'Consultez les parcours et, avec Premium, soumettez un avis factuel sur une expérience que vous connaissez. Les notes sont séparées par sport.',
+      'Consultez les parcours et soumettez un avis factuel sur une expérience que vous connaissez. Les notes sont séparées par sport.',
       'Comprenez les niveaux, clubs et références des joueurs pour préparer des prises de contact pertinentes. Les classements déclarés restent distincts des avis.',
     ],
     limit:

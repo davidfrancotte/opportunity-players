@@ -58,6 +58,7 @@ export function WebShell({ children }: { children: ReactNode }) {
     events,
     career,
     careerActor,
+    extensionWorkspace,
   } = useDemo();
   const current = [
     'dossier-sportif',
@@ -76,6 +77,7 @@ export function WebShell({ children }: { children: ReactNode }) {
         : page === 'rendez-vous'
           ? 'reseau'
           : page;
+  const extensionUnread=extensionWorkspace.notices.filter(n=>!n.read).length;
   const eventUnread = events.notices.filter(
     (n) => n.recipient === 'me' && !n.read,
   ).length;
@@ -183,8 +185,8 @@ export function WebShell({ children }: { children: ReactNode }) {
           >
             <Bell size={19} />
             <T>{'Notifications'}</T>
-            {eventUnread + careerUnread > 0 && (
-              <small>{eventUnread + careerUnread}</small>
+            {eventUnread + careerUnread + extensionUnread > 0 && (
+              <small>{eventUnread + careerUnread + extensionUnread}</small>
             )}
           </Link>
           <Link
@@ -201,6 +203,7 @@ export function WebShell({ children }: { children: ReactNode }) {
             <Settings size={19} />
             <T>{'Paramètres'}</T>
           </Link>
+          <Link href="/espace/outils" aria-current={['outils','recherches','talents','essais-groupes','equipes','calendrier-avance','statistiques','publications-programmees'].includes(page)?'page':undefined}><Sparkles size={19}/>Mes outils</Link>
         </div>
         <Link className="web-self" href="/espace/profil">
           <Image
@@ -253,7 +256,7 @@ export function WebShell({ children }: { children: ReactNode }) {
                 } as Record<string, string>
               )[page] ||
                 navigation.find((n) => n.href === current)?.label ||
-                (page === 'abonnement' ? 'Abonnement' : 'Paramètres')}
+                (page === 'abonnement' ? 'Abonnement' : ['outils','recherches','talents','essais-groupes','equipes','calendrier-avance','statistiques','publications-programmees'].includes(page) ? 'Mes outils' : 'Paramètres')}
             </strong>
           </span>
           <div className="web-topbar-actions">

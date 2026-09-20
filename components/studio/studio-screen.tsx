@@ -1,11 +1,8 @@
-'use client';
-import {
-  ApplicationsPage,
-  RecruitmentPage,
-  AppointmentsPage,
-} from './career-screens';
-import { SportsPortfolioPage } from './sport-portfolio';
-import { Suspense } from 'react';
+"use client";
+import {ExtensionPage} from './extension-screens';
+import { ApplicationsPage, RecruitmentPage, AppointmentsPage } from "./career-screens";
+import { SportsPortfolioPage } from "./sport-portfolio";
+import { Suspense } from "react";
 import {
   DisciplinesPage,
   AgentPage,
@@ -14,7 +11,7 @@ import {
   ReferralPage,
   PoliciesPage,
   SecondFactorPage,
-} from './trust-screens';
+} from "./trust-screens";
 import {
   Signup,
   VerifyEmail,
@@ -22,56 +19,44 @@ import {
   Presentation,
   Login,
   ForgotPassword,
-} from './auth-screens';
-import {
-  ProfilePage,
-  ProfileLayout,
-  EditProfile,
-  SettingsPage,
-} from './profile-screens';
-import { SubscriptionPage } from './subscription-screen';
-import {
-  FeedPage,
-  NetworkPage,
-  MessagesPage,
-  OpportunitiesPage,
-} from './social-screens';
+} from "./auth-screens";
+import { ProfilePage, ProfileLayout, EditProfile, SettingsPage } from "./profile-screens";
+import { SubscriptionPage } from "./subscription-screen";
+import { FeedPage, NetworkPage, MessagesPage, OpportunitiesPage } from "./social-screens";
 import {
   PlayPage,
   CreateMatchPage,
   MatchPage,
   AgendaPage,
   NotificationsPage,
-} from './play-screens';
+} from "./play-screens";
 export function StudioScreen({ screen }: { screen: string }) {
   switch (screen) {
-    case 'candidatures':
-      return <ApplicationsPage />;
-    case 'recrutement':
-      return <RecruitmentPage />;
-    case 'rendez-vous':
-      return <AppointmentsPage />;
-    case 'dossier-sportif':
+    case 'outils': case 'recherches': case 'publications-programmees': case 'talents': case 'essais-groupes': case 'equipes': case 'calendrier-avance': case 'statistiques': return <ExtensionPage section={screen}/>;
+    case "candidatures": return <ApplicationsPage />;
+    case "recrutement": return <RecruitmentPage />;
+    case "rendez-vous": return <AppointmentsPage />;
+    case "dossier-sportif":
       return <SportsPortfolioPage />;
-    case 'disciplines':
+    case "disciplines":
       return <DisciplinesPage />;
-    case 'agent':
+    case "agent":
       return <AgentPage />;
-    case 'documents':
+    case "documents":
       return <DocumentsPage />;
-    case 'securite':
+    case "securite":
       return <SafetyPage />;
-    case 'parrainage':
+    case "parrainage":
       return <ReferralPage />;
-    case 'confidentialite':
+    case "confidentialite":
       return <PoliciesPage />;
-    case 'double-facteur':
+    case "double-facteur":
       return <SecondFactorPage />;
-    case 'jouer':
+    case "jouer":
       return <PlayPage />;
-    case 'organiser':
+    case "organiser":
       return <CreateMatchPage />;
-    case 'match':
+    case "match":
       return (
         <Suspense
           fallback={
@@ -83,41 +68,41 @@ export function StudioScreen({ screen }: { screen: string }) {
           <MatchPage />
         </Suspense>
       );
-    case 'agenda':
+    case "agenda":
       return <AgendaPage />;
-    case 'notifications':
+    case "notifications":
       return <NotificationsPage />;
-    case 'abonnement':
+    case "abonnement":
       return <SubscriptionPage />;
-    case 'accueil':
+    case "accueil":
       return <FeedPage />;
-    case 'reseau':
+    case "reseau":
       return <NetworkPage />;
-    case 'messages':
+    case "messages":
       return <MessagesPage />;
-    case 'opportunities':
+    case "opportunities":
       return <OpportunitiesPage />;
-    case 'inscription':
+    case "inscription":
       return <Signup />;
-    case 'verification':
+    case "verification":
       return <VerifyEmail />;
-    case 'personnalisation':
+    case "personnalisation":
       return <Personalise />;
-    case 'presentation':
+    case "presentation":
       return <Presentation />;
-    case 'connexion':
+    case "connexion":
       return <Login />;
-    case 'mot-de-passe-oublie':
+    case "mot-de-passe-oublie":
       return <ForgotPassword />;
-    case 'profil':
+    case "profil":
       return <ProfilePage key="profil" />;
-    case 'parcours':
+    case "parcours":
       return <ProfilePage key="parcours" section="career" />;
-    case 'medias':
+    case "medias":
       return <ProfilePage key="medias" section="media" />;
-    case 'modifier-profil':
+    case "modifier-profil":
       return <EditProfile />;
-    case 'parametres':
+    case "parametres":
       return <SettingsPage />;
     default:
       return null;

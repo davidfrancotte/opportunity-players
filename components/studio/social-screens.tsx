@@ -1,4 +1,7 @@
 'use client';
+import {SaveDirectorySearch} from './extension-screens';
+import {isPremium} from '@/lib/studio/social';
+import {advancedDirectoryKeys,effectiveDirectoryFilters} from '@/lib/studio/directory';
 import {
   PersonalizedRecommendations,
   CareerNav,
@@ -185,7 +188,7 @@ export function FeedPage() {
           </h1>
         </div>
       </div>
-      <PlanStatus compact />
+      <PlanStatus compact /><nav className="extension-nav"><Link href="/espace/publications-programmees">Programmer une publication</Link><Link href="/espace/outils">Mes outils</Link></nav>
       <PlayHomeCard />
       <PersonalizedRecommendations />
       <button
@@ -452,21 +455,20 @@ export function FeedPage() {
 }
 
 export function NetworkPage() {
-  const { social, dispatchSocial, requestAccess, trust } = useDemo();
+  const { social, dispatchSocial, requestAccess, trust,profile,notify } = useDemo();
   const router = useRouter();
   const [filters, setFilters] = useState<DirectoryFilters>({
     ...emptyDirectoryFilters,
   });
   const { query, kind, sport } = filters;
-  const updateFilter = (key: keyof DirectoryFilters, value: string) =>
-    setFilters((f) => ({ ...f, [key]: value }));
+  const updateFilter=(key:keyof DirectoryFilters,value:string)=>{if(advancedDirectoryKeys.some(k=>k===key)&&!isPremium(social,profile.category)){notify('Ce critère avancé est inclus dans Premium.');return;}setFilters(f=>({...f,[key]:value}));};
   const [onlyFollowed, setOnlyFollowed] = useState(false);
   const [member, setMember] = useState<Member | null>(null);
   const filtered = members.filter(
     (m) =>
       !trust.blocked.includes(m.id) &&
       (!onlyFollowed || social.following.includes(m.id)) &&
-      matchesDirectory(m, memberSports[m.id] || [], filters),
+      matchesDirectory(m, memberSports[m.id] || [], effectiveDirectoryFilters(filters,isPremium(social,profile.category))),
   );
   function message(m: Member) {
     if (!requestAccess('message', m.id)) return;
@@ -487,7 +489,7 @@ export function NetworkPage() {
         </div>
         <UsersRound className="title-symbol" size={28} />
       </div>
-      <NetworkSections />
+      <NetworkSections /><SaveDirectorySearch filters={filters} onLoad={setFilters}/><nav className="extension-nav"><Link href="/espace/talents">Mes listes de profils</Link><Link href="/espace/recherches">Recherches & alertes</Link></nav>
       <SearchField
         value={query}
         onChange={(v) => updateFilter('query', v)}

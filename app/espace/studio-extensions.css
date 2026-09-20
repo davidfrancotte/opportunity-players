@@ -1,0 +1,272 @@
+body:has(.studio-surface) .extension-page {
+  display: grid;
+  gap: 1.4rem;
+  min-width: 0;
+}
+body:has(.studio-surface) .extension-page h1 {
+  font-size: clamp(2rem, 6vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  margin: 1rem 0;
+}
+body:has(.studio-surface) .extension-page h1 > span {
+  color: #d2ff43;
+}
+body:has(.studio-surface) .extension-page p {
+  line-height: 1.6;
+}
+body:has(.studio-surface) .extension-nav {
+  display: flex;
+  gap: 0.65rem;
+  overflow-x: auto;
+  padding: 0.8rem 0 1rem;
+  max-width: 100%;
+  scrollbar-width: thin;
+}
+body:has(.studio-surface) .extension-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  padding: 0.7rem 1rem;
+  border: 1px solid #46503f;
+  border-radius: 99px;
+  font-size: 0.9rem;
+  color: inherit;
+}
+body:has(.studio-surface) .extension-nav a:hover {
+  background: #28341d;
+}
+body:has(.studio-surface) .extension-card {
+  padding: 1.5rem;
+  border: 1px solid #374039;
+  border-radius: 20px;
+  background: #171d1e;
+  min-width: 0;
+  margin-bottom: 1rem;
+}
+body:has(.studio-surface) .extension-card h2 {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  font-size: 1.2rem;
+  line-height: 1.3;
+  margin: 0 0 1rem;
+}
+body:has(.studio-surface) .extension-card h3 {
+  font-size: 1rem;
+  margin: 1rem 0 0.5rem;
+}
+body:has(.studio-surface) .extension-card p {
+  color: #b8c1b3;
+  font-size: 1rem;
+}
+body:has(.studio-surface) .extension-card a {
+  color: #d2ff43;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+body:has(.studio-surface) .extension-form {
+  display: grid;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+body:has(.studio-surface) .extension-form .field {
+  margin: 0;
+}
+body:has(.studio-surface) .extension-form textarea {
+  min-height: 100px;
+}
+body:has(.studio-surface) .extension-form fieldset {
+  border: 1px solid #46503f;
+  border-radius: 12px;
+  padding: 1rem;
+}
+body:has(.studio-surface) .extension-form legend {
+  padding: 0 0.5rem;
+}
+body:has(.studio-surface) .extension-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding: 0.6rem 0;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+body:has(.studio-surface) .extension-check input {
+  width: 19px;
+  height: 19px;
+  margin-top: 3px;
+  accent-color: #cfff48;
+  flex-shrink: 0;
+}
+body:has(.studio-surface) .extension-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid #354036;
+  display: grid;
+  gap: 0.5rem;
+  overflow-wrap: anywhere;
+}
+body:has(.studio-surface) .extension-item:last-child {
+  border-bottom: 0;
+}
+body:has(.studio-surface) .extension-item small {
+  font-size: 0.875rem;
+  color: #9dab97;
+}
+body:has(.studio-surface) .extension-item p {
+  margin: 0;
+}
+body:has(.studio-surface) .extension-actions,
+body:has(.studio-surface) .extension-response {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+body:has(.studio-surface) .extension-response {
+  padding: 0.5rem 0;
+}
+body:has(.studio-surface) .extension-response > span {
+  flex: 1 1 180px;
+}
+body:has(.studio-surface) .extension-private {
+  padding: 1rem;
+  background: #222d24;
+  border-radius: 12px;
+}
+body:has(.studio-surface) .extension-inline,
+body:has(.studio-surface) .extension-simulation {
+  border: 1px solid #384336;
+  padding: 1rem;
+  border-radius: 14px;
+  margin: 1rem 0;
+  font-size: 0.925rem;
+}
+body:has(.studio-surface) .extension-inline summary,
+body:has(.studio-surface) .extension-simulation summary {
+  cursor: pointer;
+  line-height: 1.5;
+}
+body:has(.studio-surface) .extension-inline summary svg {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.4rem;
+}
+body:has(.studio-surface) .extension-inline > .extension-form + button {
+  margin: 0.3rem;
+}
+body:has(.studio-surface) .extension-inline .text-link {
+  display: block;
+  margin-top: 1rem;
+}
+body:has(.studio-surface) .extension-lock {
+  padding: 1.3rem;
+  border: 1px dashed #718259;
+  border-radius: 16px;
+  background: #20271c;
+}
+body:has(.studio-surface) .extension-lock strong {
+  color: #d2ff43;
+}
+body:has(.studio-surface) .extension-lock a {
+  color: #d2ff43;
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+body:has(.studio-surface) .extension-error {
+  border: 1px solid #bf875b;
+  background: #35251d;
+  padding: 1rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+}
+body:has(.studio-surface) .extension-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+body:has(.studio-surface) .extension-metrics > div {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background: #252f23;
+  border-radius: 15px;
+}
+body:has(.studio-surface) .extension-metrics strong {
+  font-size: 2.1rem;
+  color: #d2ff43;
+}
+body:has(.studio-surface) .extension-metrics span {
+  font-size: 0.9rem;
+}
+body:has(.studio-surface) .extension-table-wrap {
+  overflow-x: auto;
+}
+body:has(.studio-surface) .extension-table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 280px;
+}
+body:has(.studio-surface) .extension-table-wrap th,
+body:has(.studio-surface) .extension-table-wrap td {
+  text-align: left;
+  border-bottom: 1px solid #3d4a38;
+  padding: 0.8rem 0.5rem;
+  font-size: 0.925rem;
+}
+body:has(.studio-surface) .extension-footnote {
+  font-size: 0.875rem !important;
+  color: #9aa691;
+  line-height: 1.55;
+}
+body:has(.studio-surface) .extension-results {
+  margin-top: 1rem;
+}
+body:has(.studio-surface) .extension-results > a {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #384336;
+}
+body:has(.studio-surface) .extension-card button {
+  white-space: normal;
+  height: auto;
+  min-height: 44px;
+  text-align: left;
+}
+body:has(.studio-surface) .extension-form button[type="submit"] {
+  justify-content: space-between;
+}
+body:has(.studio-surface) .extension-page details p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+body:has(.studio-surface) .extension-page input:focus-visible,
+body:has(.studio-surface) .extension-page button:focus-visible,
+body:has(.studio-surface) .extension-page a:focus-visible,
+body:has(.studio-surface) .extension-page summary:focus-visible {
+  outline: 2px solid #d2ff43;
+  outline-offset: 4px;
+}
+@media (max-width: 480px) {
+  body:has(.studio-surface) .extension-card {
+    padding: 1.1rem;
+  }
+  body:has(.studio-surface) .extension-actions button {
+    flex: 1 1 auto;
+  }
+  body:has(.studio-surface) .extension-nav {
+    margin-right: -0.3rem;
+  }
+  body:has(.studio-surface) .extension-page {
+    gap: 1rem;
+  }
+}

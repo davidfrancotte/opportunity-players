@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import { StudioScreen } from '@/components/studio/studio-screen';
 const screens: Record<string, string> = {
+"outils":"outils","recherches":"recherches","publications-programmees":"publications-programmees","talents":"talents","essais-groupes":"essais-groupes","equipes":"equipes","calendrier-avance":"calendrier-avance","statistiques":"statistiques",
   candidatures: 'Candidatures et essais',
   recrutement: 'Espace recrutement',
   'rendez-vous': 'Mes rendez-vous',
