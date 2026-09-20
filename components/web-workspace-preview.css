@@ -24,10 +24,13 @@
   background: #101415;
   border-bottom: 1px solid #ffffff20;
   justify-content: stretch;
+  align-items: stretch;
 }
 .workspace-preview-switch [data-slot='tabs-trigger'] {
   padding: 20px 18px;
+  height: auto;
   min-height: 60px;
+  align-self: stretch;
   border-radius: 0;
   flex: 1;
   font-size: 14px;

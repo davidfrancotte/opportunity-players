@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { FAQ } from '@/components/arena';
 export const metadata: Metadata = {
@@ -21,6 +22,7 @@ export default function Page() {
         </p>
       </section>
       <section className="section help-content">
+        <p style={{marginBottom:28,fontSize:16}}><Link className="text-link" href="/faq">Consulter toutes les questions fréquentes <ArrowUpRight size={17}/></Link></p>
         <FAQ />
         <div className="contact-grid">
           <a href="mailto:site@opportunity-players.com">

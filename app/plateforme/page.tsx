@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { AppShowcase } from '@/components/app-showcase';
-import { Action, JoinBand, ProductDemo, SectionHead } from '@/components/arena';
+import { Action, JoinBand, SectionHead } from '@/components/arena';
+import { PlatformFeaturePreview } from '@/components/platform-feature-preview';
 export const metadata: Metadata = {
   title: 'La plateforme — Opportunity Players',
   description:
@@ -25,7 +26,7 @@ export default function Page() {
         <Action />
       </section>
       <section className="section platform-demo">
-        <ProductDemo />
+        <PlatformFeaturePreview />
       </section>
       <section className="section">
         <SectionHead
@@ -78,10 +79,10 @@ export default function Page() {
       <section className="section platform-note">
         <span className="section-label">UNE REFONTE EN COURS</span>
         <p>
-          L’aperçu présente la nouvelle direction Arena. Les fonctions décrites
-          s’appuient sur le service actuel ; l’interface ci-dessus est
-          illustrative. Vos comptes et vos échanges restent sur la plateforme
-          existante.
+          Les captures présentent la nouvelle démonstration Arena. Les profils,
+          candidatures, conversations et confirmations sont fictifs. Aucun paiement
+          ni message réel n’est envoyé ; les connexions externes restent simulées.
+          Vos comptes et échanges réels restent sur la plateforme existante.
         </p>
       </section>
       <JoinBand />

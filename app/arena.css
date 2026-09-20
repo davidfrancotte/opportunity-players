@@ -3,6 +3,12 @@
   align-items: center;
   gap: 24px;
 }
+.site-header > nav { gap:20px; }
+.mobile-menu { max-height:90dvh; overflow-y:auto; }
+@media (min-width:851px) and (max-width:1279px) {
+  .site-header > nav { display:none; }
+  .header-actions .menu-toggle { display:inline-flex; }
+}
 .login-link {
   font-size: 11px;
   display: flex;

@@ -1,5 +1,5 @@
 .plans-section {
-  padding-top: 0;
+  padding-top: clamp(24px, 3vw, 40px);
 }
 .plans-free-banner {
   display: flex;
@@ -73,6 +73,11 @@
   font-size: 13px;
   color: #aab4ac;
 }
+.plan-annual { margin: -0.5rem 0 1.8rem; padding: 1rem; background: #20291e; border-left: 2px solid #d1f94c; }
+.plan-annual > p:first-child { font-size: 1rem; line-height: 1.5; color: #e7ece4; }
+.plan-annual strong { color: #d1f94c; font-size: 1.5rem; font-weight: 500; white-space: nowrap; }
+.plan-annual > span { display: block; margin-top: .4rem; color: #b9c1bc; font-size: .875rem; }
+.plan-annual .plan-saving { font-size: .875rem; color: #c9d4bf; line-height: 1.6; margin-top: .6rem; }
 .plan-card h3 {
   font-size: 10px;
   letter-spacing: 0.08em;
@@ -171,6 +176,33 @@
   justify-content: space-between;
   gap: 30px;
 }
+.plans-free-banner p, .plan-line, .plan-card li, .plans-answers p {
+  font-size: 1rem;
+}
+.plan-card h3, .plan-monthly span, .plan-card .action {
+  font-size: 0.875rem;
+}
+.plan-card-label { font-size: 0.75rem; }
+.plan-detail-link { margin-top: 1.2rem; font-size: 0.875rem; text-decoration: underline; text-underline-offset: 4px; }
+.plans-comparison { padding-top: 1rem; }
+.plans-comparison h2 { font-size: clamp(2rem,4vw,3.4rem); margin: 1.5rem 0; }
+.plans-comparison > p { max-width: 850px; color: #b9c1bc; line-height: 1.7; margin-bottom: 2rem; }
+.plan-comparison { border-block: 1px solid #363e37; scroll-margin-top: 120px; }
+.plan-comparison + .plan-comparison { border-top: 0; }
+.plan-comparison summary { cursor: pointer; padding: 1.7rem 1rem; font-size: 1.2rem; }
+.plan-comparison summary span:last-child { display: block; font-size: 0.875rem; margin: .6rem 0 0 1.4rem; color: #b9c1bc; }
+.plan-comparison[open] summary { color: #d1f94c; }
+.plan-table-scroll { overflow-x: auto; padding: 0 0 1rem; }
+.plan-table-scroll table { width: 100%; min-width: 660px; border-collapse: collapse; text-align: left; table-layout: fixed; }
+.plan-table-scroll caption { text-align: left; padding: 1rem; color: #b9c1bc; font-size: .875rem; }
+.plan-table-scroll th, .plan-table-scroll td { padding: 1.25rem 1rem; border-bottom: 1px solid #363e37; vertical-align: top; font-size: 1rem; line-height: 1.6; }
+.plan-table-scroll thead th { background: #20291e; color: #d1f94c; font-weight: 500; }
+.plan-table-scroll thead th:first-child { width: 53%; }
+.plan-table-scroll thead th:nth-child(2) { width: 32%; }
+.plan-table-scroll tbody th { font-weight: 400; }
+.plan-table-scroll tbody th p { color: #aab7ad; margin-top: .5rem; font-size: .875rem; }
+.plan-table-scroll tbody tr:nth-child(even) { background: #181d1f; }
+.plan-comparison summary:focus-visible, .plan-table-scroll:focus-visible { outline: 2px solid #d1f94c; outline-offset: 3px; }
 @media (max-width: 1050px) {
   .plans-grid {
     gap: 12px;

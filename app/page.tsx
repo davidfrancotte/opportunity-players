@@ -3,6 +3,7 @@ import { SupportersSection } from '@/components/supporters';
 import { AppShowcase } from '@/components/app-showcase';
 import { WebWorkspacePreview } from '@/components/web-workspace-preview';
 import { AthleteImage } from '@/components/athlete-image';
+import { HeroAthletes } from '@/components/hero-athletes';
 import {
   ArrowUpRight,
   ArrowDown,
@@ -50,13 +51,7 @@ export default function Home() {
           </div>
         </div>
         <div className="hero-visual">
-          <AthleteImage
-            src="/images/arena-collective.jpg"
-            alt="Composition illustrative de sportifs en course, au football et au basketball"
-            fetchPriority="high"
-            width={1440}
-            height={720}
-          />
+          <HeroAthletes />
           <div className="image-topline">
             <span>LE SPORT NOUS RELIE.</span>
             <MoveUpRight size={30} />

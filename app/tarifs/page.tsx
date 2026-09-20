@@ -7,13 +7,14 @@ import {
   BriefcaseBusiness,
   UsersRound,
 } from 'lucide-react';
-import { monthlyPrice } from '@/lib/studio/pricing';
+import { monthlyPrice, annualPrice, annualSaving } from '@/lib/studio/pricing';
 import type { Category } from '@/lib/studio/model';
+import offerCatalog from '@/lib/studio/offer-catalog.json';
 import './pricing.css';
 export const metadata: Metadata = {
   title: 'Les formules — Opportunity Players',
   description:
-    'Compte gratuit pour tous. Premium Sportif à 2,99 €/mois, Professionnel à 14,99 €/mois et Collectif à 29,99 €/mois.',
+    `Compte gratuit pour tous. Premium Sportif à ${monthlyPrice('Sportif')}/mois, Professionnel à ${monthlyPrice('Professionnel')}/mois et Collectif à ${monthlyPrice('Organisation')}/mois. Comparez les accès, services et quotas.`,
 };
 const plans: {
   category: Category;
@@ -29,16 +30,20 @@ const plans: {
     icon: UserRound,
     line: 'Faites grandir votre parcours.',
     free: [
-      'Profil, exploration du réseau et suivi de membres',
+      'Profil multisport complet : niveaux, parcours, palmarès, handisport et relation avec un agent',
+      'Réseau, recommandations, opportunités et 1 recherche enregistrée sans alerte',
       '3 nouvelles prises de contact par mois ; réponses gratuites',
-      'Réception de messages et commentaires autorisés sur les publications ouvertes',
-      'Pas de création de publications',
+      '3 photos, 1 demande de rendez-vous et 1 événement créé par mois',
+      'Réponses aux invitations personnelles à jouer et aux essais',
+      'Commentaires, réactions et partages ; création de publications non incluse',
     ],
     premium: [
       'Tout le socle gratuit',
-      'Publication de vos actualités et de vos images',
-      '30 nouvelles prises de contact par mois',
-      'Recherches favorites avec alertes, publications programmées et agenda avancé',
+      'Création et programmation de publications ; 50 photos, 20 vidéos et 20 documents',
+      '30 nouveaux contacts, 30 candidatures et 15 demandes de rendez-vous par mois',
+      'Recherche avancée et 10 recherches enregistrées avec alertes',
+      'Découverte des matchs ouverts, rayon personnalisable et 10 événements actifs',
+      'Événements récurrents, agenda avancé et statistiques détaillées',
     ],
   },
   {
@@ -47,16 +52,21 @@ const plans: {
     icon: BriefcaseBusiness,
     line: 'Transformez votre expertise en échanges.',
     free: [
-      'Profil, exploration du réseau et suivi de membres',
-      'Création de publications',
-      '3 nouvelles prises de contact par mois, y compris avec les joueurs',
-      'Réception, réponses et commentaires gratuits',
+      'Profil, qualifications, références, 3 services et 3 photos',
+      'Création de publications, commentaires, réactions et partages',
+      '3 nouveaux contacts, 3 demandes de rendez-vous et 3 rendez-vous confirmés par mois',
+      '1 recherche enregistrée sans alerte et 1 liste de 20 profils',
+      '5 invitations à des essais et 1 événement créé par mois ; matchs visibles à 50 km',
+      'Réception des messages, réponses et traitement simple des candidatures',
     ],
     premium: [
       'Tout le socle gratuit',
       '100 nouvelles prises de contact par mois',
-      '5 offres actives, listes de talents et portefeuille avec notes privées',
-      'Essais groupés, disponibilités récurrentes et statistiques',
+      '30 candidatures, 15 demandes de rendez-vous et 100 rendez-vous confirmés par mois',
+      '5 offres actives, recrutement avancé et essais groupés',
+      '20 listes, 1 000 profils au total et notes privées ; 20 recherches avec alertes',
+      '15 services, 50 photos, 30 vidéos et 20 documents ; publications programmées',
+      '25 événements actifs, récurrences, agenda avancé, statistiques et parrainage',
     ],
   },
   {
@@ -65,16 +75,21 @@ const plans: {
     icon: UsersRound,
     line: 'Donnez de l’élan à votre communauté.',
     free: [
-      'Profil, exploration du réseau et suivi de membres',
-      '1 offre active et 1 gestionnaire ; publications avec Premium',
-      '5 nouvelles prises de contact par mois',
-      'Réception, réponses, commentaires et réactions gratuits',
+      'Profil multisport, équipes et liens confirmés avec les joueurs et le staff',
+      '1 offre active, traitement des candidatures et invitations individuelles à un essai',
+      '1 gestionnaire, 1 liste de 20 profils et 1 recherche sans alerte',
+      '5 nouveaux contacts, 1 demande de rendez-vous et 1 événement créé par mois',
+      '5 photos, 1 document et 1 vidéo d’une minute ; matchs visibles à 50 km',
+      'Réception, réponses, commentaires, réactions et partages ; publications non incluses',
     ],
     premium: [
       'Tout le socle gratuit',
       '200 nouvelles prises de contact par mois, partagées entre gestionnaires',
-      '10 offres actives, 5 gestionnaires et viviers de recrutement',
-      'Publications, équipes, essais groupés et coordination des entretiens',
+      '10 offres actives, recrutement avancé, essais groupés et 20 demandes de rendez-vous par mois',
+      '5 gestionnaires, permissions, collaboration et gestion structurée des équipes',
+      '30 listes, 1 000 profils au total et notes privées ; 30 recherches avec alertes',
+      'Publications programmées, 30 photos, 20 documents et 10 vidéos de 3 minutes',
+      '50 événements actifs, agenda partagé, entretiens coordonnés et suivi des invitations',
     ],
   },
 ];
@@ -93,7 +108,8 @@ export default function Page() {
         <p>
           La création de compte est gratuite pour les sportifs, les
           professionnels et les collectifs. Passez à Premium lorsque vous
-          souhaitez développer vos échanges.
+          souhaitez multiplier les contacts, valoriser votre parcours ou organiser
+          votre activité. Chaque formule Premium inclut les accès gratuits de sa catégorie.
         </p>
       </section>
       <section className="section plans-section">
@@ -105,8 +121,9 @@ export default function Page() {
             </h2>
             <p>
               Présentez-vous, explorez la communauté et suivez les profils qui
-              vous intéressent. Les droits de publication et de messagerie
-              dépendent de votre catégorie.
+              vous intéressent. Recevez des messages, répondez et interagissez avec
+              la communauté gratuitement. Les quotas de nouveaux contacts et les
+              outils supplémentaires dépendent de votre catégorie.
             </p>
           </div>
           <Link href="/espace/inscription" className="action">
@@ -126,13 +143,17 @@ export default function Page() {
                 <strong>{monthlyPrice(category)}</strong>
                 <span>/ mois</span>
               </div>
+              <div className="plan-annual">
+                <p>ou <strong>{annualPrice(category)}</strong> / an</p>
+                <span>Paiement annuel en une fois</span>
+                <p className="plan-saving">Économisez {annualSaving(category)} par rapport à 12 mensualités.</p>
+              </div>
               <div className="plan-free">
                 <h3>Votre accès gratuit</h3>
                 <ul>
                   {free.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
-                  <li>Réponse aux invitations personnelles à jouer</li>
                 </ul>
               </div>
               <div className="plan-premium">
@@ -144,31 +165,50 @@ export default function Page() {
                       <span>{item}</span>
                     </li>
                   ))}
-                  <li>
-                    <Check size={15} />
-                    <span>
-                      Organisation de matchs et invitations de vos contacts
-                    </span>
-                  </li>
-                  <li>
-                    <Check size={15} />
-                    <span>Découverte des matchs ouverts dans les 50 km</span>
-                  </li>
                 </ul>
               </div>
               <Link href="/espace/abonnement" className="action">
                 Découvrir Premium <ArrowUpRight size={17} />
               </Link>
+              <a className="plan-detail-link" href={`#details-${category}`}>
+                Comparer toutes les fonctionnalités
+              </a>
             </article>
           ))}
         </div>
         <p className="pricing-note">
-          Tarifs mensuels validés pour la future expérience Arena Studio. Cette
+          Paiement mensuel ou annuel au choix. Le paiement annuel en une fois
+          bénéficie d’un tarif réduit, avec les mêmes fonctionnalités incluses. Cette
           préversion ne traite aucun paiement, ne crée aucun abonnement réel et
           ne modifie pas les offres de l’application actuellement disponible sur
           les stores. Les conditions contractuelles et fiscales seront précisées
           avant toute commercialisation.
         </p>
+      </section>
+      <section className="section plans-comparison" aria-labelledby="comparison-title">
+        <span className="section-label">LE DÉTAIL, PROFIL PAR PROFIL</span>
+        <h2 id="comparison-title">Comparez ce qui est <em>inclus.</em></h2>
+        <p>Les quotas mensuels concernent les nouvelles actions, hors réponses.
+          Les plafonds de médias portent sur le total conservé, sans renouvellement mensuel.
+          « Actifs » désigne les offres ou événements gérés simultanément.</p>
+        {plans.map(({category,name}) => (
+          <details className="plan-comparison" id={`details-${category}`} key={category}>
+            <summary><span>{name}</span><span>Gratuit / Premium {monthlyPrice(category)} par mois</span></summary>
+            <div className="plan-table-scroll" role="region" aria-label={`Comparatif ${name}`} tabIndex={0}>
+              <table>
+                <caption>Fonctionnalités {name.toLowerCase()} : gratuit et Premium</caption>
+                <thead><tr><th scope="col">Fonctionnalité et détail</th><th scope="col">Gratuit · 0 €</th><th scope="col">Premium</th></tr></thead>
+                <tbody>{offerCatalog[category].map(row => (
+                  <tr key={row.feature}>
+                    <th scope="row"><strong>{row.feature}</strong><p>{row.detail.replace(' (clarification du propriétaire)', '')}</p></th>
+                    <td>{row.free === '—' ? 'Non inclus' : row.free === 'V' ? 'Inclus' : row.free.replace(/^V,?\s*/, 'Inclus, ').replace('1 nouvelles demandes', '1 nouvelle demande').replace('1 documents','1 document').replace('1 vidéos','1 vidéo')}</td>
+                    <td>{row.paid === 'V' ? 'Inclus' : row.paid}</td>
+                  </tr>
+                ))}</tbody>
+              </table>
+            </div>
+          </details>
+        ))}
       </section>
       <section className="section plans-rules">
         <div>
@@ -220,13 +260,41 @@ export default function Page() {
           <article>
             <span>04</span>
             <div>
+              <h3>Peut-on organiser un match gratuitement ?</h3>
+              <p>
+                Oui, chaque catégorie peut créer 1 événement par mois et répondre aux
+                invitations personnelles. La découverte des matchs ouverts est Premium pour
+                les sportifs, et incluse à 50 km pour les professionnels et collectifs gratuits.
+                Premium ajoute un rayon personnalisable, les alertes, les récurrences et
+                jusqu’à 10, 25 ou 50 événements actifs selon votre catégorie.
+              </p>
+            </div>
+          </article>
+          <article>
+            <span>05</span>
+            <div>
+              <h3>À quoi servent les recherches enregistrées et les alertes ?</h3>
+              <p>
+                Conservez une recherche, par exemple « Tennis à Bruxelles », pour la
+                relancer sans ressaisir les filtres. Le gratuit inclut 1 recherche sans
+                alerte. Premium permet d’enregistrer 10 recherches pour les sportifs,
+                20 pour les professionnels ou 30 pour les collectifs, et d’être averti
+                de nouveaux résultats correspondants.
+              </p>
+            </div>
+          </article>
+          <article>
+            <span>06</span>
+            <div>
               <h3>Puis-je tester sans payer ?</h3>
               <p>
                 Oui. L’espace Connexion ouvre la même démonstration que l’app
                 mobile. Dans « Abonnement », choisissez un profil sportif,
                 professionnel ou collectif, puis simulez Premium. Aucun achat,
                 prélèvement ou renouvellement n’est effectué ; l’état de la démo
-                est effacé au rechargement.
+                est effacé au rechargement. Les connexions aux agendas externes,
+                notifications et échanges entre comptes sont simulés ; aucun service
+                ne s’exécute en arrière-plan lorsque la démo est fermée.
               </p>
             </div>
           </article>

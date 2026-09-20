@@ -408,7 +408,7 @@ em {
 @keyframes hero-arrive {
   from {
     opacity: 0.5;
-    transform: scale(1.04);
+    transform: scale(0.98);
   }
   to {
     opacity: 1;

@@ -56,7 +56,7 @@ export function PlanStatus({ compact = false }: { compact?: boolean }) {
         {!premium && (
           <em className="plan-monthly">
             Premium · {monthlyPrice(profile.category)}
-            <T>{"/espace/mois"}</T>
+            <T>{"/mois"}</T>
           </em>
         )}
       </span>

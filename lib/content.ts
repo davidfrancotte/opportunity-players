@@ -204,37 +204,4 @@ export const audiences = [
     ],
   },
 ];
-export const faqs = [
-  [
-    'À qui s’adresse Opportunity Players ?',
-    'Aux sportifs amateurs, semi-professionnels et professionnels, aux métiers de l’encadrement et aux organisations sportives : clubs, fédérations, associations, académies ou universités.',
-  ],
-  [
-    'Puis-je créer un compte gratuitement ?',
-    'Oui, la création de compte est gratuite pour les sportifs, les professionnels et les collectifs. Les formules Premium Arena Studio sont de 2,99 €/mois pour les sportifs, 14,99 €/mois pour les professionnels et 29,99 €/mois pour les collectifs. La page Formules détaille les droits de chaque offre. Aucun paiement n’est traité dans cette démonstration.',
-  ],
-  [
-    'Que puis-je mettre dans mon profil sportif ?',
-    'Votre présentation, vos expériences, vos compétences, vos caractéristiques sportives, votre palmarès et vos médias. Les informations proposées dépendent de votre sport et de votre type de profil.',
-  ],
-  [
-    'Comment entrer en relation avec un club ou un professionnel ?',
-    'Recherchez un profil dans Réseau puis ouvrez une conversation. Gratuit : 3 nouveaux contacts par mois pour les sportifs et professionnels, 5 pour les collectifs. Premium : respectivement 30, 100 et 200. Les réceptions, réponses et conversations déjà engagées restent gratuites pour toutes les catégories, comme les commentaires, réactions et partages.',
-  ],
-  [
-    'Faut-il être professionnel ou vivre en Europe ?',
-    'Non. Le service s’adresse aussi aux amateurs et semi-professionnels et annonce un accès international. Les profils disponibles et les opportunités varient selon le sport et la zone géographique.',
-  ],
-  [
-    'À partir de quel âge peut-on rejoindre le réseau ?',
-    'Le site actuel indique un accès à partir de 16 ans. Les conditions applicables aux mineurs et aux abonnements sont précisées dans les conditions générales de la plateforme.',
-  ],
-  [
-    'Comment ajouter mes vidéos ?',
-    'Depuis la galerie de votre profil. La plateforme actuelle indique les formats MP4 et MOV, avec une limite de 500 Mo par fichier. Consultez votre espace pour les limites et les droits de votre offre.',
-  ],
-  [
-    'Cette nouvelle version remplace-t-elle mon compte ?',
-    'Non. Le bouton Connexion ouvre la démonstration Arena Studio, avec le même design et les mêmes fonctionnalités que la démo mobile. Les profils et échanges sont fictifs et s’effacent au rechargement. Vos véritables comptes restent sur la plateforme actuelle ; n’utilisez pas vos identifiants réels dans la démo.',
-  ],
-];
+export { faqs } from './faq';

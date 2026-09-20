@@ -63,6 +63,8 @@ export function Header() {
     ['Les sports', '/sports'],
     ['Formules', '/tarifs'],
     ['L’application', '/application'],
+    ['Blog', '/blog'],
+    ['FAQ', '/faq'],
   ];
   return (
     <header className="site-header">
@@ -126,7 +128,7 @@ export function Header() {
                 </Link>
               ))}
               <Link href="/aide" onClick={() => setOpen(false)}>
-                <span>06</span>Aide
+                <span>08</span>Aide
                 <ArrowUpRight />
               </Link>
             </nav>
@@ -163,13 +165,14 @@ export function Footer() {
           <Link href="/application">Explorer l’application</Link>
           <Link href="/sports">Les sports</Link>
           <Link href="/tarifs">Les formules</Link>
-          <Link href="/actualites">Le journal</Link>
+          <Link href="/blog">Blog</Link>
         </div>
         <div>
           <h3>Opportunity Players</h3>
           <Link href="/a-propos">Notre histoire</Link>
           <Link href="/#soutiens">Ils nous soutiennent</Link>
           <Link href="/aide">Aide & contact</Link>
+          <Link href="/faq">FAQ</Link>
           <Link href="/espace/connexion">Connexion ↗</Link>
           <Link href="/rejoindre">Rejoindre le réseau</Link>
         </div>

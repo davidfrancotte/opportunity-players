@@ -14,6 +14,20 @@ img.athlete-image {
 .hero-visual > img.athlete-image {
   --athlete-contrast: 1.03;
 }
+/* Restore the large edge-to-edge frame; crop scenery only, never athletes.
+   The taller photograph supplies roof/ground on narrow screens. */
+.hero-visual { background:#090b0b; }
+.hero-visual > img.hero-athletes {
+  position:absolute;
+  max-width:none;
+  object-fit:contain;
+  object-position:center;
+  transform-origin:center;
+}
+@media(max-width:640px) {
+  .hero-visual { flex-shrink:0; }
+  .hero { max-height:none; }
+}
 .sport-image > img.athlete-image {
   --athlete-contrast: 1.02;
 }
