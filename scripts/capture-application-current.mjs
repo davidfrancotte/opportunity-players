@@ -4,6 +4,8 @@ import assert from 'node:assert/strict';
 // Capture actual interactive states, not just the top of each legacy route.
 const browser = await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
 const page = await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2});
+const light = process.argv.includes('--light');
+await page.addInitScript(theme => localStorage.setItem('op-mobile-appearance', theme), light ? 'light' : 'dark');
 const errors=[];
 page.on('pageerror',error=>errors.push(error.message));
 const root='http://127.0.0.1:3002';
@@ -18,7 +20,8 @@ async function shot(id, selector) {
   else await page.evaluate(()=>scrollTo(0,0));
   await page.evaluate(()=>document.activeElement?.blur());
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),id);
-  await page.screenshot({path:`public/app-visuals/studio-20260922-current-${id}.png`,animations:'disabled'});
+  assert.equal(await page.locator('html').getAttribute('data-theme'), light ? 'light' : 'dark');
+  await page.screenshot({path:`public/app-visuals/studio-20260922-current-${id}${light ? '-light' : ''}.png`,animations:'disabled'});
 }
 try {
   await page.goto(root+'/reseau',{waitUntil:'networkidle'});

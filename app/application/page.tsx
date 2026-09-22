@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import {
   ArrowUpRight,
@@ -13,7 +12,7 @@ import {
   ImagePlus,
   Volleyball,
 } from 'lucide-react';
-import { AppPhone } from '@/components/app-showcase';
+import { ApplicationVisualTheme, ApplicationVisualToggle, ApplicationCapture, ApplicationHeroPhone } from '@/components/application-visual-theme';
 import { AppPhoneStage } from '@/components/app-phone-stage';
 import './application.css';
 
@@ -215,6 +214,7 @@ const roles = ['Sportifs', 'Professionnels', 'Collectifs'];
 
 export default function Page() {
   return (
+    <ApplicationVisualTheme>
     <main id="main" className="application-page">
       <section className="application-hero section">
         <div className="application-hero-copy">
@@ -233,6 +233,7 @@ export default function Page() {
             des connexions acceptées, des opportunités et un agenda unique.
             Des repères d’usage familiers, proches de LinkedIn, dans une interface plus premium.
           </p>
+          <ApplicationVisualToggle />
           <div className="application-actions">
             <Link href="/espace/connexion" className="action">
               Essayer l’expérience <ArrowUpRight size={18} />
@@ -254,10 +255,7 @@ export default function Page() {
           </span>
           <div className="app-phone-scene">
             <div className="app-phone-primary">
-              <AppPhone
-                label="Accueil de la démo Arena Studio"
-                screenSrc="/app-visuals/studio-20260922-current-accueil.png"
-              />
+              <ApplicationHeroPhone />
             </div>
           </div>
           <figcaption>
@@ -300,13 +298,9 @@ export default function Page() {
           ) => (
             <section id={id} key={id} className="section application-feature">
               <figure className="application-capture">
-                <Image
-                  unoptimized
-                  src={`/app-visuals/studio-20260922-current-${id}.png`}
+                <ApplicationCapture
+                  id={id}
                   alt={`${location} : ${capture}. Capture réelle de la démo mobile.`}
-                  width={390}
-                  height={844}
-                  loading="lazy"
                 />
                 <figcaption>
                   {capture} · DÉMO
@@ -391,5 +385,6 @@ export default function Page() {
         </small>
       </section>
     </main>
+    </ApplicationVisualTheme>
   );
 }

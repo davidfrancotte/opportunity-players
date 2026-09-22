@@ -26,6 +26,41 @@
   align-items: center;
   margin: 30px 0;
 }
+.application-visual-control {
+  display: grid;
+  grid-template-columns: auto 58px;
+  align-items: center;
+  justify-content: start;
+  gap: 10px 16px;
+  margin-top: 28px;
+  font-size: 14px;
+}
+.application-visual-control > small { grid-column: 1 / -1; }
+.application-visual-switch {
+  width: 58px;
+  min-height: 44px;
+  padding: 5px;
+  border: 1px solid #74816f;
+  border-radius: 99px;
+  background: #242c27;
+  color: #f1f2eb;
+  cursor: pointer;
+}
+.application-visual-switch-thumb {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #46513e;
+  transition: transform .18s ease;
+}
+.application-visual-switch[aria-checked="true"] { background: #d1f94c; border-color: #d1f94c; color: #17211d; }
+.application-visual-switch[aria-checked="true"] .application-visual-switch-thumb { transform: translateX(16px); background: #fff; }
+.application-visual-switch:focus-visible { outline: 2px solid #d1f94c; outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  .application-visual-switch-thumb { transition: none; }
+}
 .application-hero small,
 .application-cta small {
   display: block;
