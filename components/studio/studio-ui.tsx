@@ -194,7 +194,7 @@ export function AuthLayout({
           </h2>
         </div>
         <img
-          src="/app-visuals/studio-web-profil-trust.png"
+          src="/app-visuals/web-20260922-profil.png"
           alt="Capture de la démo web : profil multisport, niveaux, clubs, agent et références"
         />
         <span className="editorial-caption">

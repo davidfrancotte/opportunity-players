@@ -12,7 +12,6 @@ import {
   UserRound,
   Settings,
   Sparkles,
-  ArrowUpRight,
   LogOut,
   CalendarDays,
   Bell,
@@ -25,10 +24,7 @@ import { EventHeader } from './event-navigation';
 import { WebThemeSwitch } from './web-theme';
 import { useDemo } from './demo-provider';
 import { Brand } from './studio-ui';
-import { PlanStatus } from './subscription-ui';
-import { displayName, completion } from '@/lib/studio/model';
-import { members, opportunities } from '@/lib/studio/social';
-import { Button } from '@/components/ui/button';
+import { displayName } from '@/lib/studio/model';
 
 const navigation = [
   { href: 'accueil', label: 'Accueil', icon: House },
@@ -53,7 +49,6 @@ export function WebShell({ children }: { children: ReactNode }) {
   const {
     profile,
     social,
-    dispatchSocial,
     reset,
     events,
     career,
@@ -70,7 +65,7 @@ export function WebShell({ children }: { children: ReactNode }) {
     'documents',
   ].includes(page)
     ? 'profil'
-    : ['jouer', 'organiser', 'match'].includes(page)
+    : ['jouer', 'organiser', 'match', 'agenda', 'calendrier-avance'].includes(page)
       ? 'reseau'
       : ['candidatures', 'recrutement'].includes(page)
         ? 'opportunities'
@@ -85,7 +80,6 @@ export function WebShell({ children }: { children: ReactNode }) {
     (n) => n.recipient === careerActor.id && !n.read,
   ).length;
   const unread = social.conversations.filter((c) => c.unread).length;
-  const progress = completion(profile);
   if (authRoutes.includes(page))
     return (
       <div className="studio-web-auth">
@@ -145,13 +139,6 @@ export function WebShell({ children }: { children: ReactNode }) {
             </Link>
           )}
           <Link
-            href="/espace/rendez-vous"
-            aria-current={page === 'rendez-vous' ? 'page' : undefined}
-          >
-            <CalendarDays size={19} />
-            <span>Mes rendez-vous</span>
-          </Link>
-          <Link
             href="/espace/securite"
             aria-current={page === 'securite' ? 'page' : undefined}
           >
@@ -177,7 +164,7 @@ export function WebShell({ children }: { children: ReactNode }) {
             aria-current={page === 'agenda' ? 'page' : undefined}
           >
             <CalendarDays size={19} />
-            <T>{'Mon agenda'}</T>
+            <T>{'Agenda'}</T>
           </Link>
           <Link
             href="/espace/notifications"
@@ -241,7 +228,7 @@ export function WebShell({ children }: { children: ReactNode }) {
                   jouer: 'Jouer ensemble',
                   organiser: 'Organiser un match',
                   match: 'Votre match',
-                  agenda: 'Mon agenda',
+                  agenda: 'Agenda',
                   notifications: 'Notifications',
                   candidatures: 'Candidatures et essais',
                   recrutement: 'Espace recrutement',
@@ -282,82 +269,7 @@ export function WebShell({ children }: { children: ReactNode }) {
         </div>
         <div className="web-content-grid">
           <div className="web-main-content">{children}</div>
-          {page === 'accueil' && (
-            <aside
-              className="web-context-rail"
-              aria-label="Votre réseau et vos opportunités"
-            >
-              <section className="web-rail-card">
-                <span className="web-space-label">VOTRE PROCHAIN PAS</span>
-                <h2>Un profil qui ouvre des portes.</h2>
-                <p>
-                  Sports, niveaux, clubs, CV et agent : donnez du contexte à
-                  chaque rencontre.
-                </p>
-                <p>
-                  {progress.count} rubriques complétées sur {progress.total}.
-                </p>
-                <progress
-                  value={progress.count}
-                  max={progress.total}
-                  aria-label="Complétion du profil"
-                />
-                <Link href="/espace/disciplines">
-                  Compléter mon parcours <ArrowUpRight size={17} />
-                </Link>
-              </section>
-              <section className="web-rail-card">
-                <h2>Élargissez votre terrain.</h2>
-                <p>Quelques profils fictifs à découvrir.</p>
-                {members.slice(0, 3).map((member) => (
-                  <div className="web-suggestion" key={member.id}>
-                    <Image
-                      src={member.image}
-                      alt=""
-                      width={38}
-                      height={42}
-                      unoptimized
-                    />
-                    <span>
-                      <strong>{member.name}</strong>
-                      <small>{member.role}</small>
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      aria-label={`${social.following.includes(member.id) ? 'Ne plus suivre' : 'Suivre'} ${member.name}`}
-                      aria-pressed={social.following.includes(member.id)}
-                      onClick={() =>
-                        dispatchSocial({ type: 'follow', id: member.id })
-                      }
-                    >
-                      {social.following.includes(member.id) ? 'Suivi' : '+'}
-                    </Button>
-                  </div>
-                ))}
-                <Link href="/espace/reseau">
-                  Explorer le réseau <ArrowUpRight size={17} />
-                </Link>
-              </section>
-              <section className="web-rail-card web-rail-opportunity">
-                <Image
-                  src={opportunities[0].image}
-                  alt="Un terrain de padel"
-                  width={244}
-                  height={130}
-                  unoptimized
-                />
-                <span className="web-space-label">
-                  À DÉCOUVRIR · ANNONCE FICTIVE
-                </span>
-                <h2>{opportunities[0].title}</h2>
-                <Link href="/espace/opportunities">
-                  Voir les opportunités <ArrowUpRight size={17} />
-                </Link>
-              </section>
-              <PlanStatus compact />
-            </aside>
-          )}
+
         </div>
       </div>
     </div>

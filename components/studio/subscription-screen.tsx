@@ -6,7 +6,7 @@ import { NativeSelect, NativeSelectOption } from "./ui/native-select";
 import { ProfileLayout, Modal } from "./profile-screens";
 import { useDemo } from "./demo-provider";
 import { categories, type Category } from "@/lib/studio/model";
-import { monthlyPrice } from "@/lib/studio/pricing";
+import { monthlyPrice, annualPrice, annualSaving } from "@/lib/studio/pricing";
 import { isPremium, remainingMessages } from "@/lib/studio/social";
 import { limits } from "@/lib/studio/entitlements";
 import catalog from "@/lib/studio/offer-catalog.json";
@@ -15,6 +15,7 @@ export function SubscriptionPage() {
   const { profile, setProfile, social, dispatchSocial, access, notify, setCareerActor } = useDemo();
   const [confirm, setConfirm] = useState(false),
     [all, setAll] = useState(false);
+  const [annual, setAnnual] = useState(false);
   const paid = isPremium(social, profile.category),
     free = limits(profile.category, false),
     premium = limits(profile.category, true);
@@ -23,15 +24,12 @@ export function SubscriptionPage() {
     <ProfileLayout back="/espace/profil">
       <div className="extension-page">
         <header className="subscription-hero">
-          <span className="mini-kicker">ARENA / GRATUIT & PREMIUM</span>
+          <span className="mini-kicker">{paid ? "ARENA / MON ABONNEMENT" : "ARENA / GRATUIT & PREMIUM"}</span>
           <h1>
-            Un réseau ouvert.
-            <br />
-            Des outils pour aller plus loin<span>.</span>
+            {paid ? <>Votre Premium est actif<span>.</span></> : <>Un réseau ouvert.<br />Des outils pour aller plus loin<span>.</span></>}
           </h1>
           <p>
-            Votre profil, les réponses, commentaires, réactions et partages restent gratuits.
-            Choisissez les outils adaptés à vos projets.
+            {paid ? "Vos outils Premium sont disponibles. Retrouvez ici vos accès et vos limites d’utilisation." : "Votre profil, les réponses, commentaires, réactions et partages restent gratuits. Choisissez les outils adaptés à vos projets."}
           </p>
         </header>
         <div className="subscription-current">
@@ -43,12 +41,22 @@ export function SubscriptionPage() {
             encore disponibles ce mois-ci
           </span>
         </div>
-        <article className="premium-offer">
+        {!paid && <article className="premium-offer">
           <span>PREMIUM {categoryLabel(profile.category).toUpperCase()}</span>
-          <div className="subscription-price">
-            <strong>{monthlyPrice(profile.category)}</strong>
-            <span>/mois</span>
+          <div className="billing-period" role="group" aria-label="Périodicité de la formule">
+            <Button aria-pressed={!annual} onClick={() => setAnnual(false)}>Mensuel</Button>
+            <Button aria-pressed={annual} onClick={() => setAnnual(true)}>Annuel · tarif réduit</Button>
           </div>
+          <div className="subscription-price">
+            <strong>{annual ? annualPrice(profile.category) : monthlyPrice(profile.category)}</strong>
+            <span>{annual ? "/an" : "/mois"}</span>
+          </div>
+          <p className="annual-price-note">
+            {annual
+              ? `Paiement annuel en une fois. Économisez ${annualSaving(profile.category)} par rapport à 12 mensualités de ${monthlyPrice(profile.category)}.`
+              : `Ou ${annualPrice(profile.category)}/an, payés en une fois : ${annualSaving(profile.category)} d’économie par rapport à 12 mensualités.`}
+          </p>
+          <p className="price-caveat">Les mêmes fonctionnalités et quotas sont inclus, quelle que soit la périodicité.</p>
           <ul className="premium-benefits">
             <li>{premium.contacts} nouvelles demandes de conversation par mois</li>
             <li>{premium.searches} recherches favorites avec alertes de nouveautés</li>
@@ -67,7 +75,7 @@ export function SubscriptionPage() {
             Simulation gratuite. Aucun prélèvement, aucune carte, aucun abonnement réel. TVA et
             conditions commerciales à préciser avant lancement.
           </p>
-        </article>
+        </article>}
         <section className="extension-card">
           <h2>Vos accès, en détail</h2>
           <p>
@@ -107,7 +115,7 @@ export function SubscriptionPage() {
         <section className="extension-card">
           <h2>Comment les limites fonctionnent</h2>
           <p>
-            Un quota de contact est consommé au premier message vers un nouvel interlocuteur, pas à
+            Les connexions acceptées peuvent échanger sans consommer de quota. Hors connexions, un quota de contact est consommé au premier message vers un nouvel interlocuteur, pas à
             chaque réponse. Le quota gratuit est de {free.contacts} nouveaux contacts par mois,
             contre {premium.contacts} en Premium. Les réceptions et conversations déjà engagées
             restent gratuites.
@@ -157,13 +165,13 @@ export function SubscriptionPage() {
           <Link href="/espace/accueil">Continuer dans l’app</Link>
         </nav>
         <Modal
-          open={confirm}
+          open={confirm && !paid}
           onOpenChange={setConfirm}
           title="Activez la simulation"
           description="Vous débloquez les outils Premium de ce profil fictif. Aucun paiement réel."
         >
           <p>
-            {categoryLabel(profile.category)} · {monthlyPrice(profile.category)}/mois affichés ·
+            {categoryLabel(profile.category)} · {annual ? annualPrice(profile.category) + "/an, en une fois" : monthlyPrice(profile.category) + "/mois"} affichés ·
             montant prélevé : 0 €.
           </p>
           <Button

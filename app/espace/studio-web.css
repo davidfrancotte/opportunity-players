@@ -1,4 +1,16 @@
 /* Web integration only. Imported mobile app styles remain namespaced. */
+body:has(.studio-surface) .member-relationship-actions .connection-connect { margin: 0; }
+@media (min-width: 900px) {
+  body:has(.studio-surface) .studio-page-accueil .web-content-grid { grid-template-columns: minmax(0, 1fr); }
+  body:has(.studio-surface) .studio-page-accueil .profile-layout { max-width: 980px; margin-inline: auto; }
+  body:has(.studio-surface) .community-invitations { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body:has(.studio-surface) .community-filters .directory-filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body:has(.studio-surface) .community-section h2 { font-size: 22px; }
+  body:has(.studio-surface) .community-filters label,
+  body:has(.studio-surface) .member-search-premium,
+  body:has(.studio-surface) .community-invitation-profile strong { font-size: 14px; }
+  body:has(.studio-surface) .community-search-row { max-width: 850px; }
+}
 body:has(.studio-surface) .auth-editorial--workspace {background:linear-gradient(145deg,#293523,#15191b 65%);}
 body:has(.studio-surface) .auth-editorial--workspace::after {display:none;}
 body:has(.studio-surface) .auth-editorial--workspace .editorial-copy {position:relative;inset:auto;margin:65px 0 34px;}

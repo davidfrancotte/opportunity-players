@@ -1,3 +1,4 @@
+/* App rules scoped to the web workspace; desktop adaptations remain separate. */
 body:has(.studio-surface) .career-nav {
   display: flex;
   flex-wrap: wrap;
@@ -233,11 +234,9 @@ body:has(.studio-surface) .career-form .field input,
 body:has(.studio-surface) .career-form select {
   min-height: 48px;
 }
-body:has(.studio-surface) .career-form [data-slot='native-select-wrapper'],
-body:has(.studio-surface)
-  .career-section-title
-  [data-slot='native-select-wrapper'],
-body:has(.studio-surface) .career-demo [data-slot='native-select-wrapper'] {
+body:has(.studio-surface) .career-form [data-slot="native-select-wrapper"],
+body:has(.studio-surface) .career-section-title [data-slot="native-select-wrapper"],
+body:has(.studio-surface) .career-demo [data-slot="native-select-wrapper"] {
   width: 100%;
 }
 body:has(.studio-surface) .career-form textarea {

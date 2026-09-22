@@ -9,11 +9,13 @@ import { useDemo } from "./demo-provider";
 import { isPremium, remainingMessages, type AccessReason } from "@/lib/studio/social";
 import type { Category } from "@/lib/studio/model";
 import {limits} from "@/lib/studio/entitlements";
-import { monthlyPrice } from "@/lib/studio/pricing";
+import { monthlyPrice, annualPrice } from "@/lib/studio/pricing";
 
 export const categoryLabel = (category: Category) =>
   category === "Sportif" ? "Joueur" : category === "Organisation" ? "Collectif" : "Professionnel";
 export function FreePlanNote({ category }: { category: Category }) {
+  const { social } = useDemo();
+  if (isPremium(social, category)) return null;
   return (
     <aside className="free-plan-note">
       <span>
@@ -28,7 +30,7 @@ export function FreePlanNote({ category }: { category: Category }) {
       <small>
         <T>{"Premium optionnel :"}</T>
         {monthlyPrice(category)}
-        <T>{"/mois. Aucun paiement à l’inscription."}</T>
+        /mois ou {annualPrice(category)}/an. Aucun paiement à l’inscription.
       </small>
     </aside>
   );
@@ -37,6 +39,7 @@ export function PlanStatus({ compact = false }: { compact?: boolean }) {
   const { profile, social, access } = useDemo();
   const premium = isPremium(social, profile.category);
   const left = remainingMessages(social, access.month,profile.category);
+  if (premium) return null;
   return (
     <Link href="/espace/abonnement" className={compact ? "plan-status compact" : "plan-status"}>
       <span className="plan-icon">
@@ -57,6 +60,7 @@ export function PlanStatus({ compact = false }: { compact?: boolean }) {
           <em className="plan-monthly">
             Premium · {monthlyPrice(profile.category)}
             <T>{"/mois"}</T>
+            {" · ou "}{annualPrice(profile.category)}/an
           </em>
         )}
       </span>
@@ -108,14 +112,16 @@ export const gateCopy: Record<AccessReason, { title: string; text: string; benef
   },
 };
 export function LockedFeature({ reason = "receive" }: { reason?: AccessReason }) {
-  const { dispatchSocial } = useDemo();
+  const { dispatchSocial, social, profile } = useDemo();
+  const paid = isPremium(social, profile.category);
+  if (paid && reason !== "quota" && reason !== "recipient") return null;
   return (
     <aside className="locked-feature">
       <LockKeyhole size={21} />
       <h3>{gateCopy[reason].title}</h3>
       <p>{gateCopy[reason].text}</p>
       <Button variant="secondary" onClick={() => dispatchSocial({ type: "gate", reason })}>
-        {reason === "recipient" ? "Comprendre cette limite" : "Découvrir Premium"}
+        {reason === "recipient" || paid ? "Comprendre cette limite" : "Découvrir Premium"}
         <ArrowUpRight size={15} />
       </Button>
     </aside>
@@ -126,13 +132,15 @@ export function UpgradeGate() {
   const router = useRouter();
   const pathname = usePathname();
   const reason = social.gate;
+  const paid = isPremium(social, profile.category);
+  const promotion = !paid && reason !== "recipient";
   const copy = reason ? gateCopy[reason] : gateCopy.receive;
   function close() {
     dispatchSocial({ type: "gate", reason: null });
   }
   return (
     <Dialog
-      open={!!reason}
+      open={!!reason && (!paid || reason === "quota" || reason === "recipient")}
       onOpenChange={(v) => {
         if (!v) close();
       }}
@@ -143,17 +151,18 @@ export function UpgradeGate() {
         </Button>
         <span className="premium-eyebrow">
           <Sparkles size={15} />
-          {reason === "recipient" ? "DISPONIBILITÉ DU MEMBRE" : "ARENA / PREMIUM"}
+          {reason === "recipient" ? "DISPONIBILITÉ DU MEMBRE" : paid ? "VOTRE QUOTA" : "ARENA / PREMIUM"}
         </span>
         <DialogTitle className="modal-title">{copy.title}</DialogTitle>
         <DialogDescription className="modal-description">{copy.text}</DialogDescription>
-        {reason !== "recipient" && (
+        {promotion && (
           <p className="upgrade-price">
             {monthlyPrice(profile.category)}
             <span>/mois · offre {categoryLabel(profile.category)}</span>
+            <span>ou {annualPrice(profile.category)}/an, payés en une fois</span>
           </p>
         )}
-        {!!copy.benefits.length && (
+        {promotion && !!copy.benefits.length && (
           <ul className="premium-benefits">
             {copy.benefits.map((s) => (
               <li key={s}>
@@ -163,7 +172,7 @@ export function UpgradeGate() {
             ))}
           </ul>
         )}
-        {reason !== "recipient" && (
+        {promotion && (
           <Button
             className="action primary"
             onClick={() => {
@@ -176,7 +185,7 @@ export function UpgradeGate() {
           </Button>
         )}
         <Button variant="ghost" className="keep-free" onClick={close}>
-          {reason === "recipient" ? "Compris" : "Continuer gratuitement"}
+          {reason === "recipient" || paid ? "Compris" : "Continuer gratuitement"}
         </Button>
         <p className="demo-context">
           <T>{"Démo uniquement. Aucun prélèvement, aucun achat réel."}</T>

@@ -1,3 +1,4 @@
+/* App rules scoped to the web workspace; desktop adaptations remain separate. */
 body:has(.studio-surface) .locale-switch {
   display: flex;
   align-items: center;
@@ -108,7 +109,7 @@ body:has(.studio-surface) .portfolio-panel video {
   background: #000;
   border-radius: 14px;
 }
-body:has(.studio-surface) .portfolio-panel input[type='file'] {
+body:has(.studio-surface) .portfolio-panel input[type="file"] {
   max-width: 100%;
   padding: 10px;
   height: auto;

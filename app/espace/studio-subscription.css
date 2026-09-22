@@ -1,4 +1,4 @@
-/* Generated from the approved Arena Studio app; use scripts/sync-studio.mjs. */
+/* App rules scoped to the web workspace; desktop adaptations remain separate. */
 body:has(.studio-surface) .free-plan-note {
   padding: 16px;
   border: 1px solid #3e4d31;
@@ -180,7 +180,7 @@ body:has(.studio-surface) .billing-toggle button {
   color: #9aac8e;
   font-size: 12px;
 }
-body:has(.studio-surface) .billing-toggle button[aria-pressed='true'] {
+body:has(.studio-surface) .billing-toggle button[aria-pressed="true"] {
   color: #17220d;
   background: #d1f94c;
 }
@@ -240,6 +240,30 @@ body:has(.studio-surface) .all-plan-prices small {
 }
 body:has(.studio-surface) .subscription-price {
   margin: 21px 0 12px;
+}
+body:has(.studio-surface) .billing-period {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+body:has(.studio-surface) .billing-period button {
+  flex: 1 1 120px;
+  min-height: 44px;
+  border: 1px solid #566449;
+  background: transparent;
+  color: #edf2e6;
+}
+body:has(.studio-surface) .billing-period button[aria-pressed="true"] {
+  background: #d1f94c;
+  color: #14200b;
+  border-color: #d1f94c;
+}
+body:has(.studio-surface) .annual-price-note {
+  color: #dce8cd;
+  font-size: 13px;
+  line-height: 1.65;
+  margin: 0 0 10px;
 }
 body:has(.studio-surface) .subscription-price small {
   display: block;

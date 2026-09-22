@@ -106,12 +106,11 @@ export function AppShowcase({ variant = 'home' }: AppShowcaseProps) {
           )}
         </h2>
         <p>
-          Retrouvez votre fil sportif et des recommandations de personnes et
-          d’opportunités selon vos sports et votre localisation. Candidatez,
-          confirmez un essai ou demandez un rendez-vous à un professionnel :
-          après son accord, choisissez parmi ses disponibilités. Vos matchs,
-          votre dossier multisport et vos échanges restent réunis au même
-          endroit.
+          Suivez votre communauté, ouvrez les publications et partagez vos propres
+          photos ou vidéos. Connectez-vous après acceptation pour échanger librement
+          et inviter vos contacts à jouer. Matchs, rendez-vous professionnels et
+          événements à suivre se retrouvent dans un seul agenda. Premium ouvre
+          les filtres avancés, les matchs à proximité et la programmation des posts.
         </p>
         <Link href="/application" className="app-demo-link">
           Explorer l’application <ArrowUpRight size={20} aria-hidden="true" />
@@ -155,14 +154,14 @@ export function AppShowcase({ variant = 'home' }: AppShowcaseProps) {
             <div className="app-phone-secondary">
               <AppPhone
                 label="Messagerie Arena Studio"
-                screenSrc="/app-visuals/studio-messages.png"
+                screenSrc="/app-visuals/studio-20260922-messages.png"
               />
             </div>
           )}
           <div className="app-phone-primary">
             <AppPhone
               label={label}
-              screenSrc="/app-visuals/studio-accueil.png"
+              screenSrc="/app-visuals/studio-20260922-accueil.png"
             />
           </div>
         </div>

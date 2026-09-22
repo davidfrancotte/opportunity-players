@@ -1,0 +1,425 @@
+/* App rules scoped to the web workspace; desktop adaptations remain separate. */
+body:has(.studio-surface) .unified-calendar {
+  margin: 24px 0;
+  padding: 18px 12px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card);
+}
+body:has(.studio-surface) .agenda-month-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+body:has(.studio-surface) .agenda-month-heading h2 {
+  font-size: 19px;
+  text-transform: capitalize;
+  margin: 0;
+}
+body:has(.studio-surface) .agenda-month-heading button {
+  padding: 10px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+body:has(.studio-surface) .agenda-today {
+  display: block;
+  margin: 8px auto 16px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+  text-decoration: underline;
+}
+body:has(.studio-surface) .agenda-month-grid {
+  width: 100%;
+  table-layout: fixed;
+  border-spacing: 4px;
+  border-collapse: separate;
+}
+body:has(.studio-surface) .agenda-month-grid th {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  padding-bottom: 8px;
+}
+body:has(.studio-surface) .agenda-month-grid td {
+  padding: 0;
+}
+body:has(.studio-surface) .agenda-day {
+  width: 100%;
+  min-height: 46px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-size: 13px;
+  gap: 5px;
+}
+body:has(.studio-surface) .agenda-day.has-events {
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
+  font-weight: 700;
+}
+body:has(.studio-surface) .agenda-day.is-today {
+  border-color: var(--muted-foreground);
+}
+body:has(.studio-surface) .agenda-day[aria-pressed="true"] {
+  border-color: var(--primary);
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+body:has(.studio-surface) .agenda-day-dots {
+  min-height: 5px;
+  display: flex;
+  gap: 3px;
+}
+body:has(.studio-surface) .agenda-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+body:has(.studio-surface) .agenda-dot.match {
+  background: #b9d93d;
+}
+body:has(.studio-surface) .agenda-dot.professional {
+  background: #799eea;
+}
+body:has(.studio-surface) .agenda-dot.spectator {
+  background: #e6a56e;
+}
+body:has(.studio-surface) .agenda-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  justify-content: center;
+  margin-top: 18px;
+  font-size: 10px;
+}
+body:has(.studio-surface) .agenda-legend span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+body:has(.studio-surface) .agenda-list-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+body:has(.studio-surface) .agenda-list-heading h2 {
+  font-size: 20px;
+  margin: 0;
+}
+body:has(.studio-surface) .agenda-list-heading small {
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+body:has(.studio-surface) .agenda-list-heading button,
+body:has(.studio-surface) .agenda-empty button {
+  font-size: 12px;
+  text-decoration: underline;
+}
+body:has(.studio-surface) .agenda-filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 16px 0 10px;
+}
+body:has(.studio-surface) .agenda-filters button {
+  border: 1px solid var(--border);
+  padding: 8px 11px;
+  border-radius: 99px;
+  font-size: 11px;
+}
+body:has(.studio-surface) .agenda-filters button[aria-pressed="true"] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+body:has(.studio-surface) .agenda-selection {
+  font-size: 11px;
+  color: var(--muted-foreground);
+  text-transform: capitalize;
+  margin-bottom: 14px;
+}
+body:has(.studio-surface) .unified-agenda-event {
+  display: flex;
+  gap: 14px;
+  padding: 18px 12px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  border-left: 3px solid #b9d93d;
+  border-radius: 14px;
+  background: var(--card);
+}
+body:has(.studio-surface) .unified-agenda-event.professional {
+  border-left-color: #799eea;
+}
+body:has(.studio-surface) .unified-agenda-event.spectator {
+  border-left-color: #e6a56e;
+}
+body:has(.studio-surface) .agenda-event-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 36px;
+}
+body:has(.studio-surface) .agenda-event-date strong {
+  font-size: 24px;
+  line-height: 1.1;
+}
+body:has(.studio-surface) .agenda-event-date small {
+  font-size: 11px;
+  text-transform: uppercase;
+}
+body:has(.studio-surface) .agenda-event-body {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+body:has(.studio-surface) .agenda-category-label {
+  font-size: 10px;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+body:has(.studio-surface) .agenda-event-body h3 {
+  font-size: 15px;
+  line-height: 1.4;
+  margin: 5px 0;
+}
+body:has(.studio-surface) .agenda-event-body p,
+body:has(.studio-surface) .agenda-discover p {
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+body:has(.studio-surface) .agenda-event-body a,
+body:has(.studio-surface) .agenda-event-body button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  font-size: 11px;
+  text-decoration: underline;
+}
+body:has(.studio-surface) .agenda-empty {
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+  padding: 26px 18px;
+  text-align: center;
+}
+body:has(.studio-surface) .agenda-empty svg {
+  margin: auto auto 10px;
+  color: var(--muted-foreground);
+}
+body:has(.studio-surface) .agenda-empty h3 {
+  font-size: 15px;
+}
+body:has(.studio-surface) .agenda-empty p {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  margin: 8px 0;
+}
+body:has(.studio-surface) .agenda-actions {
+  display: grid;
+  gap: 10px;
+  margin: 24px 0;
+}
+body:has(.studio-surface) .agenda-actions a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 13px 15px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 12px;
+}
+body:has(.studio-surface) .agenda-discover,
+body:has(.studio-surface) .agenda-tools {
+  border-top: 1px solid var(--border);
+  padding: 18px 0;
+}
+body:has(.studio-surface) .agenda-discover summary,
+body:has(.studio-surface) .agenda-tools summary {
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+body:has(.studio-surface) .agenda-discover article {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin: 12px 0;
+}
+body:has(.studio-surface) .agenda-discover article small {
+  font-size: 11px;
+  color: var(--muted-foreground);
+}
+body:has(.studio-surface) .agenda-discover article h3 {
+  font-size: 15px;
+  margin: 6px 0;
+}
+body:has(.studio-surface) .agenda-discover article button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: 99px;
+  margin-top: 12px;
+}
+body:has(.studio-surface) .agenda-discover article button[aria-pressed="true"] {
+  border-color: var(--primary);
+}
+body:has(.studio-surface) .agenda-tools > summary {
+  margin-bottom: 16px;
+}
+body:has(.studio-surface) .unified-calendar button,
+body:has(.studio-surface) .agenda-event-list button,
+body:has(.studio-surface) .agenda-discover button {
+  cursor: pointer;
+}
+body:has(.studio-surface) .unified-calendar button:focus-visible,
+body:has(.studio-surface) .agenda-event-list button:focus-visible,
+body:has(.studio-surface) .agenda-discover button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+body:has(.studio-surface) .unified-calendar,
+body:has(.studio-surface) .agenda-event-list,
+body:has(.studio-surface) .agenda-actions,
+body:has(.studio-surface) .agenda-discover,
+body:has(.studio-surface) .agenda-tools {
+  --border: #3b4043;
+  --muted: #24282b;
+  --muted-foreground: #a9afaf;
+  --primary-foreground: #101214;
+}
+body:has(.studio-surface) .agenda-requests {
+  border-top: 1px solid #3b4043;
+  margin-top: 24px;
+  padding: 18px 0;
+}
+body:has(.studio-surface) .agenda-requests-heading,
+body:has(.studio-surface) .agenda-request > summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  list-style: none;
+}
+body:has(.studio-surface) .agenda-requests summary::-webkit-details-marker {
+  display: none;
+}
+body:has(.studio-surface) .agenda-requests-heading {
+  font-size: 13px;
+  font-weight: 600;
+}
+body:has(.studio-surface) .agenda-requests summary svg {
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+body:has(.studio-surface) .agenda-requests[open] > summary > svg,
+body:has(.studio-surface) .agenda-request[open] > summary > svg {
+  transform: rotate(180deg);
+}
+body:has(.studio-surface) .agenda-request-count {
+  margin-left: auto;
+  min-width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 7px;
+  border-radius: 99px;
+  background: var(--primary);
+  color: #101214;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+body:has(.studio-surface) .agenda-request {
+  border: 1px solid #3b4043;
+  border-radius: 14px;
+  padding: 15px;
+  margin-top: 12px;
+}
+body:has(.studio-surface) .agenda-request > summary {
+  justify-content: space-between;
+}
+body:has(.studio-surface) .agenda-request > summary span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+body:has(.studio-surface) .agenda-request strong {
+  display: block;
+  font-size: 13px;
+}
+body:has(.studio-surface) .agenda-request small {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+  color: #a9afaf;
+}
+body:has(.studio-surface) .agenda-request-content {
+  margin-top: 16px;
+  border-top: 1px solid #3b4043;
+  padding-top: 14px;
+}
+body:has(.studio-surface) .agenda-request-content h3 {
+  font-size: 11px;
+  color: #a9afaf;
+  margin-bottom: 6px;
+}
+body:has(.studio-surface) .agenda-request-purpose {
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+body:has(.studio-surface) .agenda-request-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+body:has(.studio-surface) .agenda-request-actions button {
+  flex: 1;
+}
+body:has(.studio-surface) .agenda-request-content .action {
+  font-size: 12px;
+  padding: 10px 14px;
+  min-height: 40px;
+}
+body:has(.studio-surface) .agenda-request-cancel {
+  font-size: 12px;
+  text-decoration: underline;
+  margin-top: 16px;
+}
+body:has(.studio-surface) .agenda-request-booking {
+  display: grid;
+  gap: 10px;
+  font-size: 12px;
+}
+body:has(.studio-surface) .agenda-request-booking select {
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  background: var(--card);
+  border: 1px solid #3b4043;
+  border-radius: 8px;
+}
+body:has(.studio-surface) .agenda-request-booking button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+body:has(.studio-surface) .agenda-requests-empty {
+  font-size: 12px;
+  color: #a9afaf;
+  padding: 12px 0;
+}
+body:has(.studio-surface) .agenda-requests summary:focus-visible,
+body:has(.studio-surface) .agenda-request-content button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}

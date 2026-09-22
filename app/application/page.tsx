@@ -9,11 +9,9 @@ import {
   Compass,
   UserRound,
   Check,
-  ShieldCheck,
-  Gift,
-  BriefcaseBusiness,
   CalendarDays,
-  ClipboardCheck,
+  ImagePlus,
+  Volleyball,
 } from 'lucide-react';
 import { AppPhone } from '@/components/app-showcase';
 import { AppPhoneStage } from '@/components/app-phone-stage';
@@ -22,59 +20,92 @@ import './application.css';
 export const metadata: Metadata = {
   title: 'L’application — Opportunity Players',
   description:
-    'Recommandations, candidatures, essais, recrutement et rendez-vous : découvrez Arena Studio et ses bénéfices pour les sportifs, professionnels et collectifs.',
+    'Votre communauté, vos connexions, vos matchs et un agenda commun : découvrez l’expérience Arena sur mobile et sur ordinateur.',
 };
 const features = [
   {
     id: 'accueil',
     name: 'Accueil',
+    location: 'Accueil · votre communauté',
+    capture: 'Compte Premium · filtres du fil ouverts',
+    route: 'accueil',
     icon: House,
     title: 'Votre sport fait l’actualité.',
-    text: 'Un fil sportif et des recommandations de personnes et d’opportunités selon vos sports, votre ville et votre pays. Comprenez pourquoi un profil vous est proposé, ajustez vos préférences et suivez les contacts qui correspondent à votre projet.',
+    text: 'L’accueil se concentre sur les publications de votre communauté. Lisez les trois premières lignes, puis ouvrez le post complet. Partagez du texte avec une photo ou une vidéo importée depuis votre appareil ; choisissez une discipline ou « - » pour un sujet transversal.',
     tools: [
-      'Filtrer par sport',
+      'Premium : matchs ouverts, emplois, opportunités, news et divers',
       'Aimer et commenter',
-      'Publier du texte et une image',
-      'Recommandations expliquées et préférences modifiables',
+      'Importer une photo ou une vidéo avec aperçu',
+      'Programmer une publication avec Premium',
     ],
     benefits: [
-      'Découvrez des personnes et des recherches liées à votre pratique. Avec Premium, partagez aussi vos progrès.',
-      'Repérez des missions pertinentes et développez votre réseau autour de vos disciplines et de votre localisation.',
-      'Découvrez des acteurs de votre écosystème et faites connaître la vie du club. Avec Premium, ouvrez les échanges.',
+      'Retrouvez les personnes que vous suivez et partagez vos progrès selon votre offre.',
+      'Publiez vos actualités et importez vos propres images ou vidéos. Programmez vos publications avec Premium.',
+      'Faites vivre la communauté de votre club et présentez vos besoins dans une catégorie d’opportunité précise.',
     ],
     limit:
       'Sportifs et collectifs : création de publications avec Premium. Professionnels : publication gratuite. Commentaires, réactions et partages gratuits pour tous. Programmation des publications avec Premium.',
   },
   {
+    id: 'publier',
+    name: 'Publier',
+    location: 'Accueil › Créer une publication',
+    capture: 'Photo importée · discipline « - » · programmation Premium',
+    route: 'accueil',
+    icon: ImagePlus,
+    title: 'Vos images. Vos moments. Votre communauté.',
+    text: 'Importez une photo ou une vidéo depuis votre appareil, vérifiez l’aperçu et retirez ou remplacez le média avant de publier. La discipline « - » est présélectionnée : votre publication n’a pas besoin d’être liée à un sport précis.',
+    tools: ['Texte, photo ou vidéo importée', 'Aperçu avant publication', 'Discipline facultative, sans illustration prédéfinie', 'Option Programmer visible pour tous, activable avec Premium'],
+    benefits: ['Partagez vos progrès avec vos propres médias selon votre offre.', 'Préparez une actualité et programmez sa diffusion avec Premium.', 'Annoncez la vie du club, une recherche ou un rendez-vous avec vos propres visuels.'],
+    limit: 'Images JPG, PNG et WebP jusqu’à 10 Mo ; vidéos MP4 et WebM jusqu’à 50 Mo. Dans cette démo, les fichiers restent sur votre appareil et sont perdus au rechargement. La programmation nécessite de garder la démo ouverte.',
+  },
+  {
     id: 'reseau',
     name: 'Réseau',
+    location: 'Réseau › Les membres',
+    capture: 'Compte gratuit · aperçu des filtres Premium',
+    route: 'reseau',
     icon: UsersRound,
     title: 'Les bonnes personnes. Le même terrain.',
-    text: 'Retrouvez des joueurs par sport, niveau, classement et club actuel ou passé. Un même profil peut réunir plusieurs disciplines, chacune avec son parcours. Puis passez du réseau au terrain : proposez un lieu et plusieurs dates, recueillez les disponibilités et confirmez votre match une fois l’effectif réuni.',
+    text: 'Trois espaces clairs : Les membres, Jouer ensemble et Agenda. Recherchez un nom, un rôle, un club ou une ville. Suivre affiche les publications d’un membre ; Connect lui envoie une demande qu’il doit accepter pour ouvrir les échanges sans quota et les invitations à vos matchs.',
     tools: [
-      'Filtres sport, niveau, classement et club',
-      'Profils à découvrir',
-      'Suivi de vos contacts',
-      'Organisation de matchs et choix des créneaux',
-      'Invitations avec +1 et effectif total ajustable',
-      'Matchs ouverts à 50 km, sur candidature',
-      'Agenda, confirmations et notifications',
-      'Demande de rendez-vous depuis un profil professionnel',
+      'Recherche simple et filtres Premium : pays, ville, sport, classement',
+      'Invitations reçues : deux visibles, liste dépliable',
+      'Suivre ou envoyer une demande Connect',
+      'Jouer ensemble : Mes invitations, J’organise, À proximité',
+      'À proximité et alertes de matchs réservées à Premium',
+      'Rayon des matchs dans Mes invitations et À proximité',
     ],
     benefits: [
-      'Trouvez des partenaires d’un niveau adapté, y compris dans votre deuxième sport. Invitez vos contacts, répondez à plusieurs dates et venez avec un ami si les +1 sont autorisés.',
-      'Identifiez les joueurs selon leur discipline et leur expérience en club, puis réunissez-les sur un créneau qui convient au groupe.',
-      'Repérez des parcours pertinents pour votre collectif. Organisez vos matchs, ajustez l’effectif total et validez les candidats extérieurs.',
+      'Suivez les sportifs qui vous intéressent et demandez une connexion pour échanger et les inviter à jouer.',
+      'Affinez votre recherche avec Premium. Consultez le profil avant de proposer une connexion qui devra être acceptée.',
+      'Découvrez les membres suggérés, traitez vos invitations et développez les relations de votre collectif.',
     ],
     limit:
-      'Un événement créé par mois est inclus gratuitement. La découverte des matchs ouverts est Premium pour les sportifs, gratuite à 50 km pour les professionnels et collectifs. Premium ajoute rayon personnalisable, recherches favorites avec alertes et récurrence. Organisateur et +1 comptent dans l’effectif total ; les candidatures externes nécessitent un accord. Rencontres et notifications simulées.',
+      'Les filtres avancés se déplient pour tous, mais leur utilisation et l’onglet À proximité nécessitent Premium. Un événement créé par mois est inclus gratuitement. Une connexion doit être acceptée : suivre une personne ne suffit pas pour l’inviter directement à un match. Rencontres et notifications simulées.',
+  },
+  {
+    id: 'jouer',
+    name: 'Jouer ensemble',
+    location: 'Réseau › Jouer ensemble',
+    capture: 'Compte Premium · À proximité et alertes de matchs',
+    route: 'jouer',
+    icon: Volleyball,
+    title: 'Une invitation. Un terrain. On joue.',
+    text: 'Mes invitations, J’organise et À proximité : les matchs sont répartis dans trois vues, suivies du filtre Sport. Répondez à vos invitations, gérez les rencontres que vous organisez ou découvrez les matchs ouverts autour de vous avec Premium.',
+    tools: ['Trois vues : Mes invitations, J’organise, À proximité', 'Filtre Sport après les trois onglets', 'Rayon dans Mes invitations et À proximité', 'Alertes de matchs uniquement dans À proximité', 'Invitations directes aux connexions acceptées'],
+    benefits: ['Répondez aux invitations reçues et retrouvez vos matchs confirmés dans votre agenda.', 'Organisez une rencontre et invitez les personnes qui ont accepté votre connexion.', 'Gérez les participants, les places disponibles et les candidatures aux matchs ouverts.'],
+    limit: 'À proximité et ses alertes sont réservés aux comptes Premium, quelle que soit la catégorie de profil. Les invitations personnelles restent accessibles gratuitement. Un événement créé par mois est inclus dans l’offre gratuite. Rencontres simulées dans la démo.',
   },
   {
     id: 'messages',
     name: 'Messages',
+    location: 'Messages · vos conversations',
+    capture: 'Une conversation ouverte dans l’application',
+    route: 'messages',
     icon: MessageCircle,
     title: 'Une rencontre commence par un échange.',
-    text: 'Retrouvez vos conversations, contactez un profil depuis le réseau et gardez la main sur vos échanges. Un accès au signalement et au blocage est disponible dans chaque conversation, avec un suivi dans l’espace Sécurité.',
+    text: 'Retrouvez vos conversations et écrivez librement aux personnes qui ont accepté votre connexion. En dehors de vos connexions, les quotas de nouvelles prises de contact de votre offre restent applicables. Signalement et blocage sont accessibles dans chaque conversation.',
     tools: [
       'Conversations regroupées',
       'Recherche dans les contacts',
@@ -83,103 +114,73 @@ const features = [
       'Alerte lorsqu’un texte est filtré',
     ],
     benefits: [
-      'Initiez trois nouvelles conversations par mois gratuitement ; poursuivez les échanges déjà engagés sans décompter chaque réponse.',
-      'Recevez et répondez gratuitement. Initiez trois nouvelles conversations par mois en gratuit, cent avec Premium.',
-      'Recevez et répondez gratuitement. Cinq nouvelles conversations par mois en gratuit, deux cents partagées entre gestionnaires avec Premium.',
+      'Échangez sans quota avec vos connexions acceptées ; suivre un membre seul ne donne pas cet accès.',
+      'Poursuivez vos conversations et retrouvez rapidement les contacts avec lesquels vous travaillez.',
+      'Centralisez les échanges de votre structure et bloquez ou signalez un comportement inapproprié.',
     ],
     limit:
-      'Seul le premier message à un nouvel interlocuteur consomme un quota. Réceptions, réponses et interactions sont gratuites pour tous. Un texte bloqué ne consomme rien. Filtre local illustratif, sans modération réelle ni envoi dans la démo.',
+      'Les connexions acceptées échangent sans quota. Hors connexion, seul le premier message à un nouvel interlocuteur consomme le quota de l’offre ; les réponses restent gratuites. Un texte bloqué ne consomme rien. Aucun message réel n’est envoyé dans la démo.',
   },
   {
     id: 'opportunities',
-    name: 'Opportunities',
+    name: 'Opportunités',
+    location: 'Opportunities · annonces et essais groupés',
+    capture: 'Catégorie Essais groupés sélectionnée parmi les six filtres',
+    route: 'opportunities',
     icon: Compass,
     title: 'Votre prochain chapitre se trouve ici.',
-    text: 'Explorez des opportunités de coaching, de recrutement, de partenariat et de sponsoring. Gardez vos favoris et, pour les recherches ouvertes à votre catégorie de profil, candidatez avec votre dossier. Retrouvez ensuite la réponse et les éventuelles invitations à un essai dans votre suivi.',
+    text: 'La page présente uniquement les catégories Toutes, Coaching, Recrutement, Partenariat, Sponsoring et Essais groupés, puis les annonces. Le suivi des candidatures et les outils du recruteur prolongent ces démarches : ce ne sont pas des catégories supplémentaires dans la barre de filtres.',
     tools: [
-      'Filtres par sport et type',
-      'Détail des opportunités',
-      'Enregistrement en favoris',
-      'Candidatures structurées et suivi des réponses',
+      'Six catégories, dont Essais groupés, et filtre Sport',
+      'Ouvrir une annonce et l’enregistrer en favori',
+      'Candidater puis suivre la réponse selon votre offre',
+      'Côté recruteur : présélectionner et proposer un essai',
+      'Essai confirmé retrouvé dans l’agenda',
     ],
     benefits: [
-      'Repérez une opportunité pertinente pour progresser ou rejoindre un nouveau projet.',
-      'Découvrez des besoins d’accompagnement et des pistes de collaboration dans votre domaine.',
-      'Identifiez des projets et des partenaires susceptibles d’accompagner le développement de votre collectif.',
+      'Repérez une recherche de joueur ou un essai, partagez votre dossier puis suivez l’avancement de votre candidature.',
+      'Trouvez une mission de coaching ou une collaboration. Les outils de recrutement dépendent de votre formule.',
+      'Présentez un besoin de recrutement et traitez les dossiers reçus ; explorez aussi partenariats et sponsoring.',
     ],
     limit:
-      'Les candidatures et leurs statuts sont interactifs dans la démo, sans envoi réel. Les annonces de partenariat et de sponsoring conservent une expression d’intérêt simulée.',
+      'Les accès aux candidatures, offres et essais dépendent de la catégorie de profil et de l’abonnement. Un collectif gratuit dispose d’une offre active ; les offres professionnelles sont Premium. Aucun dossier ni candidature n’est envoyé réellement dans la démo.',
   },
   {
-    id: 'candidatures',
-    name: 'Candidatures',
-    icon: ClipboardCheck,
-    title: 'Du dossier à votre prochain essai.',
-    text: 'Partagez un résumé de votre parcours avec le recruteur, suivez votre candidature puis répondez à une invitation. Une fois votre présence confirmée, retrouvez l’essai, sa date et son lieu dans votre agenda.',
-    tools: [
-      'Dossier partagé après confirmation',
-      'Statuts : envoyé, présélectionné, invité, confirmé',
-      'Date et lieu de l’essai',
-      'Retrait de candidature et notifications',
-    ],
-    benefits: [
-      'Présentez votre expérience sans tout ressaisir et sachez où en est votre candidature.',
-      'Candidatez aux missions de votre catégorie et centralisez le suivi de vos démarches.',
-      'Recevez des dossiers structurés et préparez une rencontre avec les candidats retenus.',
-    ],
-    limit:
-      'Seuls le nom et le résumé sportif sont partagés dans cette démo, sans coordonnées, date de naissance ni numéro de licence. Aucun dossier n’est envoyé à un recruteur réel.',
-  },
-  {
-    id: 'recrutement',
-    name: 'Recrutement',
-    icon: BriefcaseBusiness,
-    title: 'Les bons profils. Une sélection plus claire.',
-    text: 'Clubs et professionnels : publiez une recherche en précisant sport, ville, niveau et poste souhaités. Consultez les dossiers reçus, présélectionnez les candidats, proposez un essai et suivez les confirmations depuis un espace commun.',
-    tools: [
-      'Création et clôture des recherches',
-      'Dossiers reçus et filtres par statut',
-      'Présélection et invitations aux essais',
-      'Confirmation du candidat dans l’agenda',
-    ],
-    benefits: [
-      'Répondez à un besoin explicite et recevez une invitation concrète plutôt qu’un simple contact sans suite.',
-      'Structurez votre recherche de talents et préparez vos essais avec les personnes présélectionnées.',
-      'Centralisez vos recherches et les réponses pour mieux préparer la constitution de votre équipe.',
-    ],
-    limit:
-      'Un collectif gratuit peut publier une offre et traiter ses candidatures ; les offres professionnelles et le suivi avancé sont Premium. Les extensions ajoutent viviers avec notes privées, essais groupés, attribution des candidats et permissions de gestionnaires. Aucun recrutement réel dans la démo.',
-  },
-  {
-    id: 'rendez-vous',
-    name: 'Rendez-vous',
+    id: 'agenda',
+    name: 'Agenda',
+    location: 'Réseau › Agenda',
+    capture: 'Calendrier mensuel et filtres de la liste des événements',
+    route: 'agenda',
     icon: CalendarDays,
-    title: 'Un accord. Puis le bon créneau.',
-    text: 'Depuis le profil d’un professionnel, demandez un rendez-vous en précisant l’objet de l’échange. Le professionnel accepte ou décline. Après son accord seulement, vous accédez aux disponibilités et choisissez votre séance.',
+    title: 'Tout votre agenda. Au même endroit.',
+    text: 'Un calendrier mensuel met en couleur les jours où un événement est prévu. En dessous, filtrez la liste entre matchs, rendez-vous professionnels et événements sportifs à suivre comme spectateur. Les demandes de rendez-vous se déplient avec un compteur des demandes non confirmées.',
     tools: [
-      'Demande depuis le réseau',
-      'Acceptation préalable du professionnel',
-      'Créneaux disponibles de 30 minutes',
-      'Réservation, annulation et notifications',
+      'Calendrier du mois et jours avec événements',
+      'Filtres : matchs, rendez-vous pro et spectateur',
+      'Demandes dépliables : contenu, validation ou refus',
+      'Choix du créneau après acceptation, puis confirmation',
     ],
     benefits: [
-      'Trouvez un moment pour parler de votre progression avec un professionnel, sans multiplier les messages.',
-      'Gardez la main sur les demandes reçues et proposez vos disponibilités uniquement après acceptation.',
-      'Demandez un échange à un professionnel pour préparer l’accompagnement de votre structure.',
+      'Retrouvez vos matchs et les événements que vous souhaitez suivre comme spectateur dans un seul calendrier.',
+      'Dépliez chaque demande de rendez-vous pour en lire le contenu, l’accepter ou la refuser.',
+      'Filtrez les événements par catégorie ou par jour pour organiser les prochains temps forts de votre structure.',
     ],
     limit:
-      'Un professionnel gratuit peut confirmer trois rendez-vous par mois, contre cent avec Premium. Les créneaux restent masqués avant acceptation. Premium ajoute disponibilités récurrentes et agenda avancé. La connexion externe est simulée ; l’export .ics contient les événements fictifs. Aucun rendez-vous réel.',
+      'Un seul Agenda dans Réseau. Accepter une demande ne réserve pas encore un créneau : la demande reste comptée jusqu’à sa confirmation. Les outils de récurrence et d’export sont regroupés dans les options de cet agenda ; les accès dépendent de l’offre. Aucun rendez-vous réel dans la démo.',
   },
   {
     id: 'profil',
     name: 'Profil',
+    location: 'Profil · votre parcours sportif',
+    capture: 'Profil multisport et accès aux rubriques du parcours',
+    route: 'profil',
     icon: UserRound,
     title: 'Tous vos sports. Un parcours qui vous ressemble.',
     text: 'Tennis, padel, football… Chaque discipline garde son niveau, son classement et ses clubs actuels ou passés. Complétez votre dossier avec un CV et des références, déclarez votre agent et rendez visible le lien avec son profil.',
     tools: [
       'Plusieurs sports, niveaux et classements distincts',
       'Clubs actuels et expériences passées',
-      'CV et références associés au parcours',
+      'CV, références et import de photos ou vidéos dans Médias',
       'Agent déclaré et confirmation réciproque',
       'Avis professionnels par expérience et par sport',
     ],
@@ -189,50 +190,27 @@ const features = [
       'Comprenez les niveaux, clubs et références des joueurs pour préparer des prises de contact pertinentes. Les classements déclarés restent distincts des avis.',
     ],
     limit:
-      'Profil gratuit. Les nouveaux documents restent en attente et ne sont pas téléversés dans la démo. Un agent déclaré n’est pas un lien vérifié. Les avis passent par une validation simulée ; un avis contesté sort du score. Les classements ne sont pas certifiés par une fédération.',
+      'Profil gratuit ; quotas médias selon votre formule. Photos et vidéos peuvent être importées et prévisualisées localement, sans envoi au serveur ni conservation après rechargement. Un agent déclaré n’est pas un lien vérifié ; avis et contrôles sont simulés.',
   },
   {
-    id: 'securite',
-    name: 'Confiance',
-    icon: ShieldCheck,
-    title: 'Un réseau sportif. Un cadre de respect.',
-    text: 'L’expérience prévoit le filtrage des contenus abusifs et des photos sans lien avec le sport, avec un recours humain. Dans la démo, testez les alertes, signalez un comportement et gérez vos blocages depuis un espace dédié.',
-    tools: [
-      'Signalements et suivi',
-      'Blocage des échanges',
-      'Photos en attente avant publication',
-      'Vérification e-mail et seconde validation',
-      'Notice de confidentialité et attestation',
-    ],
-    benefits: [
-      'Gardez la main sur les personnes qui peuvent échanger avec vous et signalez un comportement abusif.',
-      'Distinguez les informations déclarées des liens et expériences qui devront être vérifiés.',
-      'Présentez votre structure dans un cadre commun : contenus sportifs, informations sincères et règles de respect.',
-    ],
-    limit:
-      'Aucune protection de production n’est active. Le filtre de texte reconnaît seulement quelques exemples ; les photos ne sont pas analysées et restent non publiées. Vérification e-mail, second facteur et traitement des signalements sont simulés. La politique définitive et les contrôles serveur restent à mettre en place.',
-  },
-  {
-    id: 'parrainage',
-    name: 'Parrainage',
-    icon: Gift,
-    title: 'Votre réseau grandit. Vos possibilités aussi.',
-    text: 'Invitez d’autres membres à rejoindre le réseau et suivez leur progression : e-mail vérifié, profil complété, première connexion. La proposition de parrainage prévoit trois mois Premium pour chaque nouveau membre qualifié.',
-    tools: [
-      'Lien d’invitation personnel',
-      'Suivi des étapes du filleul',
-      'Trois mois Premium simulés',
-      'Un seul crédit par filleul',
-    ],
-    benefits: [
-      'Invitez vos partenaires de jeu et découvrez les possibilités Premium grâce à votre réseau.',
-      'Faites découvrir votre espace sportif à vos contacts, sans récompense attribuée au simple clic.',
-      'Mobilisez votre communauté autour de la plateforme et visualisez les étapes des invitations.',
-    ],
-    limit:
-      'Offre proposée, conditions commerciales et antifraude à valider. Le lien ne suit aucune inscription réelle. Les étapes, les mois gagnés et l’activation Premium sont simulés, sans effet sur un abonnement facturé.',
+    id: 'medias',
+    name: 'Médias',
+    location: 'Profil › Médias',
+    capture: 'Le bouton Ajouter un média et la galerie du profil',
+    route: 'medias',
+    icon: ImagePlus,
+    title: 'Votre sport en images. Vos propres médias.',
+    text: 'Le bouton Ajouter un média ouvre la sélection de fichiers de votre appareil. Importez une photo ou une vidéo, vérifiez son aperçu et confirmez son ajout à votre galerie. Il ne s’agit pas d’un choix d’illustrations prédéfinies.',
+    tools: ['Bouton Ajouter un média', 'Import d’une photo ou d’une vidéo', 'Aperçu, confirmation et retrait du média', 'Formats, taille et quotas vérifiés selon votre offre'],
+    benefits: ['Montrez vos entraînements, vos matchs et votre progression avec vos propres photos et vidéos.', 'Présentez votre travail et votre accompagnement à travers des contenus concrets.', 'Partagez les moments de votre équipe et donnez de la visibilité à votre collectif.'],
+    limit: 'Dans cette démo, l’import est local : aucun fichier n’est envoyé à un serveur ni conservé au rechargement. Les quotas et les formats autorisés sont indiqués dans le formulaire.',
   },
 ];
+// Match the actual five bottom-navigation destinations. Other sections describe
+// nested workflows, not additional application tabs.
+const primaryIds = ['accueil', 'reseau', 'messages', 'opportunities', 'profil'];
+const sectionOrder = ['accueil', 'publier', 'reseau', 'jouer', 'agenda', 'messages', 'opportunities', 'profil', 'medias'];
+const orderedFeatures = sectionOrder.map(id => features.find(feature => feature.id === id)!);
 const roles = ['Sportifs', 'Professionnels', 'Collectifs'];
 
 export default function Page() {
@@ -251,8 +229,9 @@ export default function Page() {
           <p>
             Un réseau professionnel pensé pour celles et ceux qui font le sport.
             Du premier contact à la prochaine opportunité, gardez votre
-            communauté à portée de main. Des recommandations pertinentes, un
-            dossier pour candidater, des essais et des rendez-vous pour avancer.
+            communauté à portée de main. Un fil centré sur les personnes suivies,
+            des connexions acceptées, des opportunités et un agenda unique.
+            Des repères d’usage familiers, proches de LinkedIn, dans une interface plus premium.
           </p>
           <div className="application-actions">
             <Link href="/espace/connexion" className="action">
@@ -277,7 +256,7 @@ export default function Page() {
             <div className="app-phone-primary">
               <AppPhone
                 label="Accueil de la démo Arena Studio"
-                screenSrc="/app-visuals/studio-accueil.png"
+                screenSrc="/app-visuals/studio-20260922-current-accueil.png"
               />
             </div>
           </div>
@@ -291,7 +270,7 @@ export default function Page() {
         className="application-index"
         aria-label="Fonctionnalités de l’application"
       >
-        {features.map(({ id, name, icon: Icon }, i) => (
+        {primaryIds.map(id => features.find(feature => feature.id === id)!).map(({ id, name, icon: Icon }, i) => (
           <Link key={id} href={`#${id}`}>
             <span>{String(i + 1).padStart(2, '0')}</span>
             <Icon size={18} />
@@ -300,42 +279,43 @@ export default function Page() {
         ))}
       </nav>
       <section id="fonctionnalites" className="section application-intro">
-        <span className="section-label">UNE APP. TROIS FAÇONS D’AVANCER.</span>
+        <span className="section-label">CINQ ONGLETS. DES PARCOURS CONNECTÉS.</span>
         <h2>
           Le même réseau.
           <br />
           <em>Votre propre ambition.</em>
         </h2>
         <p>
-          Sportif, professionnel ou collectif : chaque espace répond à un besoin
-          concret de votre parcours.
+          Accueil, Réseau, Messages, Opportunités et Profil : la présentation suit
+          les cinq entrées de l’application. Publier se trouve dans Accueil ;
+          Les membres, Jouer ensemble et Agenda dans Réseau ; Médias dans Profil.
+          Candidatures et recrutement sont présentés avec les Opportunités.
         </p>
       </section>
       <div className="application-features">
-        {features.map(
+        {orderedFeatures.map(
           (
-            { id, name, icon: Icon, title, text, tools, benefits, limit },
+            { id, location, capture, route, icon: Icon, title, text, tools, benefits, limit },
             i,
           ) => (
             <section id={id} key={id} className="section application-feature">
               <figure className="application-capture">
                 <Image
                   unoptimized
-                  src={`/app-visuals/studio-${id === 'accueil' ? 'recommandations' : id === 'reseau' ? 'reseau-niveaux' : id === 'profil' ? 'disciplines' : id}.png`}
-                  alt={`Écran ${name} de l’application Arena Studio : capture réelle de la démo mobile`}
+                  src={`/app-visuals/studio-20260922-current-${id}.png`}
+                  alt={`${location} : ${capture}. Capture réelle de la démo mobile.`}
                   width={390}
                   height={844}
                   loading="lazy"
                 />
                 <figcaption>
-                  {String(i + 1).padStart(2, '0')} / {name.toUpperCase()} ·
-                  ÉCRAN DE DÉMONSTRATION
+                  {capture} · DÉMO
                 </figcaption>
               </figure>
               <div className="application-feature-copy">
                 <span className="section-label">
                   <Icon size={17} /> {String(i + 1).padStart(2, '0')} /{' '}
-                  {name.toUpperCase()}
+                  {location.toUpperCase()}
                 </span>
                 <h2>{title}</h2>
                 <p className="feature-description">{text}</p>
@@ -364,18 +344,25 @@ export default function Page() {
                     Découvrir Jouer ensemble <ArrowUpRight size={18} />
                   </Link>
                 )}
-                <Link className="text-link" href={`/espace/${id}`}>
-                  Explorer{' '}
-                  {name === 'Opportunities'
-                    ? 'les opportunités'
-                    : name.toLowerCase()}{' '}
-                  dans la démo <ArrowUpRight size={16} />
+                <Link className="text-link" href={`/espace/${route}`}>
+                  {id === 'publier' ? 'Ouvrir l’accueil pour publier' : 'Explorer cet espace'}
+                  {' '}dans la démo <ArrowUpRight size={16} />
                 </Link>
               </div>
             </section>
           ),
         )}
       </div>
+      <section className="section application-support">
+        <span className="section-label">LES OUTILS COMPLÉMENTAIRES</span>
+        <h2>Votre réseau, dans un cadre clair.</h2>
+        <p>Le signalement, le blocage et la gestion de la confidentialité restent accessibles dans les outils du compte. Le parrainage dispose de son espace dédié : ces services ne sont pas des onglets supplémentaires de la navigation principale.</p>
+        <div className="application-actions">
+          <Link href="/espace/securite" className="text-link">Confiance et sécurité <ArrowUpRight size={16} /></Link>
+          <Link href="/espace/parrainage" className="text-link">Parrainage <ArrowUpRight size={16} /></Link>
+        </div>
+        <small>Vérifications, modération, récompenses et notifications sont simulées. Aucun contrôle de sécurité ou avantage d’abonnement réel n’est activé par cette démo.</small>
+      </section>
       <section className="section application-cta">
         <span className="section-label">LE PREMIER PAS EST GRATUIT</span>
         <h2>

@@ -99,11 +99,13 @@ export default function Home() {
           <p>
             Plusieurs sports. Un seul réseau. Présentez vos niveaux et vos clubs
             pour chaque discipline, ajoutez votre CV et vos références, et
-            rendez visible votre lien avec un agent. Découvrez des profils et
-            des opportunités recommandés, candidatez et confirmez un essai.
+            rendez visible votre lien avec un agent. Suivez les publications de
+            votre communauté et envoyez une demande Connect aux personnes à rencontrer.
+            Une connexion acceptée permet d’échanger librement et de s’inviter à jouer.
             Clubs et professionnels disposent d’un espace de recrutement. Pour
             un rendez-vous, demandez l’accord du professionnel avant de choisir
-            un créneau. Sur ordinateur comme sur mobile, donnez une suite
+            un créneau. Un agenda unique rassemble matchs, rendez-vous et événements
+            à suivre comme spectateur. Sur ordinateur comme sur mobile, donnez une suite
             concrète à chaque rencontre.
           </p>
         </div>
@@ -181,7 +183,7 @@ export default function Home() {
               MessageCircle,
               '03',
               'Ouvrez la discussion.',
-              'Prenez contact selon votre offre et donnez une suite concrète à une rencontre.',
+              'Connectez-vous après acceptation pour échanger librement et inviter vos contacts à un match.',
             ],
           ].map(([Icon, n, t, d]) => {
             const I = Icon as typeof FileUser;

@@ -1,4 +1,4 @@
-/* Scoped trust and multisport UI from the mobile demo. */
+/* App rules scoped to the web workspace; desktop adaptations remain separate. */
 body:has(.studio-surface) .trust-profile {
   border-radius: 20px;
   margin: 24px 0;

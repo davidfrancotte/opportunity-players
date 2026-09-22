@@ -31,7 +31,7 @@ const plans: {
     line: 'Faites grandir votre parcours.',
     free: [
       'Profil multisport complet : niveaux, parcours, palmarès, handisport et relation avec un agent',
-      'Réseau, recommandations, opportunités et 1 recherche enregistrée sans alerte',
+      'Fil communautaire, réseau, opportunités et 1 recherche enregistrée sans alerte',
       '3 nouvelles prises de contact par mois ; réponses gratuites',
       '3 photos, 1 demande de rendez-vous et 1 événement créé par mois',
       'Réponses aux invitations personnelles à jouer et aux essais',
@@ -43,7 +43,7 @@ const plans: {
       '30 nouveaux contacts, 30 candidatures et 15 demandes de rendez-vous par mois',
       'Recherche avancée et 10 recherches enregistrées avec alertes',
       'Découverte des matchs ouverts, rayon personnalisable et 10 événements actifs',
-      'Événements récurrents, agenda avancé et statistiques détaillées',
+      'Événements récurrents, options avancées de l’agenda et statistiques détaillées',
     ],
   },
   {
@@ -56,7 +56,7 @@ const plans: {
       'Création de publications, commentaires, réactions et partages',
       '3 nouveaux contacts, 3 demandes de rendez-vous et 3 rendez-vous confirmés par mois',
       '1 recherche enregistrée sans alerte et 1 liste de 20 profils',
-      '5 invitations à des essais et 1 événement créé par mois ; matchs visibles à 50 km',
+      '5 invitations à des essais et 1 événement créé par mois ; réponses aux invitations personnelles',
       'Réception des messages, réponses et traitement simple des candidatures',
     ],
     premium: [
@@ -66,7 +66,7 @@ const plans: {
       '5 offres actives, recrutement avancé et essais groupés',
       '20 listes, 1 000 profils au total et notes privées ; 20 recherches avec alertes',
       '15 services, 50 photos, 30 vidéos et 20 documents ; publications programmées',
-      '25 événements actifs, récurrences, agenda avancé, statistiques et parrainage',
+      '25 événements actifs, récurrences, options de l’agenda, statistiques et parrainage',
     ],
   },
   {
@@ -79,7 +79,7 @@ const plans: {
       '1 offre active, traitement des candidatures et invitations individuelles à un essai',
       '1 gestionnaire, 1 liste de 20 profils et 1 recherche sans alerte',
       '5 nouveaux contacts, 1 demande de rendez-vous et 1 événement créé par mois',
-      '5 photos, 1 document et 1 vidéo d’une minute ; matchs visibles à 50 km',
+      '5 photos, 1 document et 1 vidéo d’une minute ; réponses aux invitations personnelles',
       'Réception, réponses, commentaires, réactions et partages ; publications non incluses',
     ],
     premium: [
@@ -263,8 +263,8 @@ export default function Page() {
               <h3>Peut-on organiser un match gratuitement ?</h3>
               <p>
                 Oui, chaque catégorie peut créer 1 événement par mois et répondre aux
-                invitations personnelles. La découverte des matchs ouverts est Premium pour
-                les sportifs, et incluse à 50 km pour les professionnels et collectifs gratuits.
+                invitations personnelles. La découverte des matchs dans « À proximité »
+                est réservée à Premium pour toutes les catégories de profils.
                 Premium ajoute un rayon personnalisable, les alertes, les récurrences et
                 jusqu’à 10, 25 ou 50 événements actifs selon votre catégorie.
               </p>

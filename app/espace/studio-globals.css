@@ -1,4 +1,4 @@
-/* Generated from the approved Arena Studio app; use scripts/sync-studio.mjs. */
+/* App rules scoped to the web workspace; desktop adaptations remain separate. */
 body:has(.studio-surface) .no-script {
   padding: 18px;
   text-align: center;
@@ -412,15 +412,10 @@ body:has(.studio-surface) .auth-editorial > img {
   filter: saturate(0.25);
 }
 body:has(.studio-surface) .auth-editorial:after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    #080a0b99 0%,
-    transparent 35%,
-    #080a0bb3 65%,
-    #080a0bfa
-  );
+  background: linear-gradient(#080a0b99 0%, transparent 35%, #080a0bb3 65%, #080a0bfa);
   z-index: -1;
 }
 body:has(.studio-surface) .editorial-copy {
@@ -510,7 +505,7 @@ body:has(.studio-surface) .field label {
   font-weight: 500;
   color: #d8dcd4;
 }
-body:has(.studio-surface) .field input:not([type='radio']),
+body:has(.studio-surface) .field input:not([type="radio"]),
 body:has(.studio-surface) .field textarea,
 body:has(.studio-surface) .field select {
   display: block;
@@ -535,7 +530,7 @@ body:has(.studio-surface) .field select:focus {
   outline-offset: 2px;
   background: #282e30;
 }
-body:has(.studio-surface) .field input[aria-invalid='true'] {
+body:has(.studio-surface) .field input[aria-invalid="true"] {
   border-color: #ef9393;
 }
 body:has(.studio-surface) .field input:read-only {
@@ -852,10 +847,7 @@ body:has(.studio-surface) .photo-choices label:has(:focus-visible) {
   outline: 2px solid var(--primary);
   outline-offset: 4px;
 }
-body:has(.studio-surface)
-  .role-choices
-  label
-  > svg:last-child:not(:first-of-type) {
+body:has(.studio-surface) .role-choices label > svg:last-child:not(:first-of-type) {
   position: absolute;
   top: 8px;
   right: 8px;
@@ -1032,7 +1024,7 @@ body:has(.studio-surface) .profile-cover:hover > img {
   filter: saturate(1);
 }
 body:has(.studio-surface) .profile-cover:after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(100deg, #0007, transparent 70%);
@@ -1319,6 +1311,21 @@ body:has(.studio-surface) .section-heading button {
   font-size: 10px;
   padding-right: 0;
 }
+body:has(.studio-surface) .media-heading {
+  flex-wrap: wrap;
+}
+body:has(.studio-surface) .section-heading .media-add-button {
+  color: #101214;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.25;
+  min-height: 44px;
+  height: auto;
+  padding: 12px 18px;
+  gap: 6px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
 body:has(.studio-surface) .media-preview {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1503,7 +1510,7 @@ body:has(.studio-surface) .studio-modal {
   color: #f1f2eb;
   gap: 12px !important;
 }
-body:has(.studio-surface) .studio-modal [data-slot='dialog-title'] {
+body:has(.studio-surface) .studio-modal [data-slot="dialog-title"] {
   font-size: 26px;
   letter-spacing: -0.045em;
   font-weight: 600;
@@ -1525,7 +1532,7 @@ body:has(.studio-surface) .modal-close {
   border-radius: 50%;
   color: #c2cdbb;
 }
-body:has(.studio-surface) .studio-modal [data-slot='input'] {
+body:has(.studio-surface) .studio-modal [data-slot="input"] {
   min-height: 48px;
 }
 body:has(.studio-surface) .image-picker {
@@ -1868,7 +1875,7 @@ body:has(.studio-surface) .not-found > a {
   body:has(.studio-surface) .field label {
     font-size: 12px;
   }
-  body:has(.studio-surface) .field input:not([type='radio']),
+  body:has(.studio-surface) .field input:not([type="radio"]),
   body:has(.studio-surface) .field textarea,
   body:has(.studio-surface) .field select {
     font-size: 16px;
@@ -2054,7 +2061,7 @@ body:has(.studio-surface) .not-found > a {
     width: calc(100% - 24px) !important;
     max-width: 550px !important;
   }
-  body:has(.studio-surface) .studio-modal [data-slot='dialog-title'] {
+  body:has(.studio-surface) .studio-modal [data-slot="dialog-title"] {
     font-size: 25px;
   }
   body:has(.studio-surface) .image-picker img {

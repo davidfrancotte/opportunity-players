@@ -1,9 +1,9 @@
-'use client';
+"use client";
 import {ExtensionNav} from './extension-screens';
-import { T, LanguageSwitch } from './locale';
-import { useState, type ReactNode, type FormEvent } from 'react';
-import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
+import { LanguageSwitch, T, useLocale } from "./locale";
+import { useState, type ReactNode, type FormEvent } from "react";
+import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
@@ -28,34 +28,20 @@ import {
   UsersRound,
   MessageCircle,
   Compass,
-} from 'lucide-react';
-import { Button } from '@/components/studio/ui/button';
-import { Textarea } from '@/components/studio/ui/textarea';
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from '@/components/studio/ui/native-select';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-} from '@/components/studio/ui/dialog';
-import { useDemo } from './demo-provider';
-import { PlanStatus } from './subscription-ui';
-import { ProfileExtensions } from './trust-screens';
-import { ProfileDirectoryFields } from './directory-fields';
-import { normalizeMeasurement } from '@/lib/studio/athlete';
-import { moderateText } from '@/lib/studio/trust';
-import { EventHeader } from './event-navigation';
-import {
-  Brand,
-  DemoPill,
-  Field,
-  Submit,
-  FormErrors,
-  focusError,
-} from './studio-ui';
+} from "lucide-react";
+import { Button } from "@/components/studio/ui/button";
+import { Textarea } from "@/components/studio/ui/textarea";
+import { NativeSelect, NativeSelectOption } from "@/components/studio/ui/native-select";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/studio/ui/dialog";
+import { useDemo } from "./demo-provider";
+import { PlanStatus } from "./subscription-ui";
+import { MediaUpload } from "./media-upload";
+import { ProfileExtensions } from "./trust-screens";
+import { ProfileDirectoryFields } from "./directory-fields";
+import { normalizeMeasurement } from "@/lib/studio/athlete";
+import { moderateText } from "@/lib/studio/trust";
+import { EventHeader } from "./event-navigation";
+import { Brand, Field, Submit, FormErrors, focusError } from "./studio-ui";
 import {
   photos,
   sports,
@@ -67,41 +53,37 @@ import {
   type Profile,
   type Experience,
   type Issues,
-} from '@/lib/studio/model';
+} from "@/lib/studio/model";
 
 const navigation = [
-  { href: '/espace/accueil', label: 'Accueil', icon: House },
-  { href: '/espace/reseau', label: 'Réseau', icon: UsersRound },
-  { href: '/espace/messages', label: 'Messages', icon: MessageCircle },
-  { href: '/espace/opportunities', label: 'Opportunities', icon: Compass },
-  { href: '/espace/profil', label: 'Profil', icon: UserRound },
+  { href: "/espace/accueil", label: "Accueil", icon: House },
+  { href: "/espace/reseau", label: "Réseau", icon: UsersRound },
+  { href: "/espace/messages", label: "Messages", icon: MessageCircle },
+  { href: "/espace/opportunities", label: "Opportunities", icon: Compass },
+  { href: "/espace/profil", label: "Profil", icon: UserRound },
 ];
 
 function BottomNav() {
   const route = usePathname();
-  const pathname = route === '/espace' ? '/espace/accueil' : route;
+  const pathname = route === "/espace" ? "/espace/accueil" : route;
   const current = [
-    '/espace/dossier-sportif',
-    '/espace/disciplines',
-    '/espace/agent',
-    '/espace/documents',
-    '/espace/securite',
-    '/espace/parrainage',
-    '/espace/modifier-profil',
-    '/espace/parcours',
-    '/espace/medias',
-    '/espace/parametres',
-    '/espace/abonnement',
+    "/espace/dossier-sportif",
+    "/espace/disciplines",
+    "/espace/agent",
+    "/espace/documents",
+    "/espace/securite",
+    "/espace/parrainage",
+    "/espace/modifier-profil",
+    "/espace/parcours",
+    "/espace/medias",
+    "/espace/parametres",
+    "/espace/abonnement",
   ].includes(pathname)
-    ? '/espace/profil'
-    : [
-          '/espace/jouer',
-          '/espace/organiser',
-          '/espace/match',
-          '/espace/agenda',
-        ].includes(pathname)
-      ? '/espace/reseau'
-      : ['/espace/candidatures', '/espace/recrutement'].includes(pathname) ? '/espace/opportunities' : pathname === '/espace/rendez-vous' ? '/espace/reseau' : pathname;
+    ? "/espace/profil"
+    : ["/espace/jouer", "/espace/organiser", "/espace/match", "/espace/agenda", "/espace/calendrier-avance"].includes(pathname)
+      ? "/espace/reseau"
+      : ["/espace/candidatures", "/espace/recrutement"].includes(pathname) ? "/espace/opportunities"
+      : pathname === "/espace/rendez-vous" ? "/espace/reseau" : pathname;
   return (
     <nav className="bottom-nav" aria-label="Navigation de l’application">
       {navigation.map(({ href, label, icon: Icon }) => (
@@ -109,7 +91,7 @@ function BottomNav() {
           key={href}
           href={href}
           className="bottom-nav-item"
-          aria-current={current === href ? 'page' : undefined}
+          aria-current={current === href ? "page" : undefined}
         >
           <span className="bottom-nav-icon">
             <Icon size={22} aria-hidden="true" />
@@ -221,9 +203,7 @@ export function Modal({
           <X size={20} />
         </Button>
         <DialogTitle className="modal-title">{title}</DialogTitle>
-        <DialogDescription className="modal-description">
-          {description}
-        </DialogDescription>
+        <DialogDescription className="modal-description">{description}</DialogDescription>
         {children}
       </DialogContent>
     </Dialog>
@@ -250,11 +230,7 @@ function EmptyCard({
   );
 }
 
-export function ProfilePage({
-  section = 'about',
-}: {
-  section?: 'about' | 'career' | 'media';
-}) {
+export function ProfilePage({ section = "about" }: { section?: "about" | "career" | "media" }) {
   const { profile, setProfile, notify } = useDemo();
   const progress = completion(profile);
   const router = useRouter();
@@ -267,14 +243,14 @@ export function ProfilePage({
   const [progressOpen, setProgressOpen] = useState(false);
   function download() {
     const url = URL.createObjectURL(
-      new Blob([cvText(profile)], { type: 'text/plain;charset=utf-8' }),
+      new Blob([cvText(profile)], { type: "text/plain;charset=utf-8" }),
     );
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = 'cv-arena-profil-fictif.txt';
+    a.download = "cv-arena-profil-fictif.txt";
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-    notify('Le CV fictif a été téléchargé au format texte.');
+    notify("Le CV fictif a été téléchargé au format texte.");
   }
   function addExperience() {
     setExperience(null);
@@ -285,21 +261,17 @@ export function ProfilePage({
     const data = new FormData(e.currentTarget);
     const record: Experience = {
       id: experience?.id || crypto.randomUUID(),
-      title: String(data.get('title') || '').trim(),
-      organisation: String(data.get('organisation') || '').trim(),
-      period: String(data.get('period') || '').trim(),
-      description: String(data.get('description') || '').trim(),
+      title: String(data.get("title") || "").trim(),
+      organisation: String(data.get("organisation") || "").trim(),
+      period: String(data.get("period") || "").trim(),
+      description: String(data.get("description") || "").trim(),
     };
     if (moderateText(JSON.stringify(record))) {
-      notify(
-        'Contenu bloqué par le filtre de démonstration. Reformulez cette expérience.',
-      );
+      notify("Contenu bloqué par le filtre de démonstration. Reformulez cette expérience.");
       return;
     }
     if (!record.title || !record.organisation || !record.period) {
-      notify(
-        'Complétez le rôle, l’organisation et la période avant d’enregistrer.',
-      );
+      notify("Complétez le rôle, l’organisation et la période avant d’enregistrer.");
       return;
     }
     setProfile({
@@ -309,22 +281,18 @@ export function ProfilePage({
         : [record, ...profile.experiences],
     });
     setExperienceOpen(false);
-    notify('Votre parcours a été mis à jour dans la démo.');
+    notify("Votre parcours a été mis à jour dans la démo.");
   }
   return (
     <ProfileLayout>
       <div className="profile-heading">
         <div>
           <p className="eyebrow">
-            <T>{'LE SPORT VOUS RASSEMBLE'}</T>
+            <T>{"LE SPORT VOUS RASSEMBLE"}</T>
           </p>
           <h1>
             <T>
-              {tab === 'career'
-                ? 'Mon parcours'
-                : tab === 'media'
-                  ? 'Mes médias'
-                  : 'Mon profil'}
+              {tab === "career" ? "Mon parcours" : tab === "media" ? "Mes médias" : "Mon profil"}
             </T>
             <span className="lime">.</span>
           </h1>
@@ -334,41 +302,29 @@ export function ProfilePage({
           <T>{profile.category}</T>
         </span>
       </div>
-      {tab === 'about' && <PlanStatus />}
-      {tab !== 'about' && (
-        <Link
-          className="action secondary"
-          href={tab === 'media' ? '/espace/documents' : '/espace/disciplines'}
-        >
+      {tab === "about" && <PlanStatus />}
+      {tab !== "about" && (
+        <Link className="action secondary" href={tab === "media" ? "/espace/documents" : "/espace/disciplines"}>
           <T>
-            {tab === 'media'
-              ? 'Ajouter un document ou une photo'
-              : 'Gérer mes sports, niveaux et clubs'}
+            {tab === "media"
+              ? "Ajouter un document ou une photo"
+              : "Gérer mes sports, niveaux et clubs"}
           </T>
         </Link>
       )}
       <nav className="profile-subnav" aria-label="Rubriques de mon profil">
-        <Link
-          href="/espace/profil"
-          aria-current={tab === 'about' ? 'page' : undefined}
-        >
-          <T>{'À propos'}</T>
+        <Link href="/espace/profil" aria-current={tab === "about" ? "page" : undefined}>
+          <T>{"À propos"}</T>
         </Link>
-        <Link
-          href="/espace/parcours"
-          aria-current={tab === 'career' ? 'page' : undefined}
-        >
-          <T>{'Parcours'}</T>
+        <Link href="/espace/parcours" aria-current={tab === "career" ? "page" : undefined}>
+          <T>{"Parcours"}</T>
         </Link>
-        <Link
-          href="/espace/medias"
-          aria-current={tab === 'media' ? 'page' : undefined}
-        >
-          <T>{'Médias'}</T>
+        <Link href="/espace/medias" aria-current={tab === "media" ? "page" : undefined}>
+          <T>{"Médias"}</T>
         </Link>
       </nav>
       <div className="profile-grid">
-        {tab === 'about' && (
+        {tab === "about" && (
           <aside className="identity-card">
             <div className="profile-cover">
               <img
@@ -376,9 +332,9 @@ export function ProfilePage({
                 alt={`Illustration du profil fictif ${displayName(profile)}`}
               />
               <span className="cover-caption">
-                <T>{'VOTRE SPORT.'}</T>
+                <T>{"VOTRE SPORT."}</T>
                 <br />
-                <T>{'VOTRE HISTOIRE.'}</T>
+                <T>{"VOTRE HISTOIRE."}</T>
               </span>
               <Button
                 size="icon"
@@ -404,78 +360,69 @@ export function ProfilePage({
               <p className="profile-headline">{profile.headline}</p>
               <p className="location">
                 <MapPin size={14} />
-                {profile.city || 'Ville à compléter'}
+                {profile.city || "Ville à compléter"}
               </p>
               <span className="sport-chip">{profile.sport}</span>
               <div className="identity-rule" />
               <p className="identity-small">
-                <T>{'Un parcours singulier.'}</T>
+                <T>{"Un parcours singulier."}</T>
                 <br />
-                <T>{'Un terrain de rencontres.'}</T>
+                <T>{"Un terrain de rencontres."}</T>
               </p>
-              <Link
-                href="/espace/modifier-profil"
-                className="profile-edit-link"
-              >
-                <T>{'Modifier mon profil'}</T>
+              <Link href="/espace/modifier-profil" className="profile-edit-link">
+                <T>{"Modifier mon profil"}</T>
                 <ArrowUpRight size={16} />
               </Link>
             </div>
           </aside>
         )}
         <section className="profile-content">
-          {tab === 'about' && <ProfileExtensions />}
-          {tab === 'about' && (
-            <Button
-              className="completion-card"
-              onClick={() => setProgressOpen(true)}
-            >
+          {tab === "about" && <ProfileExtensions />}
+          {tab === "about" && (
+            <Button className="completion-card" onClick={() => setProgressOpen(true)}>
               <UserRound size={26} />
               <span>
                 <strong>
                   {progress.count === progress.total
-                    ? 'Votre profil prend vie.'
-                    : 'Compléter mon profil'}
+                    ? "Votre profil prend vie."
+                    : "Compléter mon profil"}
                 </strong>
                 <small>
                   {progress.count}
-                  <T>{'sur'}</T>
+                  <T>{"sur"}</T>
                   {progress.total}
-                  <T>{'rubriques renseignées.'}</T>{' '}
+                  <T>{"rubriques renseignées."}</T>{" "}
                   {progress.count === progress.total
-                    ? 'Personnalisez-le à votre image.'
-                    : 'Chaque détail raconte votre parcours.'}
+                    ? "Personnalisez-le à votre image."
+                    : "Chaque détail raconte votre parcours."}
                 </small>
               </span>
               <ArrowRight size={20} />
             </Button>
           )}
           <div className="profile-sections">
-            {tab === 'about' && (
+            {tab === "about" && (
               <section aria-label="À propos" className="tab-body">
                 <article className="info-card">
                   <div className="card-heading">
                     <h3>
                       <UserRound size={16} />
-                      <T>{'Ma présentation'}</T>
+                      <T>{"Ma présentation"}</T>
                     </h3>
-                    <Link
-                      href="/espace/modifier-profil"
-                      aria-label="Modifier ma présentation"
-                    >
+                    <Link href="/espace/modifier-profil" aria-label="Modifier ma présentation">
                       <Pencil size={15} />
                     </Link>
                   </div>
                   <p>
                     {profile.bio ||
-                      'Votre histoire reste à écrire. Ajoutez quelques mots sur votre passion et votre approche du sport.'}
+                      "Votre histoire reste à écrire. Ajoutez quelques mots sur votre passion et votre approche du sport."}
                   </p>
                   <div className="skill-tags">
                     {profile.skills.length ? (
                       profile.skills.map((s) => <span key={s}>{s}</span>)
                     ) : (
                       <Link href="/espace/modifier-profil">
-                        <T>{'+ Ajouter mes compétences'}</T>
+                        <T>{"+ Ajouter mes compétences"}</T>
                       </Link>
                     )}
                   </div>
@@ -484,16 +431,16 @@ export function ProfilePage({
                   <div className="card-heading">
                     <h3>
                       <Target size={17} />
-                      <T>{'Mon prochain mouvement'}</T>
+                      <T>{"Mon prochain mouvement"}</T>
                     </h3>
                   </div>
                   <p>
                     {profile.objective ||
-                      'Un projet, une envie de progresser, des rencontres à faire… Quel est votre prochain objectif ?'}
+                      "Un projet, une envie de progresser, des rencontres à faire… Quel est votre prochain objectif ?"}
                   </p>
                   {!profile.objective && (
                     <Link href="/espace/modifier-profil" className="text-link">
-                      <T>{'Ajouter mon objectif'}</T>
+                      <T>{"Ajouter mon objectif"}</T>
                       <ArrowRight size={14} />
                     </Link>
                   )}
@@ -502,23 +449,20 @@ export function ProfilePage({
                   <FileText size={28} />
                   <span>
                     <strong>
-                      <T>{'Mon CV sportif'}</T>
+                      <T>{"Mon CV sportif"}</T>
                     </strong>
                     <small>
-                      <T>{'Télécharger mon parcours · fichier texte'}</T>
+                      <T>{"Télécharger mon parcours · fichier texte"}</T>
                     </small>
                   </span>
                   <Download size={19} />
                 </button>
                 <div className="card-heading section-heading">
                   <h3>
-                    <T>{'Mes médias'}</T>
+                    <T>{"Mes médias"}</T>
                   </h3>
-                  <Button
-                    variant="ghost"
-                    onClick={() => router.push('/espace/medias')}
-                  >
-                    <T>{'Voir tout'}</T>
+                  <Button variant="ghost" onClick={() => router.push("/espace/medias")}>
+                    <T>{"Voir tout"}</T>
                     <ArrowRight size={14} />
                   </Button>
                 </div>
@@ -528,39 +472,33 @@ export function ProfilePage({
                       <button
                         key={src}
                         onClick={() => setSelectedMedia(src)}
-                        aria-label={`Agrandir : ${photos.find((p) => p.src === src)?.label || 'image de démonstration'}`}
+                        aria-label={`Agrandir : ${photos.find((p) => p.src === src)?.label || "image de démonstration"}`}
                       >
                         <img
                           src={src}
-                          alt={
-                            photos.find((p) => p.src === src)?.label ||
-                            'Image sportive fictive'
-                          }
+                          alt={photos.find((p) => p.src === src)?.label || "Image sportive fictive"}
                         />
                         <ArrowUpRight size={17} />
                       </button>
                     ))}
                   </div>
                 ) : (
-                  <button
-                    className="add-media-inline"
-                    onClick={() => setMediaOpen(true)}
-                  >
+                  <button className="add-media-inline" onClick={() => setMediaOpen(true)}>
                     <Plus size={18} />
-                    <T>{'Ajouter mes premiers visuels'}</T>
+                    <T>{"Ajouter mes premiers visuels"}</T>
                   </button>
                 )}
               </section>
             )}
-            {tab === 'career' && (
+            {tab === "career" && (
               <section aria-label="Mon parcours" className="tab-body">
                 <div className="card-heading section-heading">
                   <h3>
-                    <T>{'Chaque étape compte.'}</T>
+                    <T>{"Chaque étape compte."}</T>
                   </h3>
                   <Button variant="ghost" onClick={addExperience}>
                     <Plus size={17} />
-                    <T>{'Ajouter'}</T>
+                    <T>{"Ajouter"}</T>
                   </Button>
                 </div>
                 {profile.experiences.length ? (
@@ -569,9 +507,7 @@ export function ProfilePage({
                       <article key={exp.id} className="experience-card">
                         <span className="timeline-dot" />
                         <div className="card-heading">
-                          <span className="experience-period">
-                            {exp.period}
-                          </span>
+                          <span className="experience-period">{exp.period}</span>
                           <Button
                             size="icon"
                             variant="ghost"
@@ -598,7 +534,7 @@ export function ProfilePage({
                     action={
                       <Button onClick={addExperience} className="small-primary">
                         <Plus size={16} />
-                        <T>{'Ajouter une étape'}</T>
+                        <T>{"Ajouter une étape"}</T>
                       </Button>
                     }
                   />
@@ -607,70 +543,65 @@ export function ProfilePage({
                   <FileText size={26} />
                   <span>
                     <strong>
-                      <T>{'Exporter mon CV fictif'}</T>
+                      <T>{"Exporter mon CV fictif"}</T>
                     </strong>
                     <small>
-                      <T>{'Les informations de ce profil, au format texte.'}</T>
+                      <T>{"Les informations de ce profil, au format texte."}</T>
                     </small>
                   </span>
                   <Download size={18} />
                 </button>
               </section>
             )}
-            {tab === 'media' && (
+            {tab === "media" && (
               <section aria-label="Mes médias" className="tab-body">
-                <div className="card-heading section-heading">
+                <div className="card-heading section-heading media-heading">
                   <h3>
-                    <T>{'Votre sport en images.'}</T>
+                    <T>{"Votre sport en images."}</T>
                   </h3>
-                  <Link className="text-link" href="/espace/dossier-sportif">
-                    <T>Ajouter des vidéos et distinctions</T>
-                  </Link>
-                  <Button variant="ghost" onClick={() => setMediaOpen(true)}>
+                  <Button className="small-primary media-add-button" onClick={() => setMediaOpen(true)}>
                     <Plus size={16} />
-                    <T>{'Ajouter'}</T>
+                    <T>{"Ajouter un média"}</T>
                   </Button>
                 </div>
                 <p className="section-note">
-                  <T>
-                    {
-                      'Galerie de démonstration. Aucun téléversement ni publication.'
-                    }
-                  </T>
+                  <T>{"Importez une photo ou une vidéo depuis votre appareil. Aperçu local uniquement, sans publication."}</T>
                 </p>
+                <Link className="action secondary" href="/espace/dossier-sportif">
+                  <T>{"Ajouter des vidéos et distinctions"}</T>
+                </Link>
                 {profile.media.length ? (
                   <div className="media-grid">
                     {profile.media.map((src) => (
-                      <button key={src} onClick={() => setSelectedMedia(src)}>
+                      <button key={src} onClick={() => setSelectedMedia(src)} aria-label={photos.find((p) => p.src === src)?.label || "Agrandir la photo importée"}>
                         <img
                           src={src}
-                          alt={
-                            photos.find((p) => p.src === src)?.label ||
-                            'Illustration sportive'
-                          }
+                          alt={photos.find((p) => p.src === src)?.label || "Photo importée"}
                         />
                         <span>
-                          {photos.find((p) => p.src === src)?.label}
+                          {photos.find((p) => p.src === src)?.label || "Photo importée"}
                           <ArrowUpRight size={16} />
                         </span>
                       </button>
                     ))}
                   </div>
-                ) : (
+                ) : profile.videos.length ? null : (
                   <EmptyCard
                     icon={Camera}
                     title="Un autre regard sur votre sport."
-                    text="Choisissez des visuels de démonstration pour personnaliser votre galerie."
+                    text="Importez un média depuis votre appareil pour personnaliser votre galerie."
                     action={
-                      <Button
-                        onClick={() => setMediaOpen(true)}
-                        className="small-primary"
-                      >
-                        <T>{'Choisir une image'}</T>
+                      <Button onClick={() => setMediaOpen(true)} className="small-primary">
+                        <T>{"Importer mon premier média"}</T>
                       </Button>
                     }
                   />
                 )}
+                {profile.videos.map(video => <article className="profile-video-card" key={video.id}>
+                  <video controls playsInline preload="metadata" src={video.url} aria-label={video.title} />
+                  <h3>{video.title}</h3><p>{video.sport}</p>
+                  <Button variant="ghost" onClick={() => { setProfile({ ...profile, videos: profile.videos.filter(v => v.id !== video.id) }); notify("Vidéo retirée de la galerie."); }}><Trash2 size={16} />Retirer la vidéo</Button>
+                </article>)}
               </section>
             )}
           </div>
@@ -686,11 +617,11 @@ export function ProfilePage({
           {photos.map((p) => (
             <button
               key={p.src}
-              className={profile.photo === p.src ? 'selected' : ''}
+              className={profile.photo === p.src ? "selected" : ""}
               onClick={() => {
                 setProfile({ ...profile, photo: p.src });
                 setPhotoOpen(false);
-                notify('Illustration de profil mise à jour.');
+                notify("Illustration de profil mise à jour.");
               }}
             >
               <img src={p.src} alt={p.label} />
@@ -703,9 +634,11 @@ export function ProfilePage({
       <Modal
         open={mediaOpen}
         onOpenChange={setMediaOpen}
-        title="Votre galerie sportive."
-        description="Ajoutez une image parmi les visuels fictifs. Vous pourrez la retirer à tout moment."
+        title="Ajouter un média"
+        description="Importez une photo ou une vidéo. Vous pourrez la retirer à tout moment."
       >
+        {mediaOpen && <MediaUpload onAdded={() => setMediaOpen(false)} />}
+        <details className="demo-media-picker"><summary>Ou choisir une image de démonstration</summary>
         <div className="image-picker">
           {photos.map((p) => {
             const added = profile.media.includes(p.src);
@@ -716,34 +649,28 @@ export function ProfilePage({
                 onClick={() => {
                   setProfile({ ...profile, media: [...profile.media, p.src] });
                   setMediaOpen(false);
-                  notify('Image ajoutée à votre galerie de démonstration.');
+                  notify("Image ajoutée à votre galerie de démonstration.");
                 }}
               >
                 <img src={p.src} alt={p.label} />
-                <span>{added ? 'Déjà dans la galerie' : p.label}</span>
+                <span>{added ? "Déjà dans la galerie" : p.label}</span>
                 {added && <Check size={17} />}
               </button>
             );
           })}
-        </div>
+        </div></details>
       </Modal>
       <Modal
         open={!!selectedMedia}
         onOpenChange={() => setSelectedMedia(null)}
-        title={
-          photos.find((p) => p.src === selectedMedia)?.label ||
-          'Illustration sportive'
-        }
-        description="Image générée · personne fictive · galerie de démonstration."
+        title={photos.find((p) => p.src === selectedMedia)?.label || "Photo importée"}
+        description={selectedMedia?.startsWith("blob:") ? "Fichier importé depuis votre appareil · aperçu local uniquement." : "Image générée · personne fictive · galerie de démonstration."}
       >
         {selectedMedia && (
           <img
             className="lightbox-image"
             src={selectedMedia}
-            alt={
-              photos.find((p) => p.src === selectedMedia)?.label ||
-              'Illustration sportive'
-            }
+            alt={photos.find((p) => p.src === selectedMedia)?.label || "Photo importée"}
           />
         )}
         <Button
@@ -755,20 +682,20 @@ export function ProfilePage({
               media: profile.media.filter((p) => p !== selectedMedia),
             });
             setSelectedMedia(null);
-            notify('Image retirée de la galerie de démonstration.');
+            notify("Image retirée de la galerie de démonstration.");
           }}
         >
           <Trash2 size={16} />
-          <T>{'Retirer de ma galerie'}</T>
+          <T>{"Retirer de ma galerie"}</T>
         </Button>
       </Modal>
       <Modal
         open={experienceOpen}
         onOpenChange={setExperienceOpen}
-        title={experience ? 'Modifier cette étape.' : 'Une nouvelle étape.'}
+        title={experience ? "Modifier cette étape." : "Une nouvelle étape."}
         description="Expérience, formation ou engagement : ajoutez une étape fictive à votre parcours."
       >
-        <form onSubmit={saveExperience} key={experience?.id || 'new'}>
+        <form onSubmit={saveExperience} key={experience?.id || "new"}>
           <Field
             label="Rôle ou formation"
             name="title"
@@ -795,7 +722,7 @@ export function ProfilePage({
           />
           <div className="field">
             <label htmlFor="description">
-              <T>{'En quelques mots'}</T>
+              <T>{"En quelques mots"}</T>
             </label>
             <Textarea
               id="description"
@@ -805,7 +732,7 @@ export function ProfilePage({
             />
           </div>
           <Submit>
-            <T>{'Enregistrer cette étape'}</T>
+            <T>{"Enregistrer cette étape"}</T>
           </Submit>
           {experience && (
             <Button
@@ -815,16 +742,14 @@ export function ProfilePage({
               onClick={() => {
                 setProfile({
                   ...profile,
-                  experiences: profile.experiences.filter(
-                    (x) => x.id !== experience.id,
-                  ),
+                  experiences: profile.experiences.filter((x) => x.id !== experience.id),
                 });
                 setExperienceOpen(false);
-                notify('Étape retirée du parcours de démonstration.');
+                notify("Étape retirée du parcours de démonstration.");
               }}
             >
               <Trash2 size={15} />
-              <T>{'Retirer cette étape'}</T>
+              <T>{"Retirer cette étape"}</T>
             </Button>
           )}
         </form>
@@ -841,12 +766,11 @@ export function ProfilePage({
               key={item.label}
               onClick={() => {
                 setProgressOpen(false);
-                if (i < 4) router.push('/espace/modifier-profil');
-                else
-                  router.push(i === 4 ? '/espace/parcours' : '/espace/medias');
+                if (i < 4) router.push("/espace/modifier-profil");
+                else router.push(i === 4 ? "/espace/parcours" : "/espace/medias");
               }}
             >
-              <span className={item.done ? 'checked' : ''}>
+              <span className={item.done ? "checked" : ""}>
                 {item.done ? <Check size={16} /> : <Plus size={15} />}
               </span>
               {item.label}
@@ -855,7 +779,7 @@ export function ProfilePage({
           ))}
         </div>
         <Link href="/espace/modifier-profil" className="action primary">
-          <T>{'Personnaliser mon profil'}</T>
+          <T>{"Personnaliser mon profil"}</T>
           <Pencil size={16} />
         </Link>
       </Modal>
@@ -867,14 +791,10 @@ export function EditProfile() {
   const { profile, setProfile, notify } = useDemo();
   const router = useRouter();
   const [draft, setDraft] = useState<Profile>(structuredClone(profile));
-  const [skills, setSkills] = useState(profile.skills.join(', '));
+  const [skills, setSkills] = useState(profile.skills.join(", "));
   const [errors, setErrors] = useState<Issues>({});
   function update(key: keyof Profile, value: string) {
-    setDraft({
-      ...draft,
-      [key]: value,
-      ...(key === 'category' ? { accountType: '' } : {}),
-    });
+    setDraft({ ...draft, [key]: value, ...(key === "category" ? { accountType: "" } : {}) });
   }
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -886,9 +806,9 @@ export function EditProfile() {
             ...draft.disciplines,
             {
               sport: draft.sport,
-              level: 'Loisir',
-              ranking: '',
-              federation: '',
+              level: "Loisir",
+              ranking: "",
+              federation: "",
               clubs: [],
             },
           ],
@@ -897,23 +817,17 @@ export function EditProfile() {
       headline: draft.headline.trim(),
       city: draft.city.trim(),
       country: draft.country.trim(),
-      weightKg:
-        draft.category === 'Sportif'
-          ? normalizeMeasurement(draft.weightKg)
-          : '',
-      heightCm:
-        draft.category === 'Sportif'
-          ? normalizeMeasurement(draft.heightCm)
-          : '',
-      accountType: draft.category === 'Sportif' ? '' : draft.accountType,
-      gender: draft.category === 'Sportif' ? draft.gender : '',
+      weightKg: draft.category === "Sportif" ? normalizeMeasurement(draft.weightKg) : "",
+      heightCm: draft.category === "Sportif" ? normalizeMeasurement(draft.heightCm) : "",
+      accountType: draft.category === "Sportif" ? "" : draft.accountType,
+      gender: draft.category === "Sportif" ? draft.gender : "",
       organisation: draft.organisation.trim(),
       bio: draft.bio.trim(),
       objective: draft.objective.trim(),
       skills: [
         ...new Set(
           skills
-            .split(',')
+            .split(",")
             .map((s) => s.trim())
             .filter(Boolean),
         ),
@@ -921,16 +835,13 @@ export function EditProfile() {
     };
     const issues = validateProfile(next);
     if (moderateText(JSON.stringify(next)))
-      issues.bio =
-        'Contenu bloqué par le filtre de démonstration. Reformulez les informations.';
+      issues.bio = "Contenu bloqué par le filtre de démonstration. Reformulez les informations.";
     setErrors(issues);
     focusError(issues);
     if (Object.keys(issues).length) return;
     setProfile(next);
-    notify(
-      'Modifications enregistrées pour cette visite. Rien n’a été publié.',
-    );
-    router.push('/espace/profil');
+    notify("Modifications enregistrées pour cette visite. Rien n’a été publié.");
+    router.push("/espace/profil");
   }
   return (
     <ProfileLayout back="/espace/profil" title="À votre image.">
@@ -938,24 +849,18 @@ export function EditProfile() {
         <div className="edit-intro">
           <Pencil size={21} />
           <p>
-            <T>
-              {
-                'Les bonnes rencontres commencent par un profil qui vous ressemble.'
-              }
-            </T>
+            <T>{"Les bonnes rencontres commencent par un profil qui vous ressemble."}</T>
             <small>
-              <T>
-                {'Utilisez des informations fictives pour cette démonstration.'}
-              </T>
+              <T>{"Utilisez des informations fictives pour cette démonstration."}</T>
             </small>
           </p>
         </div>
         <FormErrors errors={errors} />
         <section className="edit-section">
           <h2>
-            01{' '}
+            01{" "}
             <span>
-              <T>{'Votre identité'}</T>
+              <T>{"Votre identité"}</T>
             </span>
           </h2>
           <div className="field-pair">
@@ -966,7 +871,7 @@ export function EditProfile() {
               required
               maxLength={60}
               value={draft.firstName}
-              onChange={(e) => update('firstName', e.target.value)}
+              onChange={(e) => update("firstName", e.target.value)}
               error={errors.firstName}
             />
             <Field
@@ -976,7 +881,7 @@ export function EditProfile() {
               required
               maxLength={60}
               value={draft.lastName}
-              onChange={(e) => update('lastName', e.target.value)}
+              onChange={(e) => update("lastName", e.target.value)}
               error={errors.lastName}
             />
           </div>
@@ -985,22 +890,22 @@ export function EditProfile() {
               id="category"
               name="category"
               className="select-field"
-              disabled={draft.registrationMode === 'child'}
+              disabled={draft.registrationMode === "child"}
               value={draft.category}
-              onChange={(e) => update('category', e.target.value)}
+              onChange={(e) => update("category", e.target.value)}
             >
               {categories.map((c) => (
                 <NativeSelectOption key={c}>{c}</NativeSelectOption>
               ))}
             </NativeSelect>
           </Field>
-          {draft.category === 'Organisation' && (
+          {draft.category === "Organisation" && (
             <Field
               label="Organisation fictive"
               name="organisation"
               autoComplete="organization"
               value={draft.organisation}
-              onChange={(e) => update('organisation', e.target.value)}
+              onChange={(e) => update("organisation", e.target.value)}
               maxLength={100}
               error={errors.organisation}
             />
@@ -1017,9 +922,9 @@ export function EditProfile() {
         </section>
         <section className="edit-section">
           <h2>
-            02{' '}
+            02{" "}
             <span>
-              <T>{'Votre univers sportif'}</T>
+              <T>{"Votre univers sportif"}</T>
             </span>
           </h2>
           <Field
@@ -1027,7 +932,7 @@ export function EditProfile() {
             name="headline"
             autoComplete="organization-title"
             value={draft.headline}
-            onChange={(e) => update('headline', e.target.value)}
+            onChange={(e) => update("headline", e.target.value)}
             required
             maxLength={90}
             error={errors.headline}
@@ -1039,7 +944,7 @@ export function EditProfile() {
                 name="sport"
                 className="select-field"
                 value={draft.sport}
-                onChange={(e) => update('sport', e.target.value)}
+                onChange={(e) => update("sport", e.target.value)}
               >
                 {sports.map((s) => (
                   <NativeSelectOption key={s}>{s}</NativeSelectOption>
@@ -1053,15 +958,11 @@ export function EditProfile() {
               required
               maxLength={90}
               value={draft.city}
-              onChange={(e) => update('city', e.target.value)}
+              onChange={(e) => update("city", e.target.value)}
               error={errors.city}
             />
           </div>
-          <ProfileDirectoryFields
-            profile={draft}
-            onChange={setDraft}
-            errors={errors}
-          />
+          <ProfileDirectoryFields profile={draft} onChange={setDraft} errors={errors} />
           <Field
             label="Compétences"
             name="skills"
@@ -1074,20 +975,20 @@ export function EditProfile() {
         </section>
         <section className="edit-section">
           <h2>
-            03{' '}
+            03{" "}
             <span>
-              <T>{'Votre histoire'}</T>
+              <T>{"Votre histoire"}</T>
             </span>
           </h2>
           <div className="field">
             <label htmlFor="bio">
-              <T>{'Présentation'}</T>
+              <T>{"Présentation"}</T>
             </label>
             <Textarea
               id="bio"
               name="bio"
               value={draft.bio}
-              onChange={(e) => update('bio', e.target.value)}
+              onChange={(e) => update("bio", e.target.value)}
               rows={5}
               maxLength={600}
             />
@@ -1095,13 +996,13 @@ export function EditProfile() {
           </div>
           <div className="field">
             <label htmlFor="objective">
-              <T>{'Votre prochain objectif'}</T>
+              <T>{"Votre prochain objectif"}</T>
             </label>
             <Textarea
               id="objective"
               name="objective"
               value={draft.objective}
-              onChange={(e) => update('objective', e.target.value)}
+              onChange={(e) => update("objective", e.target.value)}
               maxLength={250}
               rows={3}
               placeholder="Qu’aimeriez-vous construire dans le sport ?"
@@ -1110,10 +1011,10 @@ export function EditProfile() {
         </section>
         <div className="save-bar">
           <Link href="/espace/profil" className="action secondary">
-            <T>{'Annuler'}</T>
+            <T>{"Annuler"}</T>
           </Link>
           <Submit>
-            <T>{'Enregistrer'}</T>
+            <T>{"Enregistrer"}</T>
           </Submit>
         </div>
       </form>
@@ -1127,26 +1028,28 @@ export function SettingsPage() {
   const [confirm, setConfirm] = useState(false);
   return (
     <ProfileLayout back="/espace/profil" title="Votre espace, simplement.">
-      <div className="settings-grid"><ExtensionNav/>
+      <div className="settings-grid">
+        <ExtensionNav/>
         <PlanStatus />
+        <Link href="/espace/abonnement" className="settings-action">Gérer mon abonnement <ArrowUpRight size={17} /></Link>
         <section className="info-card">
           <div className="card-heading">
             <h2>
               <LockKeyhole size={19} />
-              <T>{'Une démo transparente.'}</T>
+              <T>{"Une démo transparente."}</T>
             </h2>
           </div>
           <p>
             <T>
               {
-                'Aucun compte réel, aucune authentification et aucun message envoyé. Le code e-mail et les identifiants proposés servent uniquement à essayer l’interface.'
+                "Aucun compte réel, aucune authentification et aucun message envoyé. Le code e-mail et les identifiants proposés servent uniquement à essayer l’interface."
               }
             </T>
           </p>
           <p>
             <T>
               {
-                'Vos modifications restent en mémoire dans cet onglet et disparaissent au rechargement. Aucun mot de passe saisi n’est conservé.'
+                "Vos modifications restent en mémoire dans cet onglet et disparaissent au rechargement. Aucun mot de passe saisi n’est conservé."
               }
             </T>
           </p>
@@ -1155,27 +1058,19 @@ export function SettingsPage() {
           <div className="card-heading">
             <h2>
               <UserRound size={19} />
-              <T>{'Reprendre le parcours.'}</T>
+              <T>{"Reprendre le parcours."}</T>
             </h2>
           </div>
           <p>
-            <T>
-              {
-                'Explorez la création d’un nouveau profil ou revenez au profil fictif d’Alex.'
-              }
-            </T>
+            <T>{"Explorez la création d’un nouveau profil ou revenez au profil fictif d’Alex."}</T>
           </p>
           <Link href="/espace/inscription" className="text-link">
-            <T>{'Essayer l’inscription'}</T>
+            <T>{"Essayer l’inscription"}</T>
             <ArrowRight size={15} />
           </Link>
-          <Button
-            variant="ghost"
-            className="settings-action"
-            onClick={() => setConfirm(true)}
-          >
+          <Button variant="ghost" className="settings-action" onClick={() => setConfirm(true)}>
             <RotateCcw size={17} />
-            <T>{'Réinitialiser la démonstration'}</T>
+            <T>{"Réinitialiser la démonstration"}</T>
           </Button>
           <Button
             variant="ghost"
@@ -1183,14 +1078,12 @@ export function SettingsPage() {
             onClick={() => {
               setDraft(null);
               setEmailVerified(false);
-              notify(
-                'Retour à l’accueil. La démo ne gère pas de session authentifiée.',
-              );
-              router.push('/espace/connexion');
+              notify("Retour à l’accueil. La démo ne gère pas de session authentifiée.");
+              router.push("/espace/connexion");
             }}
           >
             <LogOut size={17} />
-            <T>{'Quitter le profil de démonstration'}</T>
+            <T>{"Quitter le profil de démonstration"}</T>
           </Button>
         </section>
       </div>
@@ -1205,14 +1098,14 @@ export function SettingsPage() {
           onClick={() => {
             reset();
             setConfirm(false);
-            router.push('/espace/profil');
+            router.push("/espace/profil");
           }}
         >
-          <T>{'Réinitialiser la démo'}</T>
+          <T>{"Réinitialiser la démo"}</T>
           <RotateCcw size={17} />
         </Button>
         <Button variant="ghost" onClick={() => setConfirm(false)}>
-          <T>{'Conserver mes modifications'}</T>
+          <T>{"Conserver mes modifications"}</T>
         </Button>
       </Modal>
     </ProfileLayout>

@@ -1,4 +1,4 @@
-/* Match styles scoped to the member workspace. */
+/* App rules scoped to the web workspace; desktop adaptations remain separate. */
 body:has(.studio-surface) .event-header {
   display: flex;
   gap: 2px;

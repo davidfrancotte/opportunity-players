@@ -1,4 +1,4 @@
-/* Generated from the approved Arena Studio app; use scripts/sync-studio.mjs. */
+/* App rules scoped to the web workspace; desktop adaptations remain separate. */
 /* One mobile app surface, not a desktop website with a mobile breakpoint. */
 body:has(.studio-surface) {
   --app-width: 480px;
@@ -82,8 +82,7 @@ body:has(.studio-surface) .bottom-nav {
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 4px;
   padding: 8px max(12px, env(safe-area-inset-right, 0px))
-    calc(8px + env(safe-area-inset-bottom, 0px))
-    max(12px, env(safe-area-inset-left, 0px));
+    calc(8px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
   background: #1a1f22f5;
   border-top: 1px solid #ffffff12;
   box-shadow: 0 -8px 28px #0002;
@@ -117,12 +116,10 @@ body:has(.studio-surface) .bottom-nav-icon {
   border-radius: 10px;
   transition: background 0.18s;
 }
-body:has(.studio-surface) .bottom-nav-item[aria-current='page'] {
+body:has(.studio-surface) .bottom-nav-item[aria-current="page"] {
   color: #d1f94c;
 }
-body:has(.studio-surface)
-  .bottom-nav-item[aria-current='page']
-  .bottom-nav-icon {
+body:has(.studio-surface) .bottom-nav-item[aria-current="page"] .bottom-nav-icon {
   background: #d1f94c18;
 }
 body:has(.studio-surface) .bottom-nav-item:active {
@@ -149,8 +146,7 @@ body:has(.studio-surface):has(.save-bar) .toast-region {
 body:has(.studio-surface) .studio-modal {
   max-width: calc(var(--app-width) - 24px) !important;
   max-height: calc(
-    100dvh - 24px - env(safe-area-inset-top, 0px) -
-      env(safe-area-inset-bottom, 0px)
+    100dvh - 24px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
   );
 }
 @media (max-width: 360px) {

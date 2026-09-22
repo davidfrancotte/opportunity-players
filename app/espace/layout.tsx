@@ -9,6 +9,8 @@ import './studio-social.css';
 import './studio-subscription.css';
 import './studio-events.css';
 import './studio-trust.css';
+import './studio-community.css';
+import './studio-agenda.css';
 import './studio-web.css';
 import './studio-theme.css';
 import './studio-sport-profile.css';

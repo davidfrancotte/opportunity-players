@@ -115,6 +115,8 @@
   font-size: 9px;
   letter-spacing: 0.08em;
   text-align: center;
+  max-width: 286px;
+  line-height: 1.7;
 }
 .application-feature-copy > .section-label {
   display: flex;
@@ -187,6 +189,13 @@
   color: #b5c1b2;
   line-height: 1.8;
 }
+.application-support {
+  padding-block: 64px;
+  border-top: 1px solid var(--border);
+}
+.application-support h2 { margin-block: 22px; }
+.application-support > p { max-width: 760px; color: #b4bcb6; line-height: 1.8; }
+.application-support small { display: block; max-width: 760px; color: #8e9c91; line-height: 1.7; }
 @media (max-width: 900px) {
   .application-hero {
     grid-template-columns: 1fr;
@@ -210,7 +219,7 @@
   }
   .application-index {
     overflow-x: auto;
-    grid-template-columns: repeat(10, minmax(150px, 1fr));
+    grid-template-columns: repeat(5, minmax(150px, 1fr));
     padding-inline: 12px;
   }
 }

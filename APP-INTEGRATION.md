@@ -1,4 +1,9 @@
-# Arena Studio integration — 19 September 2026
+# Arena Studio integration — 22 September 2026
+
+## Current web/app alignment
+
+See `WEB-APP-ALIGNMENT-2026-09-22.md` for the current implementation and verification.
+The September 22 release supersedes the older feed recommendations, directory, separate agenda and predefined-post-image descriptions below. The desktop shell, two-pane messaging, light/dark theme and web onboarding remain web-specific. Updated actual screenshots are named `*-20260922-*.png`.
 
 ## Trust / multisport update
 

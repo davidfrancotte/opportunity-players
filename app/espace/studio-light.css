@@ -93,7 +93,7 @@ body:has(.studio-surface[data-theme="light"]) .form-intro {
 body:has(.studio-surface[data-theme="light"]) .field label {
   color: var(--studio-ink);
 }
-body:has(.studio-surface[data-theme="light"]) .field input:not([type='radio']),
+body:has(.studio-surface[data-theme="light"]) .field input:not([type="radio"]),
 body:has(.studio-surface[data-theme="light"]) .field textarea,
 body:has(.studio-surface[data-theme="light"]) .field select {
   border: 1px solid var(--studio-line);
@@ -106,7 +106,7 @@ body:has(.studio-surface[data-theme="light"]) .field select:focus {
   outline: 2px solid var(--studio-accent-ink);
   background: var(--studio-subtle);
 }
-body:has(.studio-surface[data-theme="light"]) .field input[aria-invalid='true'] {
+body:has(.studio-surface[data-theme="light"]) .field input[aria-invalid="true"] {
   border-color: var(--studio-danger);
 }
 body:has(.studio-surface[data-theme="light"]) .field input::placeholder,
@@ -443,7 +443,7 @@ body:has(.studio-surface[data-theme="light"]) .bottom-nav {
 body:has(.studio-surface[data-theme="light"]) .bottom-nav-item {
   color: var(--studio-muted);
 }
-body:has(.studio-surface[data-theme="light"]) .bottom-nav-item[aria-current='page'] {
+body:has(.studio-surface[data-theme="light"]) .bottom-nav-item[aria-current="page"] {
   color: var(--studio-accent-ink);
 }
 body:has(.studio-surface[data-theme="light"]) .bottom-nav-item:active {
@@ -479,7 +479,7 @@ body:has(.studio-surface[data-theme="light"]) .sport-filters > button {
   border: 1px solid var(--studio-line);
   color: var(--studio-muted);
 }
-body:has(.studio-surface[data-theme="light"]) .sport-filters > button[aria-pressed='true'] {
+body:has(.studio-surface[data-theme="light"]) .sport-filters > button[aria-pressed="true"] {
   border-color: var(--studio-accent-ink);
 }
 body:has(.studio-surface[data-theme="light"]) .list-caption > span:last-child {
@@ -510,7 +510,7 @@ body:has(.studio-surface[data-theme="light"]) .post-actions {
 body:has(.studio-surface[data-theme="light"]) .post-actions > button {
   color: var(--studio-muted);
 }
-body:has(.studio-surface[data-theme="light"]) .post-actions > button[aria-pressed='true'] {
+body:has(.studio-surface[data-theme="light"]) .post-actions > button[aria-pressed="true"] {
   color: var(--studio-accent-ink);
 }
 body:has(.studio-surface[data-theme="light"]) .post-actions > span {
@@ -534,7 +534,7 @@ body:has(.studio-surface[data-theme="light"]) .followed-filter {
   color: var(--studio-muted);
   border: 1px solid var(--studio-line);
 }
-body:has(.studio-surface[data-theme="light"]) .followed-filter[aria-pressed='true'] {
+body:has(.studio-surface[data-theme="light"]) .followed-filter[aria-pressed="true"] {
   color: var(--studio-accent-ink);
 }
 body:has(.studio-surface[data-theme="light"]) .member-intro > svg {
@@ -630,7 +630,7 @@ body:has(.studio-surface[data-theme="light"]) .profile-subnav {
 body:has(.studio-surface[data-theme="light"]) .profile-subnav a {
   color: var(--studio-muted);
 }
-body:has(.studio-surface[data-theme="light"]) .profile-subnav a[aria-current='page'] {
+body:has(.studio-surface[data-theme="light"]) .profile-subnav a[aria-current="page"] {
   background: var(--studio-tint);
   color: var(--studio-accent-ink);
 }
@@ -750,6 +750,16 @@ body:has(.studio-surface[data-theme="light"]) .all-plan-prices strong {
 }
 body:has(.studio-surface[data-theme="light"]) .all-plan-prices small {
   color: var(--studio-muted);
+}
+body:has(.studio-surface[data-theme="light"]) .billing-period button {
+  border: 1px solid var(--studio-line);
+  color: var(--studio-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .billing-period button[aria-pressed="true"] {
+  border-color: var(--studio-accent-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .annual-price-note {
+  color: var(--studio-ink);
 }
 body:has(.studio-surface[data-theme="light"]) .subscription-price small {
   color: var(--studio-muted);
@@ -1331,6 +1341,65 @@ body:has(.studio-surface[data-theme="light"]) .extension-page a:focus-visible,
 body:has(.studio-surface[data-theme="light"]) .extension-page summary:focus-visible {
   outline: 2px solid var(--studio-accent-ink);
 }
+body:has(.studio-surface[data-theme="light"]) .post-attachment-preview img, body:has(.studio-surface[data-theme="light"]) .post-attachment-preview video { background: var(--studio-panel); }
+body:has(.studio-surface[data-theme="light"]) video.post-image { background: var(--studio-panel); }
+body:has(.studio-surface[data-theme="light"]) .schedule-premium-badge {
+  color: var(--studio-accent-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .schedule-premium-notice a {
+  color: var(--studio-accent-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .media-file-picker { border: 1px dashed var(--studio-line); }
+body:has(.studio-surface[data-theme="light"]) .profile-video-card { border: 1px solid var(--studio-line); }
+body:has(.studio-surface[data-theme="light"]) .profile-video-card p { color: var(--studio-muted); }
+body:has(.studio-surface[data-theme="light"]) .post-read-more { color: var(--studio-accent-ink); }
+body:has(.studio-surface[data-theme="light"]) .member-relationship-actions .member-follow-button {
+  border: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .member-relationship-actions .member-follow-button:hover {
+  background: var(--studio-subtle);
+  border-color: var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .connection-status { color: var(--studio-accent-ink); }
+body:has(.studio-surface[data-theme="light"]) .connection-status small { color: var(--studio-muted); }
+body:has(.studio-surface[data-theme="light"]) .connection-pending { border: 1px solid var(--studio-line); }
+body:has(.studio-surface[data-theme="light"]) .connection-pending > small { color: var(--studio-muted); }
+body:has(.studio-surface[data-theme="light"]) .connection-demo { border-top: 1px solid var(--studio-line); }
+body:has(.studio-surface[data-theme="light"]) .connection-demo p { color: var(--studio-muted); }
+body:has(.studio-surface[data-theme="light"]) .connection-sent { border-bottom: 1px solid var(--studio-line); }
+body:has(.studio-surface[data-theme="light"]) .agenda-dot.spectator {
+  background: #fff0ee;
+}
+body:has(.studio-surface[data-theme="light"]) .unified-agenda-event {
+  border-left: 3px solid var(--studio-accent-ink);
+}
+body:has(.studio-surface[data-theme="light"]) .unified-agenda-event.professional {
+  border-left-color: var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .unified-agenda-event.spectator {
+  border-left-color: var(--studio-danger);
+}
+body:has(.studio-surface[data-theme="light"]) .agenda-requests {
+  border-top: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .agenda-request {
+  border: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .agenda-request small {
+  color: var(--studio-muted);
+}
+body:has(.studio-surface[data-theme="light"]) .agenda-request-content {
+  border-top: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .agenda-request-content h3 {
+  color: var(--studio-muted);
+}
+body:has(.studio-surface[data-theme="light"]) .agenda-request-booking select {
+  border: 1px solid var(--studio-line);
+}
+body:has(.studio-surface[data-theme="light"]) .agenda-requests-empty {
+  color: var(--studio-muted);
+}
 /* Small brand and portal adjustments, outside the color migration. */
 body:has(.studio-surface[data-theme="light"]) .web-content-area { background: var(--studio-canvas); }
 body:has(.studio-surface[data-theme="light"]) .web-sidebar { box-shadow: 1px 0 0 var(--studio-line); }
@@ -1352,4 +1421,16 @@ body:has(.studio-surface[data-theme="light"]) .change-photo { color: #f1f2eb; }
 body:has(.studio-surface[data-theme="light"]) [data-slot="dialog-content"] { background: var(--studio-panel); color: var(--studio-ink); }
 body:has(.studio-surface[data-theme="light"]) input::placeholder,
 body:has(.studio-surface[data-theme="light"]) textarea::placeholder { color: #667461; opacity: 1; }
+body:has(.studio-surface[data-theme="light"]) .unified-calendar,
+body:has(.studio-surface[data-theme="light"]) .agenda-event-list,
+body:has(.studio-surface[data-theme="light"]) .agenda-actions,
+body:has(.studio-surface[data-theme="light"]) .agenda-discover,
+body:has(.studio-surface[data-theme="light"]) .agenda-tools {
+  --border: var(--studio-line);
+  --muted: var(--studio-subtle);
+  --muted-foreground: var(--studio-muted);
+}
+body:has(.studio-surface[data-theme="light"]) .agenda-dot.match { background: #547719; }
+body:has(.studio-surface[data-theme="light"]) .agenda-dot.professional { background: #365bac; }
+body:has(.studio-surface[data-theme="light"]) .agenda-dot.spectator { background: #a85c23; }
 

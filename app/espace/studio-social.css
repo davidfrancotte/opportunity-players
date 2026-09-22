@@ -1,4 +1,4 @@
-/* Generated from the approved Arena Studio app; use scripts/sync-studio.mjs. */
+/* App rules scoped to the web workspace; desktop adaptations remain separate. */
 body:has(.studio-surface) .social-title {
   display: flex;
   align-items: center;
@@ -92,7 +92,7 @@ body:has(.studio-surface) .sport-filters > button {
   font-size: 11px;
   flex-shrink: 0;
 }
-body:has(.studio-surface) .sport-filters > button[aria-pressed='true'] {
+body:has(.studio-surface) .sport-filters > button[aria-pressed="true"] {
   color: #17200d;
   background: #d1f94c;
   border-color: #d1f94c;
@@ -183,7 +183,7 @@ body:has(.studio-surface) .post-actions > button {
   color: #b7c1b8;
   gap: 7px;
 }
-body:has(.studio-surface) .post-actions > button[aria-pressed='true'] {
+body:has(.studio-surface) .post-actions > button[aria-pressed="true"] {
   color: #d1f94c;
 }
 body:has(.studio-surface) .post-actions > span {
@@ -241,7 +241,7 @@ body:has(.studio-surface) .compact-select > label {
   overflow: hidden;
   clip-path: inset(50%);
 }
-body:has(.studio-surface) .compact-select [data-slot='native-select-wrapper'] {
+body:has(.studio-surface) .compact-select [data-slot="native-select-wrapper"] {
   min-width: 0;
   flex: 1;
   max-width: 230px;
@@ -261,7 +261,7 @@ body:has(.studio-surface) .followed-filter {
   border: 1px solid #364130;
   border-radius: 12px;
 }
-body:has(.studio-surface) .followed-filter[aria-pressed='true'] {
+body:has(.studio-surface) .followed-filter[aria-pressed="true"] {
   color: #d1f94c;
   background: #d1f94c12;
 }
@@ -361,7 +361,7 @@ body:has(.studio-surface) .social-form textarea {
   max-height: 240px;
   overflow-y: auto;
 }
-body:has(.studio-surface) .social-form [data-slot='native-select-wrapper'] {
+body:has(.studio-surface) .social-form [data-slot="native-select-wrapper"] {
   width: 100%;
 }
 body:has(.studio-surface) .social-form select {
@@ -575,7 +575,7 @@ body:has(.studio-surface) .opportunity-cover > img {
   object-fit: cover;
 }
 body:has(.studio-surface) .opportunity-cover::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 50% 0 0;
   background: linear-gradient(transparent, #101814cc);
@@ -601,7 +601,7 @@ body:has(.studio-surface) .save-opportunity {
   background: #1a2321e6;
   color: #f1f5e9;
 }
-body:has(.studio-surface) .save-opportunity[aria-pressed='true'] {
+body:has(.studio-surface) .save-opportunity[aria-pressed="true"] {
   color: #d1f94c;
 }
 body:has(.studio-surface) .opportunity-body {
@@ -653,6 +653,10 @@ body:has(.studio-surface) .opportunity-detail ul {
 body:has(.studio-surface) .opportunity-detail li {
   margin-bottom: 8px;
 }
+/* Keep the media/career action separate from the profile navigation. */
+body:has(.studio-surface) .profile-layout > .action + .profile-subnav {
+  margin-top: 20px;
+}
 body:has(.studio-surface) .profile-subnav {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -670,7 +674,7 @@ body:has(.studio-surface) .profile-subnav a {
   color: #9dae94;
   border-radius: 10px;
 }
-body:has(.studio-surface) .profile-subnav a[aria-current='page'] {
+body:has(.studio-surface) .profile-subnav a[aria-current="page"] {
   background: #293420;
   color: #d1f94c;
 }
@@ -695,6 +699,7 @@ body:has(.studio-surface) .profile-subnav a[aria-current='page'] {
     margin-left: 52px;
   }
 }
+
 /* Category-aware directory: generous touch targets, no fixed-width controls. */
 body:has(.studio-surface) .directory-panel {
   margin: 20px 0 24px;
