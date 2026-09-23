@@ -1,27 +1,49 @@
 import { chromium } from '/Users/davidfrancotte/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
 import assert from 'node:assert/strict';
+import {createServer} from 'node:http';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
+// Capture the same offline export embedded in the latest iPhone demo.
+const assets=path.resolve(import.meta.dirname,'../../opportunity-players-app/studio/ios/App/App/public');
+const types={'.html':'text/html','.js':'text/javascript','.css':'text/css','.txt':'text/plain','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.woff2':'font/woff2'};
+const server=createServer(async(req,res)=>{
+  try {
+    let name=decodeURIComponent(new URL(req.url,'http://local').pathname);
+    if(!path.extname(name))name=name.replace(/\/$/,'')+'/index.html';
+    const file=path.resolve(assets,'.'+name);
+    if(!file.startsWith(assets+path.sep))throw Error('Invalid path');
+    const body=await fs.readFile(file);
+    res.writeHead(200,{'Content-Type':types[path.extname(file)]||'application/octet-stream'});res.end(body);
+  }catch{res.writeHead(404);res.end('Missing embedded file');}
+});
+await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 
 // Capture actual interactive states, not just the top of each legacy route.
 const browser = await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
-const page = await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2});
+const page = await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2,reducedMotion:'reduce'});
 const light = process.argv.includes('--light');
-await page.addInitScript(theme => localStorage.setItem('op-mobile-appearance', theme), light ? 'light' : 'dark');
+await page.addInitScript(theme => {localStorage.setItem('op-mobile-appearance', theme);localStorage.setItem('op-language','fr');}, light ? 'light' : 'dark');
 const errors=[];
 page.on('pageerror',error=>errors.push(error.message));
-const root='http://127.0.0.1:3002';
+const root=`http://127.0.0.1:${server.address().port}`;
+await page.route('**/*',route=>route.request().url().startsWith(root)||/^(blob:|data:)/.test(route.request().url())?route.continue():route.abort());
 const nav=async route=>{
-  await page.locator(`a[href="/${route}"]`).filter({visible:true}).first().press('Enter');
-  await page.waitForURL(`**/${route}`);
+  await page.locator(`a[href="/${route}/"]`).filter({visible:true}).first().press('Enter');
+  await page.waitForURL(`**/${route}/`);
 };
 async function shot(id, selector) {
+  await page.waitForLoadState('networkidle');
   await page.evaluate(()=>document.fonts.ready);
   await page.addStyleTag({content:'nextjs-portal {display:none!important}'});
   if(selector) await page.locator(selector).first().evaluate(el=>scrollTo(0, Math.max(0,el.getBoundingClientRect().top+scrollY-(document.querySelector('.app-header')?.getBoundingClientRect().height||76)-16)));
   else await page.evaluate(()=>scrollTo(0,0));
   await page.evaluate(()=>document.activeElement?.blur());
+  await page.evaluate(()=>Promise.all([...document.images].map(image=>image.decode().catch(()=>{}))));
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),id);
+  assert.equal(await page.locator('.locale-switch').count(),id==='parametres'?1:0);
   assert.equal(await page.locator('html').getAttribute('data-theme'), light ? 'light' : 'dark');
-  await page.screenshot({path:`public/app-visuals/studio-20260922-current-${id}${light ? '-light' : ''}.png`,animations:'disabled'});
+  await page.screenshot({path:`public/app-visuals/studio-20260923-current-${id}${light ? '-light' : ''}.png`,animations:'disabled'});
 }
 try {
   await page.goto(root+'/reseau',{waitUntil:'networkidle'});
@@ -54,11 +76,14 @@ try {
   await page.getByRole('button',{name:'Filtrer le fil',exact:true}).click();
   await shot('accueil','.community-heading');
   await nav('reseau');
-  await page.locator('.network-sections a[href="/jouer"]').click();
+  await page.locator('.network-sections a[href="/jouer/"]').click();
+  await page.waitForURL('**/jouer/');
   await page.getByRole('button',{name:'À proximité',exact:true}).click();
   assert.equal(await page.locator('.nearby-alerts').count(),1);
   await shot('jouer','.network-sections');
-  await page.locator('.network-sections a[href="/agenda"]').click();
+  await page.locator('.network-sections a[href="/agenda/"]').click();
+  await page.waitForURL('**/agenda/');
+  await page.locator('.agenda-month-grid').waitFor();
   await shot('agenda','.network-sections');
   await nav('messages');
   await page.locator('.conversation-list button').first().click();
@@ -70,9 +95,12 @@ try {
   await types.getByRole('button',{name:'Essais groupés',exact:true}).click();
   await shot('opportunities','h1');
   await nav('profil');
-  await shot('profil','h1');
-  await page.locator('a[href="/medias"]').filter({visible:true}).first().click();
+  await shot('profil','.profile-subnav');
+  await page.locator('a[href="/medias/"]').filter({visible:true}).first().click();
   await shot('medias','h1');
+  await page.goto(root+'/parametres/',{waitUntil:'networkidle'});
+  assert.equal(await page.locator('.language-preferences option').count(),9);
+  await shot('parametres','.appearance-preferences');
   assert.deepEqual(errors,[]);
-  console.log('PASS: nine actual current app states captured, including free gates, upload, Premium filters and unified agenda.');
-} finally {await browser.close();}
+  console.log('PASS: ten current iPhone app states captured, including language and appearance settings.');
+} finally {await browser.close();server.close();}

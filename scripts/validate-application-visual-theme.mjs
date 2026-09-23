@@ -17,9 +17,14 @@ try {
       storage:JSON.stringify({...localStorage}),
     }));
     const before=await unchanged();
-    const captures=page.locator('img[src*="studio-20260922-current-"]');
-    assert.equal(await captures.count(),10);
+    const captures=page.locator('img[src*="studio-20260923-current-"]');
+    assert.equal(await captures.count(),11);
+    assert.equal(await page.locator('main img[src*="studio-20260922-"]').count(),0);
     assert.ok((await captures.evaluateAll(images=>images.map(img=>img.src))).every(src=>!src.endsWith('-light.png')));
+    for (const img of await captures.all()) {
+      assert.ok(await img.evaluate(async el=>{el.loading='eager';await el.decode();return el.naturalWidth===780 && el.naturalHeight===1688;}));
+    }
+    await page.locator('.application-hero').screenshot({path:`/tmp/application-dark-toggle-${width}.png`,animations:'disabled'});
     await toggle.click();
     assert.equal(await toggle.getAttribute('aria-checked'),'true');
     for (const img of await captures.all()) {
@@ -32,6 +37,7 @@ try {
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
     await page.locator('.application-hero').screenshot({path:`/tmp/application-light-toggle-${width}.png`,animations:'disabled'});
     await page.locator('#publier').screenshot({path:`/tmp/application-light-publish-${width}.png`,animations:'disabled'});
+    await page.locator('#parametres').screenshot({path:`/tmp/application-settings-${width}.png`,animations:'disabled'});
     // Both keyboard directions work; repeated swaps do not duplicate phone canvases.
     await toggle.focus();
     await page.keyboard.press('Space');
@@ -45,6 +51,6 @@ try {
     await page.goto('http://127.0.0.1:3000/',{waitUntil:'networkidle'});
     assert.equal(await page.locator('img[src$="-light.png"]').count(),0,'Home visuals must not change');
     await page.close();
-    console.log(`PASS ${width}px: ten real captures, toggle, keyboard, site unchanged, home unchanged.`);
+    console.log(`PASS ${width}px: eleven current visuals, toggle, keyboard, site unchanged, home unchanged.`);
   }
 } finally {await browser.close();}

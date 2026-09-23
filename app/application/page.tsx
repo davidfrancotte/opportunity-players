@@ -11,6 +11,7 @@ import {
   CalendarDays,
   ImagePlus,
   Volleyball,
+  Settings,
 } from 'lucide-react';
 import { ApplicationVisualTheme, ApplicationVisualToggle, ApplicationCapture, ApplicationHeroPhone } from '@/components/application-visual-theme';
 import { AppPhoneStage } from '@/components/app-phone-stage';
@@ -204,11 +205,24 @@ const features = [
     benefits: ['Montrez vos entraînements, vos matchs et votre progression avec vos propres photos et vidéos.', 'Présentez votre travail et votre accompagnement à travers des contenus concrets.', 'Partagez les moments de votre équipe et donnez de la visibilité à votre collectif.'],
     limit: 'Dans cette démo, l’import est local : aucun fichier n’est envoyé à un serveur ni conservé au rechargement. Les quotas et les formats autorisés sont indiqués dans le formulaire.',
   },
+  {
+    id: 'parametres',
+    name: 'Réglages',
+    location: 'Réglages › Apparence et langue',
+    capture: 'Thème et langue de l’application dans les réglages',
+    route: 'parametres',
+    icon: Settings,
+    title: 'Votre app. Votre thème. Votre langue.',
+    text: 'Choisissez un mode clair ou sombre et la langue de votre interface dans les réglages de l’app. Le sélecteur de langue ne prend plus de place en haut des écrans. En mode clair, les sélections reprennent le jaune citron du site ; la navigation conserve la même capsule autour de l’icône dans les deux thèmes.',
+    tools: ['Modes clair et sombre', 'Français, néerlandais, allemand, espagnol, italien, portugais, polonais, turc et anglais', 'Dates et calendrier adaptés à la langue', 'Préférences mémorisées sur l’appareil'],
+    benefits: ['Retrouvez vos préférences de thème et de langue à la prochaine ouverture.', 'Consultez l’interface et les calendriers dans la langue de votre choix.', 'Gardez les mêmes repères de navigation dans les deux thèmes.'],
+    limit: 'Ces captures proviennent de la démo iPhone multilingue. Ses traductions sont embarquées pour fonctionner hors ligne ; les publications, messages et descriptions des profils restent dans leur langue d’origine. L’espace web de démonstration peut évoluer séparément.',
+  },
 ];
 // Match the actual five bottom-navigation destinations. Other sections describe
 // nested workflows, not additional application tabs.
 const primaryIds = ['accueil', 'reseau', 'messages', 'opportunities', 'profil'];
-const sectionOrder = ['accueil', 'publier', 'reseau', 'jouer', 'agenda', 'messages', 'opportunities', 'profil', 'medias'];
+const sectionOrder = ['accueil', 'publier', 'reseau', 'jouer', 'agenda', 'messages', 'opportunities', 'profil', 'medias', 'parametres'];
 const orderedFeatures = sectionOrder.map(id => features.find(feature => feature.id === id)!);
 const roles = ['Sportifs', 'Professionnels', 'Collectifs'];
 

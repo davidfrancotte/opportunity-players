@@ -41,7 +41,7 @@ export function ApplicationVisualToggle() {
 }
 
 function captureSource(id: string, light: boolean) {
-  return `/app-visuals/studio-20260922-current-${id}${light ? '-light' : ''}.png`;
+  return `/app-visuals/studio-20260923-current-${id}${light ? '-light' : ''}.png`;
 }
 
 export function ApplicationCapture({ id, alt }: { id: string; alt: string }) {
