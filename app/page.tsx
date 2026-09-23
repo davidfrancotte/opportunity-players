@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { BlogPreview } from '@/components/blog-preview';
 import { SupportersSection } from '@/components/supporters';
 import { AppShowcase } from '@/components/app-showcase';
 import { WebWorkspacePreview } from '@/components/web-workspace-preview';
@@ -242,6 +243,7 @@ export default function Home() {
         </div>
         <FAQ compact />
       </section>
+      <BlogPreview />
       <JoinBand />
     </main>
   );

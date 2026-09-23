@@ -64,8 +64,6 @@ export function Header() {
     ['Les sports', '/sports'],
     ['Formules', '/tarifs'],
     ['L’application', '/application'],
-    ['Blog', '/blog'],
-    ['FAQ', '/faq'],
   ];
   return (
     <header className="site-header">
@@ -129,7 +127,7 @@ export function Header() {
                 </Link>
               ))}
               <Link href="/aide" onClick={() => setOpen(false)}>
-                <span>08</span>Aide
+                <span>{String(links.length + 1).padStart(2, '0')}</span>Aide
                 <ArrowUpRight />
               </Link>
             </nav>
