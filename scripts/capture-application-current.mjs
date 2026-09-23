@@ -34,6 +34,10 @@ const nav=async route=>{
 };
 async function shot(id, selector) {
   await page.waitForLoadState('networkidle');
+  const toastClose=page.getByRole('button',{name:'Fermer la notification',exact:true});
+  if(await toastClose.count()) await toastClose.first().click();
+  const bannerClose=page.getByRole('button',{name:'Fermer la bannière',exact:true});
+  if(await bannerClose.count()) await bannerClose.first().click();
   await page.evaluate(()=>document.fonts.ready);
   await page.addStyleTag({content:'nextjs-portal {display:none!important}'});
   if(selector) await page.locator(selector).first().evaluate(el=>scrollTo(0, Math.max(0,el.getBoundingClientRect().top+scrollY-(document.querySelector('.app-header')?.getBoundingClientRect().height||76)-16)));
@@ -43,13 +47,22 @@ async function shot(id, selector) {
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),id);
   assert.equal(await page.locator('.locale-switch').count(),id==='parametres'?1:0);
   assert.equal(await page.locator('html').getAttribute('data-theme'), light ? 'light' : 'dark');
-  await page.screenshot({path:`public/app-visuals/studio-20260923-current-${id}${light ? '-light' : ''}.png`,animations:'disabled'});
+  await page.screenshot({path:`public/app-visuals/studio-20260923-network-${id}${light ? '-light' : ''}.png`,animations:'disabled'});
+  console.log('Captured',id,light?'light':'dark');
 }
 try {
   await page.goto(root+'/reseau',{waitUntil:'networkidle'});
   await page.getByRole('button',{name:'Affiner la recherche',exact:true}).click();
   assert.equal(await page.getByLabel('Filtrer par pays').isDisabled(),true);
+  await page.getByRole('button',{name:'Affiner la recherche',exact:true}).click();
+  await page.getByRole('button',{name:'Accepter',exact:true}).first().click();
   await shot('reseau','.network-sections');
+  await page.locator('.network-count-cards > button').first().click();
+  await shot('connexions');
+  await page.getByRole('button',{name:'Retour aux membres',exact:true}).click();
+  await page.locator('.network-count-cards > button').nth(1).click();
+  await shot('suivis');
+  await page.getByRole('button',{name:'Retour aux membres',exact:true}).click();
 
   await nav('accueil');
   await page.locator('.compose-launch').click();
@@ -108,6 +121,49 @@ try {
   await page.goto(root+'/parametres/',{waitUntil:'networkidle'});
   assert.equal(await page.locator('.language-preferences option').count(),9);
   await shot('parametres','.appearance-preferences');
+
+  await page.goto(root+'/accueil/',{waitUntil:'networkidle'});
+  await page.locator('.spotlight-card img').waitFor();
+  await shot('spotlight','.spotlight-card');
+  await page.goto(root+'/profil/',{waitUntil:'networkidle'});
+  await page.getByRole('button',{name:'Mon passeport sportif',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector('.share-card-image')?.naturalWidth===900);
+  await shot('passeport');
+  await page.getByLabel('Fermer la fenêtre').click();
+  await page.goto(root+'/parrainage/',{waitUntil:'networkidle'});
+  await shot('parrainage','.trust-reward');
+  await page.goto(root+'/reseau/',{waitUntil:'networkidle'});
+  await page.getByRole('searchbox',{name:'Nom, rôle, club ou ville…',exact:true}).fill('Marc Petit');
+  await page.getByRole('button',{name:'Rechercher des membres',exact:true}).click();
+  await page.locator('.member-intro').filter({hasText:'Marc Petit'}).first().click();
+  await page.getByRole('button',{name:'Demander un rendez-vous',exact:true}).click();
+  await page.getByRole('button',{name:'Envoyer la demande · démo',exact:true}).click();
+  await page.getByRole('link',{name:'Ouvrir mes rendez-vous',exact:true}).click();
+  await page.locator('.career-demo > summary').click();
+  await page.getByRole('combobox',{name:'Profil de simulation',exact:true}).selectOption('marc');
+  await page.getByRole('link',{name:'Retour à l’agenda',exact:true}).click();
+  await page.locator('.agenda-requests > summary').click();
+  await page.locator('.agenda-request > summary').first().click();
+  await shot('rdv','.agenda-requests');
+  await page.goto(root+'/reseau/',{waitUntil:'networkidle'});
+  await page.getByRole('button',{name:'Accepter',exact:true}).first().click();
+  await nav('jouer');
+  await page.locator('a[href="/organiser/"]').first().click();
+  await page.locator('[name="match-title"]').fill('Un padel entre amis');
+  await page.locator('[name="venue"]').fill('Club de démonstration');
+  await shot('organiser','[name="match-title"]');
+  await page.getByRole('button',{name:'Continuer',exact:true}).click();
+  await page.locator('input[type="date"]').first().fill(new Date(Date.now()+7*86400000).toISOString().slice(0,10));
+  await page.locator('input[type="time"]').first().fill('18:00');
+  await page.getByRole('button',{name:'Continuer',exact:true}).click();
+  await page.getByLabel('Léa Moreau',{exact:false}).check();
+  await page.getByRole('button',{name:'Créer et inviter',exact:true}).click();
+  await page.waitForURL('**/match/**');
+  await page.getByRole('button',{name:'Fermer la bannière',exact:true}).click();
+  if(await closeToast.count()) await closeToast.click();
+  await page.getByRole('button',{name:'Partager l’invitation',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector('.share-card-image')?.naturalWidth===900);
+  await shot('invitation');
   assert.deepEqual(errors,[]);
-  console.log('PASS: ten current iPhone app states captured, including language and appearance settings.');
+  console.log('PASS: eighteen current iPhone app states captured, including connections and following.');
 } finally {await browser.close();server.close();}

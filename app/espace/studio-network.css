@@ -1,0 +1,25 @@
+/* Selectively generated from the current mobile app. */
+body:has(.studio-surface) .network-count-cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+body:has(.studio-surface) .network-count-cards > button { display:flex; align-items:center; justify-content:space-between; gap:10px; text-align:left; padding:18px; min-height:104px; border:1px solid #3b443e; border-radius:18px; background:#1d2424; color:#f1f2eb; font:inherit; cursor:pointer; }
+body:has(.studio-surface) .network-count-cards > button > span { min-width:0; overflow-wrap:anywhere; }
+body:has(.studio-surface) .network-count-cards strong { display:block; color:#d1f94c; font-size:30px; line-height:1.25; margin-bottom:5px; }
+body:has(.studio-surface) .network-count-cards svg { flex-shrink:0; }
+body:has(.studio-surface) .network-directory-back { margin-bottom:18px; }
+body:has(.studio-surface) .network-directory > .field-hint { margin:16px 0 24px; }
+body:has(.studio-surface) .network-contact { border-bottom:1px solid #3b443e; padding:12px 0; }
+body:has(.studio-surface) .network-contact-profile { display:flex; align-items:center; gap:12px; width:100%; min-height:68px; text-align:left; background:transparent; color:inherit; border:0; padding:4px; font:inherit; cursor:pointer; }
+body:has(.studio-surface) .network-contact-profile > img { width:48px; height:48px; object-fit:cover; border-radius:50%; flex-shrink:0; }
+body:has(.studio-surface) .network-contact-profile > span { flex:1; min-width:0; overflow-wrap:anywhere; }
+body:has(.studio-surface) .network-contact-profile strong { display:block; font-size:16px; }
+body:has(.studio-surface) .network-contact-profile small { display:block; color:#b0b9b1; font-size:13px; line-height:1.5; margin-top:3px; }
+body:has(.studio-surface) .network-contact-profile > svg { flex-shrink:0; }
+body:has(.studio-surface) .network-contact-profile .network-contact-status { display:flex; align-items:center; gap:5px; color:#d1f94c; font-size:12px; }
+body:has(.studio-surface) .network-contact > button:last-child:not(.network-contact-profile) { margin:6px 0 0 60px; }
+body:has(.studio-surface) .network-directory-empty { padding:24px 0; }
+body:has(.studio-surface) .network-directory-empty p { margin-bottom:16px; }
+
+body:has(.studio-surface[data-theme="light"]) .network-count-cards > button { border:1px solid var(--studio-line); background:var(--studio-panel); color:var(--studio-ink); }
+body:has(.studio-surface[data-theme="light"]) .network-count-cards strong { color:var(--studio-accent-ink); }
+body:has(.studio-surface[data-theme="light"]) .network-contact { border-bottom:1px solid var(--studio-line); }
+body:has(.studio-surface[data-theme="light"]) .network-contact-profile small { color:var(--studio-muted); }
+body:has(.studio-surface[data-theme="light"]) .network-contact-profile .network-contact-status { color:var(--studio-accent-ink); }

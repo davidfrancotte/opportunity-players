@@ -8,7 +8,7 @@ export type PhoneRenderer = {
   dispose: () => void;
 };
 
-function placeholderTexture(label: string) {
+function placeholderTexture(label: string, mark?: HTMLImageElement) {
   const canvas = document.createElement('canvas');
   canvas.width = 768;
   canvas.height = 1664;
@@ -28,15 +28,7 @@ function placeholderTexture(label: string) {
     ctx.fillStyle = color;
     ctx.fillText(value, 62, y, 640);
   };
-  text('op', 96, 258, '#f1f2eb', 600);
-  const markX = 62 + ctx.measureText('op').width + 14;
-  ctx.strokeStyle = '#d1f94c';
-  ctx.lineWidth = 4.6;
-  ctx.beginPath();
-  ctx.moveTo(markX, 211);
-  ctx.lineTo(markX + 14.4, 211);
-  ctx.lineTo(markX + 14.4, 225.4);
-  ctx.stroke();
+  if(mark) ctx.drawImage(mark,62,150,180,180*mark.height/mark.width);
   text('FUTURE APP ARENA', 25, 422, '#a7b09d');
   text('Votre sport.', 73, 548);
   text('Votre réseau.', 73, 638);
@@ -76,6 +68,7 @@ export function mountPhoneRenderer(
   label: string,
   screenSrc: string | undefined,
   onFailure: () => void,
+  onReady: () => void,
 ): PhoneRenderer {
   const renderer = new THREE.WebGLRenderer({
     alpha: true,
@@ -166,7 +159,18 @@ export function mountPhoneRenderer(
       screenTexture.dispose();
       screenTexture = texture;
       render();
-    });
+      onReady();
+    }, undefined, () => { if (!disposed) onFailure(); });
+  else {
+    const mark=new Image();mark.src='/op-open-square-dark.png';
+    mark.decode().then(()=>{
+      if(disposed)return;
+      const texture=placeholderTexture(label,mark);
+      const screen=phone.getObjectByName('front-screen') as THREE.Mesh<THREE.BufferGeometry,THREE.MeshBasicMaterial>;
+      screen.material.map=texture;screen.material.needsUpdate=true;
+      screenTexture.dispose();screenTexture=texture;render();onReady();
+    }).catch(()=>{if(!disposed)onFailure();});
+  }
   return {
     resize,
     setPose: (x, y, immediate = false) => {

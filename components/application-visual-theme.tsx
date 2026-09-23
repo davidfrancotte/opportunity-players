@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useId, useState, type ReactNode } from 'react';
 import Image from 'next/image';
 import { Sun, Moon } from 'lucide-react';
 import { AppPhone } from './app-showcase';
@@ -19,15 +19,16 @@ export function ApplicationVisualTheme({ children }: { children: ReactNode }) {
 
 export function ApplicationVisualToggle() {
   const { light, toggle } = useContext(VisualTheme);
+  const id=useId();
   return (
     <div className="application-visual-control">
-      <span id="app-visual-theme-label">App en mode clair</span>
+      <span id={`${id}-label`}>App en mode clair</span>
       <button
         type="button"
         role="switch"
         aria-checked={light}
-        aria-labelledby="app-visual-theme-label"
-        aria-describedby="app-visual-theme-help"
+        aria-labelledby={`${id}-label`}
+        aria-describedby={`${id}-help`}
         className="application-visual-switch"
         onClick={toggle}
       >
@@ -35,13 +36,13 @@ export function ApplicationVisualToggle() {
           {light ? <Sun size={17} aria-hidden="true" /> : <Moon size={17} aria-hidden="true" />}
         </span>
       </button>
-      <small id="app-visual-theme-help">Change uniquement les visuels de l’app sur cette page.</small>
+      <small id={`${id}-help`}>Change uniquement les visuels de l’app sur cette page.</small>
     </div>
   );
 }
 
 function captureSource(id: string, light: boolean) {
-  return `/app-visuals/studio-20260923-current-${id}${light ? '-light' : ''}.png`;
+  return `/app-visuals/studio-20260923-network-${id}${light ? '-light' : ''}.png`;
 }
 
 export function ApplicationCapture({ id, alt }: { id: string; alt: string }) {
@@ -51,5 +52,5 @@ export function ApplicationCapture({ id, alt }: { id: string; alt: string }) {
 
 export function ApplicationHeroPhone() {
   const { light } = useContext(VisualTheme);
-  return <AppPhone key={light ? 'light' : 'dark'} label={`Accueil de la démo Arena Studio — mode ${light ? 'clair' : 'sombre'}`} screenSrc={captureSource('accueil', light)} />;
+  return <AppPhone key={light ? 'light' : 'dark'} label={`Accueil et Spotlight de la démo Arena Studio — mode ${light ? 'clair' : 'sombre'}`} screenSrc={captureSource('spotlight', light)} />;
 }

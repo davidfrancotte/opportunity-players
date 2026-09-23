@@ -12,6 +12,10 @@ import {
   ImagePlus,
   Volleyball,
   Settings,
+  Share2,
+  Sparkles,
+  UserPlus,
+  IdCard,
 } from 'lucide-react';
 import { ApplicationVisualTheme, ApplicationVisualToggle, ApplicationCapture, ApplicationHeroPhone } from '@/components/application-visual-theme';
 import { AppPhoneStage } from '@/components/app-phone-stage';
@@ -20,7 +24,7 @@ import './application.css';
 export const metadata: Metadata = {
   title: 'L’application — Opportunity Players',
   description:
-    'Votre communauté, vos connexions, vos matchs et un agenda commun : découvrez l’expérience Arena sur mobile et sur ordinateur.',
+    'Découvrez la nouvelle app Opportunity Players : matchs partageables, passeport sportif, Spotlight du mois, parrainage et rendez-vous professionnels. Visuels en modes clair et sombre.',
 };
 const features = [
   {
@@ -36,6 +40,7 @@ const features = [
       'Premium : matchs ouverts, emplois, opportunités, news et divers',
       'Filtres Premium par catégorie, discipline et mots-clés',
       'Aimer et commenter',
+      'Spotlight of the month : une publication mise à l’honneur',
       'Importer une photo ou une vidéo avec aperçu',
       'Programmer une publication avec Premium',
     ],
@@ -45,7 +50,7 @@ const features = [
       'Faites vivre la communauté de votre club et présentez vos besoins dans une catégorie d’opportunité précise.',
     ],
     limit:
-      'Sportifs et collectifs : création de publications avec Premium. Professionnels : publication gratuite. Commentaires, réactions et partages gratuits pour tous. Programmation des publications avec Premium.',
+      'Sportifs et collectifs : création de publications avec Premium. Professionnels : publication gratuite. Commentaires et réactions gratuits pour tous. Programmation avec Premium. Le Spotlight compte les likes et commentaires du mois sur les publications du fil ; l’exemple et la clôture mensuelle sont simulés localement.',
   },
   {
     id: 'publier',
@@ -64,13 +69,15 @@ const features = [
     id: 'reseau',
     name: 'Réseau',
     location: 'Réseau › Les membres',
-    capture: 'Compte gratuit · filtres avancés ouverts',
+    capture: 'Mon réseau · Connexions et Suivis accessibles gratuitement',
     route: 'reseau',
     icon: UsersRound,
     title: 'Les bonnes personnes. Le même terrain.',
-    text: 'Trois espaces clairs : Les membres, Jouer ensemble et Agenda. Recherchez un nom, un rôle, un club ou une ville, puis affinez par type de profil, secteur ou métier, localisation et discipline. Suivre affiche les publications d’un membre ; Connect lui envoie une demande qu’il doit accepter pour ouvrir les échanges sans quota et les invitations à vos matchs.',
+    text: 'Trois espaces clairs : Les membres, Jouer ensemble et Agenda. Sous la recherche, Mon réseau réunit deux cartes avec compteurs : Connexions et Suivis. Chacune ouvre sa liste avec une recherche et un accès aux profils. Suivre affiche les publications d’un membre ; une connexion acceptée permet les échanges sans quota et les invitations à vos matchs.',
     tools: [
       'Recherche simple et filtres Premium : profil, secteur, pays, ville, sport, classement',
+      'Mon réseau : cartes Connexions et Suivis avec compteurs à jour',
+      'Listes accessibles gratuitement, recherche et accès aux profils',
       'Invitations reçues : deux visibles, liste dépliable',
       'Suivre ou envoyer une demande Connect',
       'Jouer ensemble : Mes invitations, J’organise, À proximité',
@@ -78,12 +85,12 @@ const features = [
       'Rayon des matchs dans Mes invitations et À proximité',
     ],
     benefits: [
-      'Suivez les sportifs qui vous intéressent et demandez une connexion pour échanger et les inviter à jouer.',
+      'Retrouvez vos connexions acceptées et les profils suivis dans deux listes distinctes ; un membre peut figurer dans les deux.',
       'Affinez votre recherche avec Premium. Consultez le profil avant de proposer une connexion qui devra être acceptée.',
       'Découvrez les membres suggérés, traitez vos invitations et développez les relations de votre collectif.',
     ],
     limit:
-      'Les filtres avancés se déplient pour tous, mais leur utilisation et l’onglet À proximité nécessitent Premium. Un événement créé par mois est inclus gratuitement. Une connexion doit être acceptée : suivre une personne ne suffit pas pour l’inviter directement à un match. Rencontres et notifications simulées.',
+      'Les listes Connexions et Suivis et leur recherche sont gratuites. Les demandes en attente restent dans Invitations et ne comptent pas comme des connexions. Les filtres avancés se déplient pour tous, mais leur utilisation et À proximité nécessitent Premium. Un événement créé par mois est inclus gratuitement. Relations, rencontres et notifications simulées dans la démo.',
   },
   {
     id: 'jouer',
@@ -94,7 +101,7 @@ const features = [
     icon: Volleyball,
     title: 'Une invitation. Un terrain. On joue.',
     text: 'Mes invitations, J’organise et À proximité : les matchs sont répartis dans trois vues, suivies du filtre Sport. Répondez à vos invitations, gérez les rencontres que vous organisez ou découvrez les matchs ouverts autour de vous avec Premium.',
-    tools: ['Trois vues : Mes invitations, J’organise, À proximité', 'Filtre Sport après les trois onglets', 'Rayon dans Mes invitations et À proximité', 'Alertes de matchs uniquement dans À proximité', 'Invitations directes aux connexions acceptées'],
+    tools: ['Trois vues dans un sélecteur distinct des onglets Réseau', 'Filtre Sport après les trois vues', 'Rayon dans Mes invitations et À proximité', 'Alertes de matchs uniquement dans À proximité', 'Invitations directes aux connexions acceptées', 'Carte d’invitation partageable avec aperçu invité'],
     benefits: ['Répondez aux invitations reçues et retrouvez vos matchs confirmés dans votre agenda.', 'Organisez une rencontre et invitez les personnes qui ont accepté votre connexion.', 'Gérez les participants, les places disponibles et les candidatures aux matchs ouverts.'],
     limit: 'À proximité et ses alertes sont réservés aux comptes Premium, quelle que soit la catégorie de profil. Les invitations personnelles restent accessibles gratuitement. Un événement créé par mois est inclus dans l’offre gratuite. Rencontres simulées dans la démo.',
   },
@@ -125,7 +132,7 @@ const features = [
   {
     id: 'opportunities',
     name: 'Opportunités',
-    location: 'Opportunities · annonces et filtres',
+    location: 'Opportunités · annonces et filtres',
     capture: 'Filtres ouverts · catégorie Essais groupés',
     route: 'opportunities',
     icon: Compass,
@@ -133,6 +140,8 @@ const features = [
     text: 'Explorez les annonces par mots-clés, catégorie, discipline ou favoris. Le catalogue couvre les besoins communs ainsi que des domaines spécialisés comme la santé, l’arbitrage, le juridique, les médias, les équipes et les universités. Les professionnels et les collectifs peuvent aussi publier une annonce selon les droits et le quota de leur formule.',
     tools: [
       'Recherche, treize catégories, filtre Sport et favoris',
+      'Filtres repliés par défaut, bouton juste au-dessus des annonces',
+      'Publier une annonce à droite du titre, sans ligne supplémentaire',
       'Ouvrir, enregistrer ou publier une annonce selon votre profil',
       'Candidater puis suivre la réponse selon votre offre',
       'Côté recruteur : présélectionner et proposer un essai',
@@ -160,6 +169,7 @@ const features = [
       'Filtres : matchs, rendez-vous pro et spectateur',
       'Demandes dépliables : contenu, validation ou refus',
       'Choix du créneau après acceptation, puis confirmation',
+      'Options de l’agenda : récurrence et export .ics',
     ],
     benefits: [
       'Retrouvez vos matchs et les événements que vous souhaitez suivre comme spectateur dans un seul calendrier.',
@@ -184,6 +194,7 @@ const features = [
       'CV, références et import de photos ou vidéos dans Médias',
       'Agent déclaré et confirmation réciproque',
       'Avis professionnels par expérience et par sport',
+      'Passeport sportif : aperçu de la carte et partage',
     ],
     benefits: [
       'Montrez votre progression dans chaque discipline sans mélanger les classements. Donnez du contexte à vos expériences et à votre représentation.',
@@ -202,7 +213,7 @@ const features = [
     icon: ImagePlus,
     title: 'Votre sport en images. Vos propres médias.',
     text: 'Le bouton Ajouter un média ouvre la sélection de fichiers de votre appareil. Importez une photo ou une vidéo, vérifiez son aperçu et confirmez son ajout à votre galerie. Il ne s’agit pas d’un choix d’illustrations prédéfinies.',
-    tools: ['Bouton Ajouter un média', 'Import d’une photo ou d’une vidéo', 'Aperçu, confirmation et retrait du média', 'Formats, taille et quotas vérifiés selon votre offre'],
+    tools: ['Bouton Ajouter un média', 'Import d’une photo ou d’une vidéo', 'Aperçu, confirmation et retrait du média', 'Likes sur les photos ouvertes et les vidéos', 'Formats, taille et quotas vérifiés selon votre offre'],
     benefits: ['Montrez vos entraînements, vos matchs et votre progression avec vos propres photos et vidéos.', 'Présentez votre travail et votre accompagnement à travers des contenus concrets.', 'Partagez les moments de votre équipe et donnez de la visibilité à votre collectif.'],
     limit: 'Dans cette démo, l’import est local : aucun fichier n’est envoyé à un serveur ni conservé au rechargement. Les quotas et les formats autorisés sont indiqués dans le formulaire.',
   },
@@ -226,6 +237,51 @@ const primaryIds = ['accueil', 'reseau', 'messages', 'opportunities', 'profil'];
 const sectionOrder = ['accueil', 'publier', 'reseau', 'jouer', 'agenda', 'messages', 'opportunities', 'profil', 'medias', 'parametres'];
 const orderedFeatures = sectionOrder.map(id => features.find(feature => feature.id === id)!);
 const roles = ['Sportifs', 'Professionnels', 'Collectifs'];
+
+const adoptionFeatures = [
+  {
+    id: 'parrainage', icon: UserPlus, step: 'Inviter', title: 'Affiliation & parrainage',
+    experience: 'Un lien de parrainage et un parcours d’activation : nouveau membre distinct, e-mail vérifié, profil complété et première connexion. La démo propose trois mois Premium au parrain lorsque ces étapes sont réunies.',
+    value: 'Donner aux membres une raison concrète d’inviter leur réseau, et privilégier des profils actifs plutôt que de simples inscriptions.',
+    note: 'Parrainage simulé : récompenses et conditions à valider avant lancement. Aucun programme de commissions financières n’est activé.',
+    caption: 'Le parcours de parrainage et sa récompense de démonstration.',
+  },
+  {
+    id: 'organiser', icon: Volleyball, step: 'Se retrouver', title: 'Organisation de matchs',
+    experience: 'Créer une rencontre, proposer des créneaux, inviter ses connexions et gérer les participants. Mes invitations, J’organise et À proximité séparent clairement les usages ; les matchs confirmés rejoignent l’agenda.',
+    value: 'Faire de l’app un outil utile avant et après le match, avec des occasions naturelles de revenir et de retrouver son groupe.',
+    note: 'Un événement créé par mois en gratuit. À proximité et les alertes nécessitent Premium. Les rencontres restent fictives dans la démo.',
+    caption: 'La création d’un match depuis Jouer ensemble.',
+  },
+  {
+    id: 'passeport', icon: IdCard, step: 'Se présenter', title: 'Le passeport sportif partageable',
+    experience: 'Depuis le profil, ouvrir une pop-up montrant la carte exacte : photo, nom, présentation, disciplines, niveaux et ville. Autoriser le partage, puis transmettre la carte en image depuis son téléphone.',
+    value: 'Donner une présentation prête à partager avec un club, un partenaire ou son réseau, tout en faisant découvrir Opportunity Players.',
+    note: 'Le bouton Télécharger l’app est prévu. Le vrai lien public et l’adresse de téléchargement seront raccordés lors de la mise en ligne.',
+    caption: 'L’aperçu réel du passeport, avant tout partage.',
+  },
+  {
+    id: 'invitation', icon: Share2, step: 'Faire découvrir', title: 'Une invitation qui sort de l’app',
+    experience: 'L’organisateur ouvre la carte du match et son aperçu invité. Le parcours présente le sport, la ville et la date, avec une demande de participation simple et un accès Télécharger l’app, sans divulguer l’adresse précise du lieu.',
+    value: 'Faire découvrir l’app à partir d’une invitation concrète, plutôt que d’une publicité : une rencontre à rejoindre avec son réseau.',
+    note: 'La carte est partageable. Le lien public et le téléchargement restent à raccorder ; la demande invitée est simulée, sans réservation ni accord automatique.',
+    caption: 'La carte partageable d’une rencontre organisée dans la démo.',
+  },
+  {
+    id: 'spotlight', icon: Sparkles, step: 'Être reconnu', title: 'Spotlight of the month',
+    experience: 'Photos, vidéos et publications du fil peuvent recevoir des likes. Le Spotlight met à l’honneur la publication ayant obtenu le plus d’interactions du mois : un like ou un commentaire vaut une interaction. Une photo illustrant ce classement est déjà visible dans la démo.',
+    value: 'Reconnaître les contributions de la communauté et donner envie de publier, de réagir et de revenir découvrir la sélection du mois.',
+    note: 'Les médias privés ne participent pas. La clôture est calculée à l’utilisation de la démo, sans serveur ni traitement en arrière-plan ; les données sont réinitialisées au rechargement.',
+    caption: 'Une photo mise à l’honneur dans le fil communautaire.',
+  },
+  {
+    id: 'rdv', icon: CalendarDays, step: 'Concrétiser', title: 'Rendez-vous pro & agenda',
+    experience: 'Envoyer une demande, en consulter l’objet, l’accepter ou la refuser, puis choisir un créneau disponible. Le rendez-vous confirmé apparaît dans les deux agendas de démonstration. Les options de l’agenda proposent aussi un export au format .ics.',
+    value: 'Transformer une connexion en rendez-vous et faciliter l’organisation avec un calendrier que l’on peut exporter vers son outil habituel.',
+    note: 'Accès selon la formule. Export de démonstration, sans synchronisation continue avec Google, Apple ou Outlook ni agenda public partagé.',
+    caption: 'Les demandes de rendez-vous, dépliables dans l’agenda.',
+  },
+];
 
 export default function Page() {
   return (
@@ -256,6 +312,7 @@ export default function Page() {
             <Link href="#fonctionnalites" className="text-link">
               Découvrir les fonctionnalités ↓
             </Link>
+            <Link href="#adoption-visibilite" className="text-link">Adoption & visibilité ↓</Link>
           </div>
           <small>
             Écrans réels de la démo Arena Studio. Les fonctionnalités présentées
@@ -346,6 +403,12 @@ export default function Page() {
                 </div>
                 <p className="application-feature-note">{limit}</p>
                 {id === 'reseau' && (
+                  <div className="application-network-lists">
+                    <figure><ApplicationCapture id="connexions" alt="Liste des connexions acceptées avec recherche et accès à la messagerie"/><figcaption>Connexions : vos relations acceptées.</figcaption></figure>
+                    <figure><ApplicationCapture id="suivis" alt="Liste des profils suivis avec recherche et accès aux profils"/><figcaption>Suivis : les membres dont vous suivez les publications.</figcaption></figure>
+                  </div>
+                )}
+                {id === 'reseau' && (
                   <Link
                     className="action application-play-action"
                     href="/espace/jouer"
@@ -398,6 +461,33 @@ export default function Page() {
           La démo ne crée pas de compte réel. Les tarifs des formules sont
           présentés sur la page dédiée.
         </small>
+      </section>
+      <section id="adoption-visibilite" className="section application-adoption" aria-labelledby="adoption-title">
+        <header className="application-adoption-heading">
+          <span className="section-label">LES NOUVEAUX LEVIERS DE LA REFONTE</span>
+          <h2 id="adoption-title" lang="en">How to increase<br /><em>adoption and visibility.</em></h2>
+          <p>Faire découvrir l’app, créer des occasions de l’utiliser et valoriser celles et ceux qui font vivre le réseau. Ces six expériences de la nouvelle version visent à soutenir l’adoption et la visibilité organique, sans promettre une croissance automatique.</p>
+          <p className="application-adoption-subtitle">Inviter. Jouer. Partager. Revenir.</p>
+          <ApplicationVisualToggle />
+        </header>
+        <div className="application-adoption-grid">
+          {adoptionFeatures.map(({id,icon:Icon,step,title,experience,value,note,caption},index)=>(
+            <article key={id} className="application-adoption-card" id={`adoption-${id}`}>
+              <div className="application-adoption-copy">
+                <span className="application-adoption-step"><Icon size={18} aria-hidden="true" /> {String(index+1).padStart(2,'0')} / {step}</span>
+                <h3>{title}</h3>
+                <p>{experience}</p>
+                <div className="application-adoption-value"><span>La valeur pour la communauté</span><p>{value}</p></div>
+              </div>
+              <figure className="application-capture">
+                <ApplicationCapture id={id} alt={`${caption} Capture réelle de la dernière démo mobile.`}/>
+                <figcaption>{caption} · DÉMO</figcaption>
+              </figure>
+              <p className="application-adoption-note">{note}</p>
+            </article>
+          ))}
+        </div>
+        <p className="application-adoption-footnote">Captures de la démo iPhone du 23 septembre 2026, en modes clair et sombre. Cette présentation décrit la refonte et ses parcours de démonstration, pas les fonctionnalités déjà déployées dans l’ancienne app. Les invitations, récompenses et rendez-vous ne sont pas transmis à un serveur. Le téléchargement public de la nouvelle app n’est pas encore disponible.</p>
       </section>
     </main>
     </ApplicationVisualTheme>

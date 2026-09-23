@@ -1,6 +1,7 @@
 "use client";
 import { isPremium, isConnected, inCommunityFeed, matchesOpportunityType } from "@/lib/studio/social";
 import { ConnectionControls } from "./connection-controls";
+import {networkMembers,type NetworkList} from '@/lib/studio/network-lists';
 import { ApplyButton, AppointmentRequestButton } from "./career-screens";
 import { T, useLocale } from "./locale";
 import {
@@ -748,6 +749,12 @@ export function NetworkPage() {
   const [searched, setSearched] = useState(false);
   const [advanced, setAdvanced] = useState(false);
   const [expandedInvitations, setExpandedInvitations] = useState(false);
+  const [networkList,setNetworkList]=useState<NetworkList|null>(null);
+  const [contactQuery,setContactQuery]=useState('');
+  const connectionMembers=networkMembers(social,trust.blocked,'connections');
+  const followedMembers=networkMembers(social,trust.blocked,'following');
+  const contactMembers=networkList?networkMembers(social,trust.blocked,networkList,contactQuery):[];
+  function openNetworkList(kind:NetworkList|null){setNetworkList(kind);setContactQuery('');window.scrollTo({top:0,behavior:'instant'});}
   const [member, setMember] = useState<Member | null>(null);
   const effectiveFilters = memberSearchFilters(filters, premium);
   const sport = effectiveFilters.sport;
@@ -845,11 +852,22 @@ export function NetworkPage() {
     <ProfileLayout>
       <div className="social-title">
         <h1>
-          <T>{"Votre réseau"}</T>
+          <T>{networkList==='connections'?'Mes connexions':networkList==='following'?'Profils suivis':'Votre réseau'}</T>
           <span>.</span>
         </h1>
       </div>
       <NetworkSections />
+      {networkList ? <section className="network-directory">
+        <Button variant="ghost" className="network-directory-back" onClick={()=>openNetworkList(null)}><ArrowLeft size={18}/><T>Retour aux membres</T></Button>
+        <p className="field-hint"><T>{networkList==='connections'?'Vos connexions acceptées : échangez et invitez-les à jouer.':'Les membres dont vous suivez les publications. Suivre ne crée pas une connexion.'}</T></p>
+        <SearchField label={t('Rechercher dans cette liste…')} value={contactQuery} onChange={setContactQuery}/>
+        <p className="list-caption" role="status">{contactMembers.length} <T>résultats</T></p>
+        <div className="network-contact-list">{contactMembers.map(m=><article className="network-contact" key={m.id}>
+          <button className="network-contact-profile" onClick={()=>setMember(m)}><img src={m.image} alt=""/><span><strong>{m.name}</strong><small>{m.role} · {m.city}</small>{isConnected(social,m.id)&&<small className="network-contact-status"><Check size={12}/><T>Connexion acceptée</T></small>}</span><ArrowUpRight size={18}/></button>
+          {isConnected(social,m.id)&&<Button variant="ghost" onClick={()=>message(m)}><MessageCircle size={16}/><T>Message</T></Button>}
+        </article>)}</div>
+        {!contactMembers.length&&<div className="network-directory-empty"><p><T>{contactQuery?'Aucun membre trouvé.':networkList==='connections'?'Aucune connexion acceptée pour le moment.':'Vous ne suivez encore aucun membre.'}</T></p><Button variant="outline" onClick={()=>openNetworkList(null)}><T>Découvrir des membres</T><ArrowUpRight size={16}/></Button></div>}
+      </section> : <>
       <section className="community-section" aria-labelledby="member-search-title">
         <h2 id="member-search-title">
           <T>{"Recherche"}</T>
@@ -987,6 +1005,13 @@ export function NetworkPage() {
           </div>
         )}
       </section>
+      <section className="community-section network-overview" aria-labelledby="network-overview-title">
+        <h2 id="network-overview-title"><T>Mon réseau</T></h2>
+        <div className="network-count-cards">
+          <button onClick={()=>openNetworkList('connections')} aria-label={`${t('Connexions')} · ${connectionMembers.length}`}><span><strong>{connectionMembers.length}</strong><T>Connexions</T></span><ArrowUpRight size={20}/></button>
+          <button onClick={()=>openNetworkList('following')} aria-label={`${t('Suivis')} · ${followedMembers.length}`}><span><strong>{followedMembers.length}</strong><T>Suivis</T></span><ArrowUpRight size={20}/></button>
+        </div>
+      </section>
       <section className="community-section" aria-labelledby="member-invitations-title">
         <div className="community-section-heading">
           <h2 id="member-invitations-title">
@@ -1083,6 +1108,7 @@ export function NetworkPage() {
       <p className="demo-context">
         <T>{"Profils et invitations fictifs. Les actions restent dans cette démo."}</T>
       </p>
+      </>}
       <Modal
         open={!!member}
         onOpenChange={(v) => {

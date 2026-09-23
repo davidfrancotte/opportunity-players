@@ -17,7 +17,7 @@ const features = [
       'Handisport, profil enfant accompagné et contrôle de la visibilité des informations personnelles.',
     ],
     href: '/espace/profil', action: 'Explorer le profil',
-    image: 'web-20260922-profil',
+    image: 'web-20260923-network-profil',
     alt: 'Capture de la démo web Arena en mode clair : profil d’un coach, parcours et accès au dossier sportif, aux références et à l’agent.',
   },
   {
@@ -25,14 +25,14 @@ const features = [
     title: 'Les bons profils. Et l’occasion de jouer ensemble.',
     text: 'Recherchez les membres, suivez leurs publications ou envoyez une demande Connect. Après acceptation, échangez sans quota et invitez vos connexions à jouer.',
     points: [
-      'Recherche simple par nom, rôle, club ou ville ; invitations reçues dans une liste dépliable.',
+      'Mon réseau : listes Connexions et Suivis avec compteurs, recherche et accès aux profils, gratuitement.',
       'Filtres avancés par pays, ville, sport et classement : visibles pour tous, utilisables avec Premium.',
       'Jouer ensemble : Mes invitations, J’organise et À proximité ; proximité et alertes avec Premium.',
       'Invitations à jouer : dates proposées, lieu, effectif total, +1 et confirmation de l’organisateur.',
     ],
     href: '/espace/reseau', action: 'Explorer le réseau',
-    image: 'web-20260922-reseau',
-    alt: 'Capture de la démo web Arena en mode clair : recherche de membres, filtres et profils sportifs fictifs.',
+    image: 'web-20260923-network-reseau',
+    alt: 'Capture de la démo web Arena en mode clair : recherche, cartes Connexions et Suivis, et invitations.',
   },
   {
     id: 'opportunites', label: 'Opportunités', icon: BriefcaseBusiness,
@@ -45,7 +45,7 @@ const features = [
       'Pour les collectifs Premium : gestionnaires, permissions, commentaires internes et entretiens coordonnés.',
     ],
     href: '/espace/opportunities', action: 'Explorer les opportunités',
-    image: 'web-20260922-opportunities',
+    image: 'web-20260923-network-opportunities',
     alt: 'Capture de la démo web Arena en mode clair : opportunités sportives, filtres, favoris et accès aux candidatures.',
   },
   {
@@ -59,7 +59,7 @@ const features = [
       'Blocage, signalement et parcours de modération pour encadrer les échanges.',
     ],
     href: '/espace/messages', action: 'Explorer la messagerie',
-    image: 'web-20260922-messages',
+    image: 'web-20260923-network-messages',
     alt: 'Capture de la messagerie web Arena en mode clair, avec liste de conversations et échanges fictifs.',
   },
 ];

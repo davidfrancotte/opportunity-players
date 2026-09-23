@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { BrandMark } from './brand-mark';
 import { usePathname, useRouter } from 'next/navigation';
 import type { ReactNode } from 'react';
 import {
@@ -49,7 +50,7 @@ function Shell({ children }: { children: ReactNode }) {
           aria-label="Arena, fil d’actualité"
         >
           <span>
-            op<em>↗</em>
+            <BrandMark/>
           </span>
           <span>
             opportunity
@@ -99,7 +100,7 @@ function Shell({ children }: { children: ReactNode }) {
       <div className="member-body">
         <header className="member-topbar">
           <Link href="/espace" className="mobile-member-brand">
-            op<em>↗</em>
+            <BrandMark/>
           </Link>
           <form
             action="/espace/reseau"

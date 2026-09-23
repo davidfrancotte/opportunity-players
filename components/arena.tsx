@@ -1,5 +1,6 @@
 'use client';
 import { AthleteImage } from '@/components/athlete-image';
+import { BrandMark } from './brand-mark';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
@@ -43,7 +44,7 @@ export function Brand() {
   return (
     <Link href="/" className="brand" aria-label="Opportunity Players accueil">
       <span className="brand-symbol">
-        op<i className="op-angle" aria-hidden="true" />
+        <BrandMark/>
       </span>
       <span>
         opportunity
@@ -432,7 +433,7 @@ export function ProductDemo() {
         <TabsContent key={key} value={key}>
           <div className="demo-scene">
             <div className="demo-side">
-              <span className="demo-brand">op<i className="op-angle" aria-hidden="true" /></span>
+              <span className="demo-brand"><BrandMark/></span>
               <span className="demo-avatar">
                 <UserRound />
               </span>

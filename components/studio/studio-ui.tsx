@@ -1,5 +1,6 @@
 'use client';
 import { T, LanguageSwitch, useLocale } from './locale';
+import { BrandMark } from '../brand-mark';
 import Link from 'next/link';
 import {
   useEffect,
@@ -25,8 +26,7 @@ export function Brand({ href = '/espace/connexion' }: { href?: string }) {
       className="brand"
       aria-label="Opportunity Players — accueil"
     >
-      op
-      <i className="op-angle" aria-hidden="true" />
+      <BrandMark/>
       <small>Opportunity Players</small>
     </Link>
   );
@@ -194,7 +194,7 @@ export function AuthLayout({
           </h2>
         </div>
         <img
-          src="/app-visuals/web-20260922-profil.png"
+          src="/app-visuals/web-20260923-network-profil.png"
           alt="Capture de la démo web : profil multisport, niveaux, clubs, agent et références"
         />
         <span className="editorial-caption">

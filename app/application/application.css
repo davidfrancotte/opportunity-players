@@ -288,3 +288,35 @@
   margin: 16px 0 24px;
   max-width: 380px;
 }
+
+.application-adoption { padding-block: 100px; border-top: 1px solid var(--border); scroll-margin-top: 30px; }
+.application-adoption-heading { max-width: 860px; margin-bottom: 48px; }
+.application-adoption-heading h2 { margin-block: 24px; font-size: clamp(34px, 4.3vw, 64px); line-height: 1.06; }
+.application-adoption-heading > p { max-width: 730px; color: #b4bcb6; line-height: 1.8; }
+.application-adoption-heading .application-adoption-subtitle { color: #d1f94c; font-size: 18px; margin-top: 20px; }
+.application-adoption .application-visual-control small { color: #a8b1aa; line-height: 1.6; }
+.application-adoption-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; }
+.application-adoption-card { display: grid; grid-template-columns: minmax(0,1fr) 150px; gap: 24px; align-content: start; padding: 28px; background: #171d1e; border: 1px solid #3b443b; border-radius: 24px; scroll-margin-top: 30px; }
+.application-adoption-step { display: flex; align-items: center; gap: 9px; color: #d1f94c; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.application-adoption-copy h3 { font-size: clamp(23px,2vw,30px); line-height: 1.15; margin: 20px 0 16px; letter-spacing: -.025em; }
+.application-adoption-copy p { font-size: 14px; line-height: 1.75; color: #bdc5c0; }
+.application-adoption-value { padding-top: 18px; margin-top: 22px; border-top: 1px solid #3b443b; }
+.application-adoption-value > span { display: block; color: #d1f94c; font-size: 11px; text-transform: uppercase; letter-spacing: .055em; margin-bottom: 8px; }
+.application-adoption-card .application-capture { gap: 16px; }
+.application-adoption-card .application-capture img { width: 150px; border-radius: 14px; }
+.application-adoption-note { grid-column: 1/-1; font-size: 12px; line-height: 1.75; color: #a2ada5; margin: 0; }
+.application-adoption-footnote { margin-top: 36px; max-width: 920px; font-size: 13px; line-height: 1.8; color: #a2ada5; }
+@media (max-width: 1150px) {
+  .application-adoption-grid { grid-template-columns: 1fr; }
+  .application-adoption-card { grid-template-columns: minmax(0,1fr) 210px; gap: 28px; }
+  .application-adoption-card .application-capture img { width: 210px; }
+}
+@media (max-width: 600px) {
+  .application-adoption { padding-block: 60px; }
+  .application-adoption-card { grid-template-columns: minmax(0,1fr); padding: 24px; }
+  .application-adoption-card .application-capture img { width: 230px; }
+}
+.application-network-lists { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin:26px 0; }
+.application-network-lists figure { margin:0; min-width:0; }
+.application-network-lists img { display:block; width:100%; height:auto; border:1px solid var(--border); border-radius:18px; }
+.application-network-lists figcaption { font-size:12px; line-height:1.5; margin-top:10px; color:var(--muted-foreground); }

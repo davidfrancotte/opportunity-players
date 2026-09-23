@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { BrandMark } from './brand-mark';
 import Image from 'next/image';
 import { AppPhoneStage } from '@/components/app-phone-stage';
 import { Phone3D } from '@/components/phone-3d';
@@ -52,8 +53,7 @@ export function AppPhone({
         ) : (
           <div className="app-screen-placeholder" data-app-screen="placeholder">
             <span className="app-screen-brand">
-              op
-              <i className="op-angle" aria-hidden="true" />
+              <BrandMark/>
             </span>
             <span className="app-screen-kicker">FUTURE APP ARENA</span>
             <strong>
@@ -154,14 +154,14 @@ export function AppShowcase({ variant = 'home' }: AppShowcaseProps) {
             <div className="app-phone-secondary">
               <AppPhone
                 label="Messagerie Arena Studio"
-                screenSrc="/app-visuals/studio-20260922-messages.png"
+                screenSrc="/app-visuals/studio-20260923-network-messages.png"
               />
             </div>
           )}
           <div className="app-phone-primary">
             <AppPhone
               label={label}
-              screenSrc="/app-visuals/studio-20260922-accueil.png"
+              screenSrc="/app-visuals/studio-20260923-network-accueil.png"
             />
           </div>
         </div>

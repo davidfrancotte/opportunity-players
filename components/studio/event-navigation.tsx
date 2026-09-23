@@ -37,7 +37,6 @@ export function NetworkSections({
       </Link>
       <Link href="/espace/jouer" aria-current={active === "play" ? "page" : undefined}>
         <T>{"Jouer ensemble"}</T>
-        <span>NEW</span>
       </Link>
       <Link href="/espace/agenda" aria-current={active === "agenda" ? "page" : undefined}>
         <T>{"Agenda"}</T>

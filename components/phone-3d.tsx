@@ -44,9 +44,10 @@ export function Phone3D({
       try {
         const { mountPhoneRenderer } = await import('@/lib/phone-renderer');
         if (cancelled) return;
-        renderer = mountPhoneRenderer(host, label, screenSrc, fail);
+        renderer = mountPhoneRenderer(host, label, screenSrc, fail, () => {
+          if (!cancelled) phone.dataset.deviceReady = 'true';
+        });
         pose(true);
-        phone.dataset.deviceReady = 'true';
       } catch {
         // The original raster remains a usable fallback without WebGL support.
         fail();

@@ -9,7 +9,7 @@ const previews = [
   {
     id: 'profil',
     label: '01 / Mon parcours',
-    image: 'web-20260922-profil',
+    image: 'web-20260923-network-profil',
     href: '/espace/profil',
     title: 'Vos sports, vos niveaux, vos clubs.',
     text: 'Un dossier multisport, vos références et votre agent : donnez du contexte à votre profil.',
@@ -18,16 +18,16 @@ const previews = [
   {
     id: 'reseau',
     label: '02 / Les bons profils',
-    image: 'web-20260922-reseau',
+    image: 'web-20260923-network-reseau',
     href: '/espace/reseau',
     title: 'Une recherche qui connaît votre terrain.',
-    text: 'Recherchez un membre, suivez ses publications ou envoyez une demande Connect. Avec Premium, affinez par pays, ville, sport et classement.',
-    alt: 'Interface web actualisée en mode clair : recherche, filtres Premium dépliés, invitations et suggestions de membres.',
+    text: 'Retrouvez vos Connexions et vos Suivis dans deux listes avec recherche. Envoyez une demande Connect ou affinez la découverte de membres avec Premium.',
+    alt: 'Interface web actualisée en mode clair : recherche, cartes Connexions et Suivis, invitations et suggestions de membres.',
   },
   {
     id: 'messages',
     label: '03 / Mes échanges',
-    image: 'web-20260922-messages',
+    image: 'web-20260923-network-messages',
     href: '/espace/messages',
     title: 'Une conversation peut tout changer.',
     text: 'Après acceptation de votre connexion, échangez sans quota et préparez vos prochaines rencontres.',
@@ -36,7 +36,7 @@ const previews = [
   {
     id: 'accueil',
     label: '04 / Ma communauté',
-    image: 'web-20260922-accueil',
+    image: 'web-20260923-network-accueil',
     href: '/espace/accueil',
     title: 'Votre communauté, au premier plan.',
     text: 'Un fil centré sur les membres suivis. Ouvrez les posts complets, importez photos et vidéos et programmez vos publications avec Premium.',
@@ -45,7 +45,7 @@ const previews = [
   {
     id: 'opportunities',
     label: '05 / Opportunités',
-    image: 'web-20260922-opportunities',
+    image: 'web-20260923-network-opportunities',
     href: '/espace/opportunities',
     title: 'Votre prochain projet, plus facile à trouver.',
     text: 'Coaching, recrutement, partenariat, sponsoring et essais groupés : trouvez les annonces pertinentes et suivez vos démarches.',
@@ -54,7 +54,7 @@ const previews = [
   {
     id: 'agenda',
     label: '06 / Agenda',
-    image: 'web-20260922-agenda',
+    image: 'web-20260923-network-agenda',
     href: '/espace/agenda',
     title: 'Un mois. Toutes vos rencontres.',
     text: 'Calendrier coloré, liste filtrable et demandes de rendez-vous à valider : matchs, rendez-vous pro et événements à suivre, réunis.',

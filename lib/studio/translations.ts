@@ -1,5 +1,7 @@
 // Stable French domain values are never translated in storage. Only interface labels change.
+import {networkRows} from './network-translations';
 export const english: Record<string, string> = {
+  ...Object.fromEntries(networkRows.map(row=>[row[0],row[8]])),
   'Écrire librement': 'Message freely',
   'Ouvrir la publication de': 'Open post by',
   'Voir la publication': 'View post',
