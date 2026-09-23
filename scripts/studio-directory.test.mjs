@@ -128,7 +128,8 @@ test("category switch clears hidden incompatible filters, keeps location and spo
   assert.deepEqual(results(f), ["academie"]);
 });
 test("all requested account types validate in their own category only", () => {
-  assert.equal(professionalTypes.length, 26);
+  assert.equal(professionalTypes.length, 30);
+  for(const type of ['Coach','Kiné','Nutritionniste','Arbitre','Recruteur','Agent','Staff technique','Média'])assert.ok(professionalTypes.includes(type));
   assert.equal(collectiveTypes.length, 7);
   for (const [category, types] of [
     ["Professionnel", professionalTypes],

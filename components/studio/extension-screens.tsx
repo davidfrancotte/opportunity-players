@@ -1,4 +1,6 @@
 "use client";
+import { useLocale } from "./locale";
+import { T } from "./locale";
 import { useState, useId, useEffect, type ReactNode, type FormEvent } from "react";
 import Link from "next/link";
 import {
@@ -29,8 +31,8 @@ import { agendaEntries } from "@/lib/studio/agenda";
 const uid = () => crypto.randomUUID();
 const name = (id: string) =>
   members.find((m) => m.id === id)?.name || (id === "owner" ? "Propriétaire" : id);
-const when = (s: string) =>
-  new Intl.DateTimeFormat("fr-BE", { dateStyle: "medium", timeStyle: "short" }).format(new Date(s));
+const when = (s: string, dateLocale: string) =>
+  new Intl.DateTimeFormat(dateLocale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(s));
 function Select({
   label,
   value,
@@ -77,7 +79,7 @@ function CheckChoice({
 function Card({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="extension-card">
-      <h2>{title}</h2>
+      <h2><T>{title}</T></h2>
       {children}
     </section>
   );
@@ -88,10 +90,10 @@ function Premium({ children }: { children: ReactNode }) {
     <>{children}</>
   ) : (
     <aside className="extension-lock">
-      <strong>Inclus dans Premium</strong>
-      <p>Votre offre gratuite reste accessible. Activez Premium pour essayer cette extension.</p>
+      <strong><T>{"Inclus dans Premium"}</T></strong>
+      <p><T>{"Votre offre gratuite reste accessible. Activez Premium pour essayer cette extension."}</T></p>
       <Link href="/espace/abonnement">
-        Découvrir mon offre <ArrowUpRight size={16} />
+        <T>{"Découvrir mon offre"}</T><ArrowUpRight size={16} />
       </Link>
     </aside>
   );
@@ -106,24 +108,25 @@ const routes = [
   ["statistiques", "Statistiques & invitations", ChartNoAxesCombined],
 ] as const;
 export function ExtensionNav({ compact = false }: { compact?: boolean }) {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   return (
-    <nav className="extension-nav" aria-label="Outils complémentaires">
+    <nav className="extension-nav" aria-label={uiCopy("Outils complémentaires")}>
       {(compact ? routes.slice(0, 1) : routes).map(([route, label, Icon]) => (
         <Link href={`/espace/${route}`} key={route}>
           <Icon size={17} />
-          {label}
+          <T>{label}</T>
         </Link>
       ))}
       {compact && (
         <Link href="/espace/outils">
           <Layers size={17} />
-          Tous mes outils
-        </Link>
+          <T>{"Tous mes outils"}</T></Link>
       )}
     </nav>
   );
 }
 export function ExtensionPage({ section = "outils" }: { section?: string }) {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const {
     extensions,
     dispatchExtension,
@@ -137,20 +140,18 @@ export function ExtensionPage({ section = "outils" }: { section?: string }) {
     <ProfileLayout back="/espace/profil">
       <div className="extension-page">
         <header>
-          <span className="mini-kicker">ARENA / VOTRE ESPACE DE TRAVAIL</span>
+          <span className="mini-kicker"><T>{"ARENA / VOTRE ESPACE DE TRAVAIL"}</T></span>
           <h1>
-            {title}
+            <T>{title}</T>
             <span>.</span>
           </h1>
           <p className="demo-context">
-            Démo interactive · données fictives conservées pendant cette visite. Aucun envoi, aucune
-            connexion à un service externe.
-          </p>
+            <T>{"Démo interactive · données fictives conservées pendant cette visite. Aucun envoi, aucune connexion à un service externe."}</T></p>
         </header>
         <details className="extension-simulation">
           <summary>
-            Tester un autre rôle · {careerActor.name} ·{" "}
-            {careerActor.premium ? "Premium" : "Gratuit"}
+            <T>{"Tester un autre rôle ·"}</T>{careerActor.name} ·{" "}
+            <T>{careerActor.premium ? "Premium" : "Gratuit"}</T>
           </summary>
           <Select
             label="Profil fictif de simulation"
@@ -161,32 +162,25 @@ export function ExtensionPage({ section = "outils" }: { section?: string }) {
               .map((a) => [a.id, a.name + " · " + a.category])}
           />
           <p>
-            Les espaces sont séparés par profil. Revenez à votre profil pour programmer ses
-            publications.
-          </p>
+            <T>{"Les espaces sont séparés par profil. Revenez à votre profil pour programmer ses publications."}</T></p>
         </details>
         <ExtensionNav />
         {extensions.error && (
           <div role="alert" className="extension-error">
             {extensions.error}
             <Button variant="ghost" onClick={() => dispatchExtension({ type: "clear" })}>
-              Fermer
-            </Button>
+              <T>{"Fermer"}</T></Button>
           </div>
         )}
         {section === "outils" && (
           <>
-            <Card title="Des outils pour passer à l’action">
+            <Card title={uiCopy("Des outils pour passer à l’action")}>
               <p>
-                Retrouvez une recherche, préparez votre communication, centralisez les talents ou
-                coordonnez votre équipe.
-              </p>
+                <T>{"Retrouvez une recherche, préparez votre communication, centralisez les talents ou coordonnez votre équipe."}</T></p>
               <p>
-                Les quotas de cette version suivent votre fichier Excel mis à jour. Les réactions,
-                commentaires et partages restent gratuits.
-              </p>
+                <T>{"Les quotas de cette version suivent votre fichier Excel mis à jour. Les réactions, commentaires et partages restent gratuits."}</T></p>
               <Link href="/espace/abonnement" className="text-link">
-                {careerActor.premium ? "Gérer mon abonnement" : "Comparer gratuit et Premium"}
+                <T>{careerActor.premium ? "Gérer mon abonnement" : "Comparer gratuit et Premium"}</T>
               </Link>
             </Card>
             <ExtensionNotices />
@@ -200,9 +194,7 @@ export function ExtensionPage({ section = "outils" }: { section?: string }) {
         {section === "calendrier-avance" && <CalendarWorkspace />}
         {section === "statistiques" && <StatsWorkspace />}
         <p className="extension-footnote">
-          Les simulations ne créent aucun droit réel d’accès. En production : contrôle serveur des
-          quotas et permissions, notifications et traitements en arrière-plan.
-        </p>
+          <T>{"Les simulations ne créent aucun droit réel d’accès. En production : contrôle serveur des quotas et permissions, notifications et traitements en arrière-plan."}</T></p>
       </div>
     </ProfileLayout>
   );
@@ -221,12 +213,9 @@ export function SaveDirectorySearch({
   return (
     <details className="extension-inline">
       <summary>
-        <Bookmark size={16} /> Retrouver cette recherche en un clic
-      </summary>
+        <Bookmark size={16} /> <T>{"Retrouver cette recherche en un clic"}</T></summary>
       <p>
-        Enregistrez vos filtres actuels, par exemple « Tennis · Bruxelles ». Premium peut vous
-        alerter de nouvelles correspondances.
-      </p>
+        <T>{"Enregistrez vos filtres actuels, par exemple « Tennis · Bruxelles ». Premium peut vous alerter de nouvelles correspondances."}</T></p>
       <div className="extension-form">
         <Field
           label="Nom de la recherche"
@@ -236,8 +225,7 @@ export function SaveDirectorySearch({
           maxLength={160}
         />
         <CheckChoice checked={alerts} onChange={setAlerts}>
-          M’alerter des nouveaux profils · Premium
-        </CheckChoice>
+          <T>{"M’alerter des nouveaux profils · Premium"}</T></CheckChoice>
         <Button
           onClick={() => {
             dispatchExtension({
@@ -259,13 +247,11 @@ export function SaveDirectorySearch({
             });
           }}
         >
-          Enregistrer mes critères
-        </Button>
+          <T>{"Enregistrer mes critères"}</T></Button>
       </div>
       <p>
         {w.searches.length}/{limits(careerActor.category, careerActor.premium).searches}{" "}
-        recherche(s) enregistrée(s)
-      </p>
+        <T>{"recherche(s) enregistrée(s)"}</T></p>
       {items.map((s) => (
         <Button
           key={s.id}
@@ -276,12 +262,12 @@ export function SaveDirectorySearch({
         </Button>
       ))}
       <Link href="/espace/recherches" className="text-link">
-        Gérer mes recherches favorites
-      </Link>
+        <T>{"Gérer mes recherches favorites"}</T></Link>
     </details>
   );
 }
 function SearchWorkspace() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const {
     extensionWorkspace: w,
     dispatchExtension,
@@ -382,16 +368,13 @@ function SearchWorkspace() {
   }
   return (
     <>
-      <Card title="Vos critères, mémorisés">
+      <Card title={uiCopy("Vos critères, mémorisés")}>
         <p>
-          Une recherche favorite conserve vos filtres ; elle ne contacte personne. Une alerte
-          signale uniquement les nouveaux résultats, sans répéter ceux déjà vus.
-        </p>
+          <T>{"Une recherche favorite conserve vos filtres ; elle ne contacte personne. Une alerte signale uniquement les nouveaux résultats, sans répéter ceux déjà vus."}</T></p>
         <Link href="/espace/reseau" className="text-link">
-          Enregistrer une recherche de personnes depuis le réseau
-        </Link>
+          <T>{"Enregistrer une recherche de personnes depuis le réseau"}</T></Link>
       </Card>
-      <Card title="Suivre des opportunités ou des matchs">
+      <Card title={uiCopy("Suivre des opportunités ou des matchs")}>
         <form className="extension-form" onSubmit={save}>
           <Select
             label="Je recherche"
@@ -450,30 +433,27 @@ function SearchWorkspace() {
                 ]}
               />
               <p>
-                Les villes disponibles pour la distance : {Object.keys(cities).join(", ")}. Les
-                événements sans niveau ne correspondent pas à un filtre de niveau précis.
-              </p>
+                <T>{"Les villes disponibles pour la distance :"}</T>{Object.keys(cities).join(", ")}<T>{". Les événements sans niveau ne correspondent pas à un filtre de niveau précis."}</T></p>
             </>
           )}
           <CheckChoice checked={alerts} onChange={setAlerts}>
-            M’alerter des nouveautés · Premium
-          </CheckChoice>
-          <Submit>Enregistrer la recherche</Submit>
+            <T>{"M’alerter des nouveautés · Premium"}</T></CheckChoice>
+          <Submit><T>{"Enregistrer la recherche"}</T></Submit>
         </form>
       </Card>
       <Card
         title={`Mes recherches · ${w.searches.length}/${limits(careerActor.category, careerActor.premium).searches}`}
       >
         {!w.searches.length && (
-          <p>Aucune recherche enregistrée. Vos filtres du réseau peuvent aussi être mémorisés.</p>
+          <p><T>{"Aucune recherche enregistrée. Vos filtres du réseau peuvent aussi être mémorisés."}</T></p>
         )}
         {w.searches.map((s) => (
           <article className="extension-item" key={s.id}>
             <strong>{s.name}</strong>
             <p>
-              {s.alerts
+              <T>{s.alerts
                 ? "Alertes activées · vérification pendant la visite"
-                : "Sans alerte automatique"}
+                : "Sans alerte automatique"}</T>
             </p>
             <div className="extension-actions">
               <Button
@@ -486,29 +466,26 @@ function SearchWorkspace() {
                   });
                 }}
               >
-                Voir les résultats
-              </Button>
+                <T>{"Voir les résultats"}</T></Button>
               <Button
                 variant="outline"
                 onClick={() =>
                   dispatchExtension({ type: "search", value: { ...s, alerts: !s.alerts } })
                 }
               >
-                {s.alerts ? "Désactiver" : "Activer"} l’alerte
-              </Button>
+                <T>{s.alerts ? "Désactiver" : "Activer"}</T> <T>{"l’alerte"}</T></Button>
               <Button
                 variant="ghost"
                 onClick={() => dispatchExtension({ type: "search-remove", id: s.id })}
               >
-                Supprimer
-              </Button>
+                <T>{"Supprimer"}</T></Button>
             </div>
           </article>
         ))}
         {active && (
           <div className="extension-results">
             <h3>{active.name}</h3>
-            {!results(active).length && <p>Aucune correspondance actuellement.</p>}
+            {!results(active).length && <p><T>{"Aucune correspondance actuellement."}</T></p>}
             {results(active).map((r) => (
               <Link key={r.id} href={r.href}>
                 <strong>{r.title}</strong>
@@ -520,26 +497,23 @@ function SearchWorkspace() {
       </Card>
       <ExtensionNotices />
       <p className="demo-context">
-        Les alertes consultent les données de démonstration. Pas de notification lorsque
-        l’application est fermée.
-      </p>
+        <T>{"Les alertes consultent les données de démonstration. Pas de notification lorsque l’application est fermée."}</T></p>
     </>
   );
 }
 function ScheduledWorkspace() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { extensionWorkspace: w, dispatchExtension, runScheduled, careerActor } = useDemo();
   const [text, setText] = useState(""),
     [start, setStart] = useState(""),
     [sport, setSport] = useState("Tennis");
   return (
     <>
-      <Card title="Préparer maintenant, publier plus tard">
+      <Card title={uiCopy("Préparer maintenant, publier plus tard")}>
         <p>
-          La publication rejoint le fil lorsque l’heure arrive et que cette démo reste ouverte. Le
-          bouton de simulation permet de tester immédiatement la diffusion.
-        </p>
+          <T>{"La publication rejoint le fil lorsque l’heure arrive et que cette démo reste ouverte. Le bouton de simulation permet de tester immédiatement la diffusion."}</T></p>
         {careerActor.id !== "self" ? (
-          <p>Revenez à « Mon profil actuel » pour publier dans votre fil.</p>
+          <p><T>{"Revenez à « Mon profil actuel » pour publier dans votre fil."}</T></p>
         ) : (
           <Premium>
             <form
@@ -576,49 +550,47 @@ function ScheduledWorkspace() {
                 value={start}
                 onChange={(e) => setStart(e.target.value)}
               />
-              <Submit>Programmer</Submit>
+              <Submit><T>{"Programmer"}</T></Submit>
             </form>
           </Premium>
         )}
       </Card>
-      <Card title="Mes publications programmées">
-        {!w.schedules.length && <p>Vos prochaines publications apparaîtront ici.</p>}
+      <Card title={uiCopy("Mes publications programmées")}>
+        {!w.schedules.length && <p><T>{"Vos prochaines publications apparaîtront ici."}</T></p>}
         {w.schedules.map((p) => (
           <article key={p.id} className="extension-item">
             <p>{p.text}</p>
             <small>
-              {p.sport} · {when(p.start)} ·{" "}
-              {p.status === "planned"
+              {p.sport} · {when(p.start, uiDateLocale)} ·{" "}
+              <T>{p.status === "planned"
                 ? "Programmée"
                 : p.status === "published"
                   ? "Publiée dans le fil démo"
-                  : "Annulée"}
+                  : "Annulée"}</T>
             </small>
             {p.status === "planned" && (
               <div className="extension-actions">
                 <Button onClick={() => runScheduled(Date.parse(p.start))}>
-                  Simuler l’arrivée de cette date
-                </Button>
+                  <T>{"Simuler l’arrivée de cette date"}</T></Button>
                 <Button
                   variant="ghost"
                   onClick={() =>
                     dispatchExtension({ type: "schedule-status", id: p.id, status: "cancelled" })
                   }
                 >
-                  Annuler
-                </Button>
+                  <T>{"Annuler"}</T></Button>
               </div>
             )}
           </article>
         ))}
         <Link href="/espace/accueil" className="text-link">
-          Voir le fil d’actualité
-        </Link>
+          <T>{"Voir le fil d’actualité"}</T></Link>
       </Card>
     </>
   );
 }
 function TalentWorkspace() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { extensionWorkspace: w, dispatchExtension, careerActor } = useDemo();
   const [title, setTitle] = useState(""),
     [selected, setSelected] = useState(""),
@@ -631,27 +603,22 @@ function TalentWorkspace() {
     l = limits(careerActor.category, careerActor.premium);
   if (careerActor.category === "Sportif")
     return (
-      <Card title="Un espace pour les recruteurs et accompagnants">
+      <Card title={uiCopy("Un espace pour les recruteurs et accompagnants")}>
         <p>
-          Le portefeuille est réservé aux professionnels ; les viviers sont destinés aux collectifs.
-          Vous pouvez suivre les profils dans votre réseau.
-        </p>
-        <Link href="/espace/reseau">Mon réseau</Link>
+          <T>{"Le portefeuille est réservé aux professionnels ; les viviers sont destinés aux collectifs. Vous pouvez suivre les profils dans votre réseau."}</T></p>
+        <Link href="/espace/reseau"><T>{"Mon réseau"}</T></Link>
       </Card>
     );
   return (
     <>
       <Card
-        title={
-          careerActor.category === "Professionnel"
+        title={uiCopy(careerActor.category === "Professionnel"
             ? "Mes listes et mon portefeuille métier"
-            : "Mes viviers de recrutement"
-        }
+            : "Mes viviers de recrutement")}
       >
         <p>
-          {w.lists.length}/{l.lists} listes · {w.lists.reduce((n, l) => n + l.profiles.length, 0)}/
-          {l.talents} profils au total. Les notes ne sont jamais affichées sur le profil public.
-        </p>
+          {w.lists.length}/{l.lists} <T>{" listes · "}</T>{w.lists.reduce((n, l) => n + l.profiles.length, 0)}/
+          {l.talents} <T>{"profils au total. Les notes ne sont jamais affichées sur le profil public."}</T></p>
         <form
           className="extension-form"
           onSubmit={(e) => {
@@ -662,12 +629,12 @@ function TalentWorkspace() {
           <Field
             id="list-title"
             label="Nom de la liste"
-            placeholder="Talents à suivre, joueurs accompagnés…"
+            placeholder={uiCopy("Talents à suivre, joueurs accompagnés…")}
             required
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-          <Submit>Créer une liste</Submit>
+          <Submit><T>{"Créer une liste"}</T></Submit>
         </form>
       </Card>
       {list && (
@@ -691,21 +658,20 @@ function TalentWorkspace() {
             <Button
               onClick={() => dispatchExtension({ type: "talent", list: list.id, id: person })}
             >
-              Conserver ce profil
-            </Button>
+              <T>{"Conserver ce profil"}</T></Button>
           </div>
           {list.profiles.map((p) => (
             <article className="extension-item" key={p.id}>
               <strong>{name(p.id)}</strong>
               <small>
                 {p.step}
-                {p.next ? " · Suivi le " + when(p.next) : ""}
+                {p.next ? " · Suivi le " + when(p.next, uiDateLocale) : ""}
               </small>
               {careerActor.premium && p.note && (
-                <p className="extension-private">Note privée : {p.note}</p>
+                <p className="extension-private"><T>{"Note privée : "}</T>{p.note}</p>
               )}
               <div className="extension-actions">
-                <Link href="/espace/reseau">Voir le réseau</Link>
+                <Link href="/espace/reseau"><T>{"Voir le réseau"}</T></Link>
                 <Button
                   variant="outline"
                   onClick={() => {
@@ -715,16 +681,14 @@ function TalentWorkspace() {
                     setNext(p.next ? p.next.slice(0, 16) : "");
                   }}
                 >
-                  Dossier & suivi
-                </Button>
+                  <T>{"Dossier & suivi"}</T></Button>
                 <Button
                   variant="ghost"
                   onClick={() =>
                     dispatchExtension({ type: "talent", list: list.id, id: p.id, remove: true })
                   }
                 >
-                  Retirer
-                </Button>
+                  <T>{"Retirer"}</T></Button>
               </div>
               {editing === p.id && (
                 <Premium>
@@ -771,7 +735,7 @@ function TalentWorkspace() {
                       value={next}
                       onChange={(e) => setNext(e.target.value)}
                     />
-                    <Submit>Enregistrer le suivi</Submit>
+                    <Submit><T>{"Enregistrer le suivi"}</T></Submit>
                   </form>
                 </Premium>
               )}
@@ -783,6 +747,7 @@ function TalentWorkspace() {
   );
 }
 function TrialWorkspace() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { extensionWorkspace: w, dispatchExtension, careerActor } = useDemo();
   const [title, setTitle] = useState(""),
     [start, setStart] = useState(""),
@@ -791,18 +756,16 @@ function TrialWorkspace() {
     [selected, setSelected] = useState<string[]>([]);
   if (careerActor.category === "Sportif")
     return (
-      <Card title="Vos invitations à des essais">
+      <Card title={uiCopy("Vos invitations à des essais")}>
         <p>
-          Les sessions sont organisées par un club ou un professionnel. La réponse à une invitation
-          reste gratuite.
-        </p>
-        <Link href="/espace/candidatures">Mes candidatures et essais</Link>
+          <T>{"Les sessions sont organisées par un club ou un professionnel. La réponse à une invitation reste gratuite."}</T></p>
+        <Link href="/espace/candidatures"><T>{"Mes candidatures et essais"}</T></Link>
       </Card>
     );
   return (
     <>
       <Premium>
-        <Card title="Inviter plusieurs candidats à un essai">
+        <Card title={uiCopy("Inviter plusieurs candidats à un essai")}>
           <form
             className="extension-form"
             onSubmit={(e) => {
@@ -852,7 +815,7 @@ function TrialWorkspace() {
               onChange={(e) => setCapacity(e.target.value)}
             />
             <fieldset>
-              <legend>Candidats fictifs à inviter</legend>
+              <legend><T>{"Candidats fictifs à inviter"}</T></legend>
               {members
                 .filter((m) => m.kind === "Joueurs")
                 .map((m) => (
@@ -867,32 +830,30 @@ function TrialWorkspace() {
                   </CheckChoice>
                 ))}
             </fieldset>
-            <Submit>Créer la session et ses invitations démo</Submit>
+            <Submit><T>{"Créer la session et ses invitations démo"}</T></Submit>
           </form>
         </Card>
       </Premium>
-      <Card title="Sessions et confirmations">
-        {!w.sessions.length && <p>Aucune session créée.</p>}
+      <Card title={uiCopy("Sessions et confirmations")}>
+        {!w.sessions.length && <p><T>{"Aucune session créée."}</T></p>}
         {w.sessions.map((s) => (
           <article key={s.id} className="extension-item">
             <strong>{s.title}</strong>
             <p>
-              {when(s.start)} · {s.place}
+              {when(s.start, uiDateLocale)} · {s.place}
             </p>
             <p>
               {s.participants.filter((p) => p.status === "accepted").length}/{s.capacity}{" "}
-              confirmations · {s.participants.filter((p) => p.status === "invited").length} en
-              attente
-            </p>
+              <T>{"confirmations ·"}</T>{s.participants.filter((p) => p.status === "invited").length} <T>{"en attente"}</T></p>
             {s.participants.map((p) => (
               <div className="extension-response" key={p.id}>
                 <span>
                   {name(p.id)} ·{" "}
-                  {p.status === "invited"
+                  <T>{p.status === "invited"
                     ? "Invité"
                     : p.status === "accepted"
                       ? "Confirmé"
-                      : "Décliné"}
+                      : "Décliné"}</T>
                 </span>
                 <Button
                   variant="outline"
@@ -905,8 +866,7 @@ function TrialWorkspace() {
                     })
                   }
                 >
-                  Simuler : accepte
-                </Button>
+                  <T>{"Simuler : accepte"}</T></Button>
                 <Button
                   variant="ghost"
                   onClick={() =>
@@ -918,24 +878,23 @@ function TrialWorkspace() {
                     })
                   }
                 >
-                  Décline
-                </Button>
+                  <T>{"Décline"}</T></Button>
               </div>
             ))}
             <Button
               variant="ghost"
               onClick={() => dispatchExtension({ type: "session-remove", id: s.id })}
             >
-              Supprimer cette session
-            </Button>
+              <T>{"Supprimer cette session"}</T></Button>
           </article>
         ))}
-        <Link href="/espace/agenda">Retrouver les sessions dans l’agenda</Link>
+        <Link href="/espace/agenda"><T>{"Retrouver les sessions dans l’agenda"}</T></Link>
       </Card>
     </>
   );
 }
 function TeamWorkspace() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { extensionWorkspace: w, dispatchExtension, careerActor, events, career } = useDemo();
   const [title, setTitle] = useState(""),
     [sport, setSport] = useState("Football"),
@@ -953,16 +912,14 @@ function TeamWorkspace() {
   const team = w.teams.find((t) => t.id === teamId) || w.teams[0];
   if (careerActor.category !== "Organisation")
     return (
-      <Card title="Équipes et gestionnaires">
+      <Card title={uiCopy("Équipes et gestionnaires")}>
         <p>
-          Cet espace concerne les collectifs. Le menu « Tester un autre rôle » permet d’essayer
-          Horizon Padel ou Collectif Arena.
-        </p>
+          <T>{"Cet espace concerne les collectifs. Le menu « Tester un autre rôle » permet d’essayer Horizon Padel ou Collectif Arena."}</T></p>
       </Card>
     );
   return (
     <>
-      <Card title="Présenter les équipes et sections">
+      <Card title={uiCopy("Présenter les équipes et sections")}>
         <form
           className="extension-form"
           onSubmit={(e) => {
@@ -1018,7 +975,7 @@ function TeamWorkspace() {
               />
             </>
           )}
-          <Submit>Créer la section</Submit>
+          <Submit><T>{"Créer la section"}</T></Submit>
         </form>
       </Card>
       {w.teams.map((t) => (
@@ -1026,7 +983,7 @@ function TeamWorkspace() {
           <p>
             {t.sport} · {t.description || "Présentation à compléter"}
           </p>
-          <h3>Vue publique : membres ayant confirmé leur lien</h3>
+          <h3><T>{"Vue publique : membres ayant confirmé leur lien"}</T></h3>
           <p>
             {t.links
               .filter((l) => l.status === "confirmed")
@@ -1035,8 +992,8 @@ function TeamWorkspace() {
           </p>
           {careerActor.premium && (
             <div className="extension-private">
-              <h3>Organisation interne</h3>
-              <p>Besoins : {t.need || "Aucun besoin renseigné"}</p>
+              <h3><T>{"Organisation interne"}</T></h3>
+              <p><T>{"Besoins : "}</T>{t.need || "Aucun besoin renseigné"}</p>
               {t.eventIds.map((id) => (
                 <Link key={id} href={`/espace/match?id=${id}`}>
                   {events.matches.find((m) => m.id === id)?.title || "Événement"}
@@ -1049,8 +1006,7 @@ function TeamWorkspace() {
                   setNeed(t.need);
                 }}
               >
-                Gérer les besoins
-              </Button>
+                <T>{"Gérer les besoins"}</T></Button>
               {teamId === t.id && (
                 <form
                   className="extension-form"
@@ -1079,7 +1035,7 @@ function TeamWorkspace() {
                         .map((m) => [m.id, m.title] as [string, string]),
                     ]}
                   />
-                  <Submit>Enregistrer</Submit>
+                  <Submit><T>{"Enregistrer"}</T></Submit>
                 </form>
               )}
             </div>
@@ -1087,11 +1043,9 @@ function TeamWorkspace() {
         </Card>
       ))}
       {team && (
-        <Card title="Liens avec les joueurs et le staff">
+        <Card title={uiCopy("Liens avec les joueurs et le staff")}>
           <p>
-            Le lien n’apparaît publiquement qu’après confirmation par la personne concernée. Les
-            boutons ci-dessous simulent sa réponse.
-          </p>
+            <T>{"Le lien n’apparaît publiquement qu’après confirmation par la personne concernée. Les boutons ci-dessous simulent sa réponse."}</T></p>
           <div className="extension-form">
             <Select
               label="Équipe"
@@ -1114,8 +1068,7 @@ function TeamWorkspace() {
             <Button
               onClick={() => dispatchExtension({ type: "link", team: team.id, id: person, role })}
             >
-              Demander la confirmation du lien
-            </Button>
+              <T>{"Demander la confirmation du lien"}</T></Button>
           </div>
           {team.links.map((l) => (
             <article className="extension-item" key={l.id}>
@@ -1123,11 +1076,11 @@ function TeamWorkspace() {
                 {name(l.id)} · {l.role}
               </strong>
               <p>
-                {l.status === "confirmed"
+                <T>{l.status === "confirmed"
                   ? "Lien confirmé et visible"
                   : l.status === "declined"
                     ? "Lien refusé, non public"
-                    : "En attente, non public"}
+                    : "En attente, non public"}</T>
               </p>
               <div className="extension-actions">
                 <Button
@@ -1136,8 +1089,7 @@ function TeamWorkspace() {
                     dispatchExtension({ type: "link-reply", team: team.id, id: l.id, accept: true })
                   }
                 >
-                  Simuler : confirme
-                </Button>
+                  <T>{"Simuler : confirme"}</T></Button>
                 <Button
                   variant="ghost"
                   onClick={() =>
@@ -1149,8 +1101,7 @@ function TeamWorkspace() {
                     })
                   }
                 >
-                  Refuse / retire son accord
-                </Button>
+                  <T>{"Refuse / retire son accord"}</T></Button>
               </div>
             </article>
           ))}
@@ -1160,9 +1111,7 @@ function TeamWorkspace() {
         title={`Gestionnaires · ${w.managers.length}/${limits(careerActor.category, careerActor.premium).managers}`}
       >
         <p>
-          Propriétaire / administrateur : tous les outils. Recruteur : talents, essais et suivi des
-          candidats. Lecture seule : consultation. Les notes internes ne sont pas publiques.
-        </p>
+          <T>{"Propriétaire / administrateur : tous les outils. Recruteur : talents, essais et suivi des candidats. Lecture seule : consultation. Les notes internes ne sont pas publiques."}</T></p>
         <Select
           label="Tester les permissions avec le rôle de"
           value={w.activeManager}
@@ -1204,7 +1153,7 @@ function TeamWorkspace() {
                 ["viewer", "Lecture seule"],
               ]}
             />
-            <Submit>Inviter un gestionnaire</Submit>
+            <Submit><T>{"Inviter un gestionnaire"}</T></Submit>
           </form>
         </Premium>
         {w.managers.map((m) => (
@@ -1212,25 +1161,23 @@ function TeamWorkspace() {
             <strong>
               {m.name} · {m.role}
             </strong>
-            <p>{m.status === "active" ? "Accès actif" : "Invitation en attente"}</p>
+            <p><T>{m.status === "active" ? "Accès actif" : "Invitation en attente"}</T></p>
             {m.status === "invited" && (
               <Button onClick={() => dispatchExtension({ type: "manager-activate", id: m.id })}>
-                Simuler l’acceptation
-              </Button>
+                <T>{"Simuler l’acceptation"}</T></Button>
             )}
             {m.id !== "owner" && (
               <Button
                 variant="ghost"
                 onClick={() => dispatchExtension({ type: "manager-remove", id: m.id })}
               >
-                Retirer l’accès
-              </Button>
+                <T>{"Retirer l’accès"}</T></Button>
             )}
           </div>
         ))}
       </Card>
       <Premium>
-        <Card title="Suivi collaboratif des candidats">
+        <Card title={uiCopy("Suivi collaboratif des candidats")}>
           <form
             className="extension-form"
             onSubmit={(e) => {
@@ -1260,7 +1207,7 @@ function TeamWorkspace() {
                 maxLength={1200}
               />
             </Field>
-            <Submit>Attribuer et ajouter la note</Submit>
+            <Submit><T>{"Attribuer et ajouter la note"}</T></Submit>
           </form>
           {Object.entries(w.assignments).map(([id, a]) => (
             <div key={id} className="extension-item">
@@ -1278,13 +1225,14 @@ function TeamWorkspace() {
               ))}
             </div>
           ))}
-          <Link href="/espace/recrutement">Ouvrir les candidatures et décisions</Link>
+          <Link href="/espace/recrutement"><T>{"Ouvrir les candidatures et décisions"}</T></Link>
         </Card>
       </Premium>
     </>
   );
 }
 export function CalendarWorkspace({ compact = false }: { compact?: boolean }) {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const {
     extensionWorkspace: w,
     dispatchExtension,
@@ -1344,28 +1292,23 @@ export function CalendarWorkspace({ compact = false }: { compact?: boolean }) {
   }
   return (
     <>
-      {!compact && <Card title="Un agenda partagé pour vos activités">
+      {!compact && <Card title={uiCopy("Un agenda partagé pour vos activités")}>
         <p>
-          Matchs confirmés, essais, rendez-vous et entretiens acceptés. Les créneaux et dates sont
-          affichés dans votre fuseau local.
-        </p>
-        {!items.length && <p>Aucune activité confirmée pour le moment.</p>}
+          <T>{"Matchs confirmés, essais, rendez-vous et entretiens acceptés. Les créneaux et dates sont affichés dans votre fuseau local."}</T></p>
+        {!items.length && <p><T>{"Aucune activité confirmée pour le moment."}</T></p>}
         {items.map((i) => (
           <article key={i.id} className="extension-item">
             <strong>{i.title}</strong>
             <p>
-              {when(i.start)} · {i.place}
+              {when(i.start, uiDateLocale)} · {i.place}
             </p>
           </article>
         ))}
       </Card>}
       <Premium>
-        <Card title="Agenda externe et rappels">
+        <Card title={uiCopy("Agenda externe et rappels")}>
           <p>
-            La connexion ci-dessous est simulée : aucun accès à Google, Outlook ou Apple n’est
-            demandé. L’export .ics est réel et contient uniquement les événements fictifs affichés
-            ici ; ce n’est pas une synchronisation bidirectionnelle.
-          </p>
+            <T>{"La connexion ci-dessous est simulée : aucun accès à Google, Outlook ou Apple n’est demandé. L’export .ics est réel et contient uniquement les événements fictifs affichés ici ; ce n’est pas une synchronisation bidirectionnelle."}</T></p>
           <div className="extension-form">
             <Select
               label="Agenda à tester"
@@ -1393,7 +1336,7 @@ export function CalendarWorkspace({ compact = false }: { compact?: boolean }) {
                 })
               }
             >
-              {w.calendar.connected ? "Déconnecter la simulation" : "Simuler la connexion"}
+              <T>{w.calendar.connected ? "Déconnecter la simulation" : "Simuler la connexion"}</T>
             </Button>
             <Button
               variant="outline"
@@ -1406,17 +1349,14 @@ export function CalendarWorkspace({ compact = false }: { compact?: boolean }) {
                 })
               }
             >
-              Enregistrer le rappel
-            </Button>
+              <T>{"Enregistrer le rappel"}</T></Button>
             <Button variant="outline" onClick={download} disabled={!items.length}>
-              Exporter l’agenda fictif (.ics)
-            </Button>
+              <T>{"Exporter l’agenda fictif (.ics)"}</T></Button>
             <p>
               {w.calendar.connected
                 ? `Connexion simulée : ${w.calendar.provider}`
                 : "Aucun agenda externe connecté"}{" "}
-              · rappel {w.calendar.reminder} min.
-            </p>
+              <T>{"· rappel"}</T>{w.calendar.reminder} <T>{"min."}</T></p>
             <Button
               variant="ghost"
               disabled={!items.length}
@@ -1429,18 +1369,15 @@ export function CalendarWorkspace({ compact = false }: { compact?: boolean }) {
                 })
               }
             >
-              Tester un rappel dans les notifications
-            </Button>
+              <T>{"Tester un rappel dans les notifications"}</T></Button>
           </div>
         </Card>
       </Premium>
       <Premium>
-        <Card title="Dupliquer une rencontre ou créer une série">
+        <Card title={uiCopy("Dupliquer une rencontre ou créer une série")}>
           {!original ? (
             <p>
-              Créez d’abord un match dans « Jouer ensemble ». Une copie reprend lieu, sport,
-              effectif et invitations, mais jamais les votes ni les confirmations.
-            </p>
+              <T>{"Créez d’abord un match dans « Jouer ensemble ». Une copie reprend lieu, sport, effectif et invitations, mais jamais les votes ni les confirmations."}</T></p>
           ) : (
             <form className="extension-form" onSubmit={series}>
               <Select
@@ -1467,21 +1404,18 @@ export function CalendarWorkspace({ compact = false }: { compact?: boolean }) {
                 value={count}
                 onChange={(e) => setCount(e.target.value)}
               />
-              <Submit>Créer les nouvelles rencontres</Submit>
+              <Submit><T>{"Créer les nouvelles rencontres"}</T></Submit>
             </form>
           )}
           {events.error && <p role="alert">{events.error}</p>}
-          <Link href="/espace/jouer">Voir les rencontres</Link>
+          <Link href="/espace/jouer"><T>{"Voir les rencontres"}</T></Link>
         </Card>
       </Premium>
       {careerActor.category === "Professionnel" && (
         <Premium>
-          <Card title="Disponibilités récurrentes">
+          <Card title={uiCopy("Disponibilités récurrentes")}>
             <p>
-              Créez des créneaux hebdomadaires de 30 minutes. Ils apparaissent dans la prise de
-              rendez-vous uniquement après acceptation de la demande. Une collision annule toute la
-              série.
-            </p>
+              <T>{"Créez des créneaux hebdomadaires de 30 minutes. Ils apparaissent dans la prise de rendez-vous uniquement après acceptation de la demande. Une collision annule toute la série."}</T></p>
             <form className="extension-form" onSubmit={availability}>
               <Field
                 id="slot-start"
@@ -1508,27 +1442,25 @@ export function CalendarWorkspace({ compact = false }: { compact?: boolean }) {
                 value={place}
                 onChange={(e) => setPlace(e.target.value)}
               />
-              <Submit>Créer les disponibilités</Submit>
+              <Submit><T>{"Créer les disponibilités"}</T></Submit>
             </form>
-            {career.error && <p role="alert">Impossible de créer la série : {career.error}</p>}
+            {career.error && <p role="alert"><T>{"Impossible de créer la série : "}</T>{career.error}</p>}
             {career.slots
               .filter((s) => s.professional === careerActor.id)
               .map((s) => (
                 <p key={s.id}>
-                  {when(s.start)} · {s.place}
+                  {when(s.start, uiDateLocale)} · {s.place}
                 </p>
               ))}
-            <Link href="/espace/rendez-vous">Gérer mes rendez-vous</Link>
+            <Link href="/espace/rendez-vous"><T>{"Gérer mes rendez-vous"}</T></Link>
           </Card>
         </Premium>
       )}
       {careerActor.category === "Organisation" && (
         <Premium>
-          <Card title="Coordonner un entretien avec le staff">
+          <Card title={uiCopy("Coordonner un entretien avec le staff")}>
             <p>
-              L’entretien est confirmé lorsque le candidat et tous les gestionnaires invités
-              acceptent. Un refus annule la proposition. Les créneaux durent une heure.
-            </p>
+              <T>{"L’entretien est confirmé lorsque le candidat et tous les gestionnaires invités acceptent. Un refus annule la proposition. Les créneaux durent une heure."}</T></p>
             <form
               className="extension-form"
               onSubmit={(e) => {
@@ -1569,7 +1501,7 @@ export function CalendarWorkspace({ compact = false }: { compact?: boolean }) {
                 onChange={(e) => setPlace(e.target.value)}
               />
               <fieldset>
-                <legend>Gestionnaires invités</legend>
+                <legend><T>{"Gestionnaires invités"}</T></legend>
                 {w.managers
                   .filter((m) => m.status === "active")
                   .map((m) => (
@@ -1584,27 +1516,27 @@ export function CalendarWorkspace({ compact = false }: { compact?: boolean }) {
                     </CheckChoice>
                   ))}
               </fieldset>
-              <Submit>Proposer l’entretien</Submit>
+              <Submit><T>{"Proposer l’entretien"}</T></Submit>
             </form>
             {w.interviews.map((i) => (
               <article key={i.id} className="extension-item">
                 <strong>
-                  {name(i.candidate)} · {when(i.start)}
+                  {name(i.candidate)} · {when(i.start, uiDateLocale)}
                 </strong>
                 <p>
                   {i.place} ·{" "}
-                  {i.status === "confirmed"
+                  <T>{i.status === "confirmed"
                     ? "Confirmé"
                     : i.status === "cancelled"
                       ? "Annulé"
-                      : "En attente des accords"}
+                      : "En attente des accords"}</T>
                 </p>
                 {i.status === "proposed" &&
                   [i.candidate, ...i.staff].map((id) => (
                     <div className="extension-response" key={id}>
                       <span>
                         {w.managers.find((m) => m.id === id)?.name || name(id)} ·{" "}
-                        {i.accepted.includes(id) ? "Accord reçu" : "En attente"}
+                        <T>{i.accepted.includes(id) ? "Accord reçu" : "En attente"}</T>
                       </span>
                       <Button
                         variant="outline"
@@ -1617,8 +1549,7 @@ export function CalendarWorkspace({ compact = false }: { compact?: boolean }) {
                           })
                         }
                       >
-                        Simuler : accepte
-                      </Button>
+                        <T>{"Simuler : accepte"}</T></Button>
                       <Button
                         variant="ghost"
                         onClick={() =>
@@ -1630,8 +1561,7 @@ export function CalendarWorkspace({ compact = false }: { compact?: boolean }) {
                           })
                         }
                       >
-                        Refuse
-                      </Button>
+                        <T>{"Refuse"}</T></Button>
                     </div>
                   ))}
               </article>
@@ -1643,6 +1573,7 @@ export function CalendarWorkspace({ compact = false }: { compact?: boolean }) {
   );
 }
 function StatsWorkspace() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { extensionWorkspace: w, dispatchExtension, careerActor, career, social } = useDemo();
   const [visitor, setVisitor] = useState("lea"),
     [consent, setConsent] = useState(false),
@@ -1662,30 +1593,29 @@ function StatsWorkspace() {
   };
   return (
     <>
-      <Card title="Mesurer la visibilité, sans inventer de résultats">
+      <Card title={uiCopy("Mesurer la visibilité, sans inventer de résultats")}>
         <p>
-          Compteurs de cette session de démonstration, pas de statistiques réelles de la plateforme.
-        </p>
+          <T>{"Compteurs de cette session de démonstration, pas de statistiques réelles de la plateforme."}</T></p>
         <div className="extension-metrics">
           <div>
             <strong>{w.visits.filter((v) => v.kind === "visit").length}</strong>
-            <span>visites simulées</span>
+            <span><T>{"visites simulées"}</T></span>
           </div>
           {careerActor.category !== "Sportif" && (
             <div>
               <strong>{requests.length}</strong>
-              <span>demandes reçues</span>
+              <span><T>{"demandes reçues"}</T></span>
             </div>
           )}
           {careerActor.category === "Organisation" && (
             <div>
               <strong>{w.visits.filter((v) => v.kind === "interaction").length}</strong>
-              <span>interactions simulées</span>
+              <span><T>{"interactions simulées"}</T></span>
             </div>
           )}
         </div>
         <details className="extension-simulation">
-          <summary>Ajouter une activité fictive pour tester les statistiques</summary>
+          <summary><T>{"Ajouter une activité fictive pour tester les statistiques"}</T></summary>
           <Select
             label="Visiteur fictif"
             value={visitor}
@@ -1702,8 +1632,7 @@ function StatsWorkspace() {
             ]}
           />
           <CheckChoice checked={consent} onChange={setConsent}>
-            Ce visiteur accepte d’afficher son identité
-          </CheckChoice>
+            <T>{"Ce visiteur accepte d’afficher son identité"}</T></CheckChoice>
           <Button
             onClick={() =>
               dispatchExtension({
@@ -1715,12 +1644,11 @@ function StatsWorkspace() {
               })
             }
           >
-            Simuler cette activité
-          </Button>
+            <T>{"Simuler cette activité"}</T></Button>
         </details>
       </Card>
       <Premium>
-        <Card title="Statistiques détaillées">
+        <Card title={uiCopy("Statistiques détaillées")}>
           <Select
             label="Période"
             value={period}
@@ -1735,30 +1663,30 @@ function StatsWorkspace() {
             <table>
               <thead>
                 <tr>
-                  <th>Indicateur</th>
-                  <th>Résultat de la démo</th>
+                  <th><T>{"Indicateur"}</T></th>
+                  <th><T>{"Résultat de la démo"}</T></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Visites / interactions sur la période</td>
+                  <td><T>{"Visites / interactions sur la période"}</T></td>
                   <td>
                     {recent.filter((v) => v.kind === "visit").length} /{" "}
                     {recent.filter((v) => v.kind === "interaction").length}
                   </td>
                 </tr>
                 <tr>
-                  <td>Candidatures reçues</td>
+                  <td><T>{"Candidatures reçues"}</T></td>
                   <td>{applications.length}</td>
                 </tr>
                 <tr>
-                  <td>Rendez-vous confirmés / demandes reçues</td>
+                  <td><T>{"Rendez-vous confirmés / demandes reçues"}</T></td>
                   <td>
                     {requests.filter((a) => a.status === "booked").length} / {requests.length}
                   </td>
                 </tr>
                 <tr>
-                  <td>Confirmations aux essais groupés</td>
+                  <td><T>{"Confirmations aux essais groupés"}</T></td>
                   <td>
                     {w.sessions.reduce(
                       (n, s) => n + s.participants.filter((p) => p.status === "accepted").length,
@@ -1767,40 +1695,36 @@ function StatsWorkspace() {
                   </td>
                 </tr>
                 <tr>
-                  <td>Publications programmées diffusées</td>
+                  <td><T>{"Publications programmées diffusées"}</T></td>
                   <td>{w.schedules.filter((p) => p.status === "published").length}</td>
                 </tr>
                 <tr>
-                  <td>Délai moyen de réponse</td>
+                  <td><T>{"Délai moyen de réponse"}</T></td>
                   <td>{requests.filter(a=>a.createdAt&&a.respondedAt).length?Math.round(requests.filter(a=>a.createdAt&&a.respondedAt).reduce((n,a)=>n+(a.respondedAt!-a.createdAt!)/60000,0)/requests.filter(a=>a.createdAt&&a.respondedAt).length)+' min':'Aucune demande traitée dans cette session'}</td>
                 </tr>
                 <tr>
-                  <td>Réactions / commentaires sur mes publications</td>
+                  <td><T>{"Réactions / commentaires sur mes publications"}</T></td>
                   <td>{social.posts.filter(p=>p.author==='self').reduce((n,p)=>n+p.likes,0)} / {social.posts.filter(p=>p.author==='self').reduce((n,p)=>n+p.comments.length,0)}</td>
                 </tr>
               </tbody>
             </table>
           </div>
           <p>
-            Les indicateurs de recrutement couvrent la session entière ; seul le journal de
-            visibilité utilise le filtre de période.
-          </p>
-          <h3>Journal de visibilité</h3>
-          {!recent.length && <p>Aucune activité dans cette période.</p>}
+            <T>{"Les indicateurs de recrutement couvrent la session entière ; seul le journal de visibilité utilise le filtre de période."}</T></p>
+          <h3><T>{"Journal de visibilité"}</T></h3>
+          {!recent.length && <p><T>{"Aucune activité dans cette période."}</T></p>}
           {recent.map((v) => (
             <p key={v.id}>
               {v.consent ? v.name : "Visiteur anonyme"} ·{" "}
-              {v.kind === "visit" ? "visite" : "interaction"} · {when(new Date(v.at).toISOString())}
+              <T>{v.kind === "visit" ? "visite" : "interaction"}</T> · {when(new Date(v.at).toISOString(), uiDateLocale)}
             </p>
           ))}
-          <p>Le nom d’un visiteur n’est montré qu’avec son accord, même en Premium.</p>
+          <p><T>{"Le nom d’un visiteur n’est montré qu’avec son accord, même en Premium."}</T></p>
         </Card>
       </Premium>
-      <Card title="Invitations et activation du réseau">
+      <Card title={uiCopy("Invitations et activation du réseau")}>
         <p>
-          Testez le parcours d’un invité : invitation → inscription → e-mail vérifié → activation
-          qualifiée. Aucun e-mail n’est envoyé ; aucune récompense réelle n’est créditée.
-        </p>
+          <T>{"Testez le parcours d’un invité : invitation → inscription → e-mail vérifié → activation qualifiée. Aucun e-mail n’est envoyé ; aucune récompense réelle n’est créditée."}</T></p>
         <form
           className="extension-form"
           onSubmit={(e) => {
@@ -1815,10 +1739,10 @@ function StatsWorkspace() {
             value={invited}
             onChange={(e) => setInvited(e.target.value)}
           />
-          <Submit>Créer une invitation de démonstration</Submit>
+          <Submit><T>{"Créer une invitation de démonstration"}</T></Submit>
         </form>
         {careerActor.category === "Organisation" && !careerActor.premium ? (
-          <p>Le suivi détaillé des activations est inclus dans Premium.</p>
+          <p><T>{"Le suivi détaillé des activations est inclus dans Premium."}</T></p>
         ) : (
           <>
             {w.invitations.map((i) => (
@@ -1830,19 +1754,15 @@ function StatsWorkspace() {
                   disabled={i.status === "qualified"}
                   onClick={() => dispatchExtension({ type: "invitation-progress", id: i.id })}
                 >
-                  Simuler l’étape suivante
-                </Button>
+                  <T>{"Simuler l’étape suivante"}</T></Button>
               </article>
             ))}
             <p>
-              {w.invitations.filter((i) => i.status === "qualified").length} activation(s)
-              qualifiée(s) simulée(s) ·{" "}
-              {w.invitations.filter((i) => i.status === "qualified").length * 3} mois de récompense
-              potentielle.
-            </p>
+              {w.invitations.filter((i) => i.status === "qualified").length} <T>{"activation(s) qualifiée(s) simulée(s) ·"}</T>{" "}
+              {w.invitations.filter((i) => i.status === "qualified").length * 3} <T>{"mois de récompense potentielle."}</T></p>
           </>
         )}
-        <Link href="/espace/parrainage">Voir les règles du parrainage</Link>
+        <Link href="/espace/parrainage"><T>{"Voir les règles du parrainage"}</T></Link>
       </Card>
     </>
   );
@@ -1852,17 +1772,15 @@ export function ExtensionNotices() {
   return (
     <section className="extension-card">
       <h2>
-        <Bell size={18} /> Notifications de vos outils
-      </h2>
-      {!w.notices.length && <p>Aucune nouvelle notification.</p>}
+        <Bell size={18} /> <T>{"Notifications de vos outils"}</T></h2>
+      {!w.notices.length && <p><T>{"Aucune nouvelle notification."}</T></p>}
       {w.notices.map((n) => (
         <div className="extension-item" key={n.id}>
           <Link href={n.href}>{n.text}</Link>
-          <small>{n.read ? "Lue" : "Non lue"}</small>
+          <small><T>{n.read ? "Lue" : "Non lue"}</T></small>
           {!n.read && (
             <Button variant="ghost" onClick={() => dispatchExtension({ type: "read", id: n.id })}>
-              Marquer comme lue
-            </Button>
+              <T>{"Marquer comme lue"}</T></Button>
           )}
         </div>
       ))}

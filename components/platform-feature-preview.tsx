@@ -17,7 +17,7 @@ const features = [
       'Handisport, profil enfant accompagné et contrôle de la visibilité des informations personnelles.',
     ],
     href: '/espace/profil', action: 'Explorer le profil',
-    image: 'web-20260923-network-profil',
+    image: 'web-20260924-parity-profil',
     alt: 'Capture de la démo web Arena en mode clair : profil d’un coach, parcours et accès au dossier sportif, aux références et à l’agent.',
   },
   {
@@ -26,12 +26,12 @@ const features = [
     text: 'Recherchez les membres, suivez leurs publications ou envoyez une demande Connect. Après acceptation, échangez sans quota et invitez vos connexions à jouer.',
     points: [
       'Mon réseau : listes Connexions et Suivis avec compteurs, recherche et accès aux profils, gratuitement.',
-      'Filtres avancés par pays, ville, sport et classement : visibles pour tous, utilisables avec Premium.',
+      'Filtres avancés par type de profil, secteur, pays, ville, sport et classement : visibles pour tous, utilisables avec Premium.',
       'Jouer ensemble : Mes invitations, J’organise et À proximité ; proximité et alertes avec Premium.',
       'Invitations à jouer : dates proposées, lieu, effectif total, +1 et confirmation de l’organisateur.',
     ],
     href: '/espace/reseau', action: 'Explorer le réseau',
-    image: 'web-20260923-network-reseau',
+    image: 'web-20260924-parity-reseau',
     alt: 'Capture de la démo web Arena en mode clair : recherche, cartes Connexions et Suivis, et invitations.',
   },
   {
@@ -39,13 +39,14 @@ const features = [
     title: 'De l’opportunité à la candidature. Puis au terrain.',
     text: 'Découvrez les recherches de joueurs, missions et collaborations. Les sportifs et professionnels suivent leurs démarches ; les recruteurs organisent leurs besoins et leurs réponses.',
     points: [
-      'Annonces classées : Toutes, Coaching, Recrutement, Partenariat, Sponsoring et Essais groupés.',
+      'Filtres dépliables pour tous : treize catégories d’annonces et toutes les disciplines sportives.',
+      'Publication pour professionnels et collectifs : catégories proposées selon le type de compte, dans les limites de la formule.',
       'Candidatures avec dossier partagé sur accord et suivi du statut avec Premium.',
       'Offres, présélection, invitations individuelles à des essais et sessions groupées selon la formule.',
       'Pour les collectifs Premium : gestionnaires, permissions, commentaires internes et entretiens coordonnés.',
     ],
     href: '/espace/opportunities', action: 'Explorer les opportunités',
-    image: 'web-20260923-network-opportunities',
+    image: 'web-20260924-parity-opportunities',
     alt: 'Capture de la démo web Arena en mode clair : opportunités sportives, filtres, favoris et accès aux candidatures.',
   },
   {
@@ -59,7 +60,7 @@ const features = [
       'Blocage, signalement et parcours de modération pour encadrer les échanges.',
     ],
     href: '/espace/messages', action: 'Explorer la messagerie',
-    image: 'web-20260923-network-messages',
+    image: 'web-20260924-parity-messages',
     alt: 'Capture de la messagerie web Arena en mode clair, avec liste de conversations et échanges fictifs.',
   },
 ];

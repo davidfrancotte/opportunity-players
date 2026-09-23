@@ -119,14 +119,15 @@ try {
       .click();
   }
   await nav("/espace/accueil");
-  await page.getByRole("button", { name: "Filtrer le fil", exact: true }).click();
-  await page.getByLabel("Catégorie du fil").selectOption("Opportunités");
+  const feedToggle = page.getByRole("button", { name: "Filtrer le fil", exact: true });
+  if (await feedToggle.getAttribute('aria-expanded') !== 'true') await feedToggle.click();
+  await page.locator('#feed-category').selectOption("Opportunités");
   await page.getByLabel("Type d’opportunité").selectOption("Recrutement de joueurs");
   assert.equal(await page.locator(".post-card").count(), 1);
   assert.match(await page.locator(".post-card").innerText(), /attaquant/);
-  await page.getByLabel("Catégorie du fil").selectOption("Offres d’emploi");
+  await page.locator('#feed-category').selectOption("Offres d’emploi");
   assert.equal(await page.locator(".post-card").count(), 1);
-  await page.getByLabel("Catégorie du fil").selectOption("Matchs ouverts");
+  await page.locator('#feed-category').selectOption("Matchs ouverts");
   assert.equal(await page.locator(".post-card").count(), 0);
   assert.ok((await page.locator(".match-card").count()) > 0);
   await page.getByRole("button", { name: "Réinitialiser les filtres", exact: true }).click();
@@ -135,7 +136,7 @@ try {
     .getByLabel("Votre publication", { exact: true })
     .fill("Publication programmée de test");
   await page.getByLabel("Catégorie", { exact: true }).selectOption("Opportunités");
-  await page.getByLabel("Discipline", { exact: true }).selectOption("-");
+  await page.getByRole('dialog').getByLabel("Discipline", { exact: true }).selectOption("-");
   await page.getByLabel("Type d’opportunité", { exact: true }).selectOption("Essais et détections");
   await page
     .getByLabel("Importer une photo ou une vidéo", { exact: true })
@@ -211,7 +212,8 @@ try {
       `overflow nearby ${width}: ${JSON.stringify(overflow)}`,
     );
   }
-  await page.getByLabel("Langue / Language").filter({ visible: true }).selectOption("en");
+  await nav('/espace/parametres');
+  await page.locator('.language-preferences select').selectOption("en");
   await nav("/espace/reseau");
   assert.equal(await page.getByRole("heading", { name: "People you may know" }).count(), 1);
   await page.screenshot({ path: "/tmp/web-parity-community-network-en.png", fullPage: true });

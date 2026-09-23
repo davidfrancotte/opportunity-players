@@ -66,7 +66,9 @@ try {
   await page.screenshot({ path: "/tmp/web-parity-agenda-viewport.png" });
   await page.goto("http://127.0.0.1:3000/espace/calendrier-avance", { waitUntil: "networkidle" });
   assert.equal(await page.getByRole("table").count(), 1);
-  await page.getByLabel("Langue / Language").filter({ visible: true }).selectOption("en");
+  await page.locator('a[href="/espace/parametres"]').filter({visible:true}).first().click();
+  await page.locator('.language-preferences select').selectOption("en");
+  await page.locator('a[href="/espace/agenda"]').filter({visible:true}).first().click();
   await page.getByRole("button", { name: "Sports calendar", exact: true }).click();
   assert.equal(await page.locator(".unified-agenda-event").count(), 1);
   assert.deepEqual(errors, []);

@@ -1,31 +1,16 @@
-'use client';
-import { T, LanguageSwitch, useLocale } from './locale';
-import { BrandMark } from '../brand-mark';
-import Link from 'next/link';
-import {
-  useEffect,
-  useState,
-  type ReactNode,
-  type ComponentProps,
-} from 'react';
-import {
-  ArrowLeft,
-  ArrowRight,
-  Eye,
-  EyeOff,
-  ShieldCheck,
-  ArrowUpRight,
-} from 'lucide-react';
-import { Button } from '@/components/studio/ui/button';
-import { Input } from '@/components/studio/ui/input';
-import { Label } from '@/components/studio/ui/label';
-export function Brand({ href = '/espace/connexion' }: { href?: string }) {
+"use client";
+import { T, useLocale } from "./locale";
+import Link from "next/link";
+import { useEffect, useState, type ReactNode, type ComponentProps } from "react";
+import { ArrowLeft, ArrowRight, Eye, EyeOff, ShieldCheck, ArrowUpRight } from "lucide-react";
+import { Button } from "@/components/studio/ui/button";
+import { Input } from "@/components/studio/ui/input";
+import { Label } from "@/components/studio/ui/label";
+import {BrandMark} from '../brand-mark';
+export function Brand({ href = "/espace/connexion" }: { href?: string }) {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   return (
-    <Link
-      href={href}
-      className="brand"
-      aria-label="Opportunity Players — accueil"
-    >
+    <Link href={href} className="brand" aria-label={uiCopy("Opportunity Players — accueil")}>
       <BrandMark/>
       <small>Opportunity Players</small>
     </Link>
@@ -35,15 +20,11 @@ export function DemoPill() {
   return (
     <span className="demo-pill">
       <i />
-      <T>{'DÉMO INTERACTIVE'}</T>
+      <T>{"DÉMO INTERACTIVE"}</T>
     </span>
   );
 }
-export function Submit({
-  children,
-  disabled,
-  ...props
-}: ComponentProps<typeof Button>) {
+export function Submit({ children, disabled, ...props }: ComponentProps<typeof Button>) {
   // Prevent native form submissions before the client-side demo is hydrated.
   const [ready, setReady] = useState(false);
   useEffect(() => setReady(true), []);
@@ -65,7 +46,7 @@ export function Field({
   hint,
   children,
   ...props
-}: ComponentProps<'input'> & {
+}: ComponentProps<"input"> & {
   label: string;
   error?: string;
   hint?: string;
@@ -82,11 +63,9 @@ export function Field({
           placeholder={props.placeholder ? t(props.placeholder) : undefined}
           id={id}
           aria-invalid={!!error}
-          aria-describedby={
-            error ? `${id}-error` : hint ? `${id}-hint` : undefined
-          }
+          aria-describedby={error ? `${id}-error` : hint ? `${id}-hint` : undefined}
         />
-      )}{' '}
+      )}{" "}
       {hint && (
         <p id={`${id}-hint`} className="field-hint">
           {t(hint)}
@@ -107,21 +86,22 @@ export function Password({
   error?: string;
   newPassword?: boolean;
 }) {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const [visible, setVisible] = useState(false);
   return (
     <div className="field">
       <Label htmlFor="password">
-        <T>{'Mot de passe de démonstration'}</T>
+        <T>{"Mot de passe de démonstration"}</T>
       </Label>
       <div className="password-input">
         <Input
           id="password"
           name="password"
-          type={visible ? 'text' : 'password'}
-          autoComplete={newPassword ? 'new-password' : 'current-password'}
+          type={visible ? "text" : "password"}
+          autoComplete={newPassword ? "new-password" : "current-password"}
           required
           maxLength={80}
-          placeholder="Uniquement le mot de passe démo"
+          placeholder={uiCopy("Uniquement le mot de passe démo")}
           aria-invalid={!!error}
           aria-describedby="password-help"
         />
@@ -130,19 +110,17 @@ export function Password({
           variant="ghost"
           size="icon"
           onClick={() => setVisible(!visible)}
-          aria-label={
-            visible ? 'Masquer le mot de passe' : 'Afficher le mot de passe'
-          }
+          aria-label={uiCopy(visible ? "Masquer le mot de passe" : "Afficher le mot de passe")}
           aria-pressed={visible}
         >
           {visible ? <EyeOff size={19} /> : <Eye size={19} />}
         </Button>
       </div>
-      <p className={error ? 'field-error' : 'field-hint'} id="password-help">
+      <p className={error ? "field-error" : "field-hint"} id="password-help">
         {error || (
           <>
-            <T>{'Utilisez'}</T> <strong>ArenaDemo2026!</strong>
-            <T>{', jamais votre vrai mot de passe.'}</T>
+            <T>{"Utilisez"}</T> <strong>ArenaDemo2026!</strong>
+            <T>{", jamais votre vrai mot de passe."}</T>
           </>
         )}
       </p>
@@ -150,15 +128,12 @@ export function Password({
   );
 }
 export function Stepper({ step }: { step: number }) {
-  const steps = ['Identité', 'E-mail', 'Sport', 'Présentation'];
+  const steps = ["Identité", "E-mail", "Sport", "Présentation"];
   return (
-    <div
-      className="stepper"
-      aria-label={`Étape ${step} sur 4 : ${steps[step - 1]}`}
-    >
+    <div className="stepper" aria-label={`Étape ${step} sur 4 : ${steps[step - 1]}`}>
       <div>
         {steps.map((name, i) => (
-          <span key={name} className={i < step ? 'done' : ''} />
+          <span key={name} className={i < step ? "done" : ""} />
         ))}
       </div>
       <p>
@@ -194,7 +169,7 @@ export function AuthLayout({
           </h2>
         </div>
         <img
-          src="/app-visuals/web-20260923-network-profil.png"
+          src="/app-visuals/web-20260924-parity-profil.png"
           alt="Capture de la démo web : profil multisport, niveaux, clubs, agent et références"
         />
         <span className="editorial-caption">
@@ -240,22 +215,18 @@ export function AuthLayout({
   );
 }
 export function Guard({ verification = false }: { verification?: boolean }) {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   return (
     <AuthLayout
-      title="Reprenons au bon endroit."
+      title={uiCopy("Reprenons au bon endroit.")}
       intro="Le parcours est conservé uniquement pendant votre visite. Après un rechargement, vous pouvez recommencer ou explorer le profil fictif."
     >
-      <Link
-        className="action primary"
-        href={verification ? '/espace/verification' : '/espace/inscription'}
-      >
-        {verification
-          ? 'Vérifier mon e-mail de démo'
-          : 'Commencer l’inscription'}
+      <Link className="action primary" href={verification ? "/espace/verification" : "/espace/inscription"}>
+        <T>{verification ? "Vérifier mon e-mail de démo" : "Commencer l’inscription"}</T>
         <ArrowRight size={18} />
       </Link>
       <Link href="/espace/profil" className="text-link">
-        <T>{'Explorer le profil de démonstration'}</T>
+        <T>{"Explorer le profil de démonstration"}</T>
       </Link>
     </AuthLayout>
   );
@@ -263,7 +234,7 @@ export function Guard({ verification = false }: { verification?: boolean }) {
 export function FormErrors({ errors }: { errors: Record<string, string> }) {
   return Object.keys(errors).length ? (
     <p className="form-error-summary" role="alert">
-      <T>{'Vérifiez les champs indiqués ci-dessous.'}</T>
+      <T>{"Vérifiez les champs indiqués ci-dessous."}</T>
     </p>
   ) : null;
 }

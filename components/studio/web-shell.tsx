@@ -1,5 +1,5 @@
 'use client';
-import { T, LanguageSwitch } from './locale';
+import { T } from './locale';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -30,7 +30,7 @@ const navigation = [
   { href: 'accueil', label: 'Accueil', icon: House },
   { href: 'reseau', label: 'Réseau', icon: UsersRound },
   { href: 'messages', label: 'Messages', icon: MessageCircle },
-  { href: 'opportunities', label: 'Opportunities', icon: Compass },
+  { href: 'opportunities', label: 'Opportunités', icon: Compass },
   { href: 'profil', label: 'Mon profil', icon: UserRound },
 ];
 const authRoutes = [
@@ -85,7 +85,6 @@ export function WebShell({ children }: { children: ReactNode }) {
       <div className="studio-web-auth">
         <nav className="studio-web-return" aria-label="Retour au site vitrine">
           <Link href="/">← Retour au site</Link>
-          <LanguageSwitch />
           <WebThemeSwitch />
           <Link href="/application">Découvrir l’application ↗</Link>
         </nav>
@@ -127,7 +126,7 @@ export function WebShell({ children }: { children: ReactNode }) {
             aria-current={page === 'candidatures' ? 'page' : undefined}
           >
             <ClipboardCheck size={19} />
-            <span>Candidatures & essais</span>
+            <span><T>Candidatures et essais</T></span>
           </Link>
           {profile.category !== 'Sportif' && (
             <Link
@@ -135,7 +134,7 @@ export function WebShell({ children }: { children: ReactNode }) {
               aria-current={page === 'recrutement' ? 'page' : undefined}
             >
               <BriefcaseBusiness size={19} />
-              <span>Espace recrutement</span>
+              <span><T>Espace recrutement</T></span>
             </Link>
           )}
           <Link
@@ -150,7 +149,7 @@ export function WebShell({ children }: { children: ReactNode }) {
             aria-current={page === 'parrainage' ? 'page' : undefined}
           >
             <Gift size={19} />
-            Parrainage
+            <T>Parrainage</T>
           </Link>
           <Link
             href="/espace/jouer"
@@ -190,7 +189,7 @@ export function WebShell({ children }: { children: ReactNode }) {
             <Settings size={19} />
             <T>{'Paramètres'}</T>
           </Link>
-          <Link href="/espace/outils" aria-current={['outils','recherches','talents','essais-groupes','equipes','calendrier-avance','statistiques','publications-programmees'].includes(page)?'page':undefined}><Sparkles size={19}/>Mes outils</Link>
+          <Link href="/espace/outils" aria-current={['outils','recherches','talents','essais-groupes','equipes','calendrier-avance','statistiques','publications-programmees'].includes(page)?'page':undefined}><Sparkles size={19}/><T>Mes outils</T></Link>
         </div>
         <Link className="web-self" href="/espace/profil">
           <Image
@@ -203,7 +202,7 @@ export function WebShell({ children }: { children: ReactNode }) {
           <span>
             <strong>{displayName(profile)}</strong>
             <small>
-              {profile.sport} · {profile.city}
+              <T>{profile.sport}</T> · {profile.city}
             </small>
           </span>
         </Link>
@@ -223,7 +222,7 @@ export function WebShell({ children }: { children: ReactNode }) {
           <span>
             OPPORTUNITY PLAYERS <i>/</i>{' '}
             <strong>
-              {(
+              <T>{(
                 {
                   jouer: 'Jouer ensemble',
                   organiser: 'Organiser un match',
@@ -243,11 +242,10 @@ export function WebShell({ children }: { children: ReactNode }) {
                 } as Record<string, string>
               )[page] ||
                 navigation.find((n) => n.href === current)?.label ||
-                (page === 'abonnement' ? 'Abonnement' : ['outils','recherches','talents','essais-groupes','equipes','calendrier-avance','statistiques','publications-programmees'].includes(page) ? 'Mes outils' : 'Paramètres')}
+                (page === 'abonnement' ? 'Abonnement' : ['outils','recherches','talents','essais-groupes','equipes','calendrier-avance','statistiques','publications-programmees'].includes(page) ? 'Mes outils' : 'Paramètres')}</T>
             </strong>
           </span>
           <div className="web-topbar-actions">
-            <LanguageSwitch />
             <WebThemeSwitch />
             <EventHeader />
             <Link href="/espace/profil">
@@ -263,8 +261,7 @@ export function WebShell({ children }: { children: ReactNode }) {
           </div>
         </header>
         <div className="web-mobile-appearance">
-          <span>Apparence</span>
-          <LanguageSwitch />
+          <span><T>Apparence de l’app</T></span>
           <WebThemeSwitch />
         </div>
         <div className="web-content-grid">

@@ -5,6 +5,10 @@ import { normalizeText, levels, type SportRecord } from "./trust.ts";
 
 // One vocabulary shared by profile forms and network filters.
 export const professionalTypes = [
+  "Coach",
+  "Recruteur",
+  "Staff technique",
+  "Juriste du sport",
   "Scout",
   "Entraîneur",
   "Entraîneur de gardiens",
@@ -188,7 +192,7 @@ export const emptyDirectoryFilters: DirectoryFilters = {
   ranking: "",
   query: "",
 };
-export const advancedDirectoryKeys=['position','dominantSide','ranking','club','availability','contractStatus'] as const;
+export const advancedDirectoryKeys=['kind','accountType','position','dominantSide','ranking','club','availability','contractStatus'] as const;
 export function effectiveDirectoryFilters(filters:DirectoryFilters,premium:boolean):DirectoryFilters {
   if(premium)return filters;
   const f={...filters};for(const key of advancedDirectoryKeys)f[key]=emptyDirectoryFilters[key];return f;
@@ -228,7 +232,6 @@ export function matchesDirectory(member: Member, records: SportRecord[], f: Dire
   }
   if (playerFilters && f.gender !== "Tous" && member.gender !== f.gender) return false;
   if (
-    ["Professionnels", "Collectives"].includes(f.kind) &&
     f.accountType !== "Tous" &&
     member.accountType !== f.accountType
   )

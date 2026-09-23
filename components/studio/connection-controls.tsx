@@ -1,4 +1,5 @@
 "use client";
+import { T } from "./locale";
 import { Button } from "./ui/button";
 import { useDemo } from "./demo-provider";
 import { useLocale } from "./locale";
@@ -7,8 +8,8 @@ import { Check, UserPlus } from "lucide-react";
 
 export function ConnectionControls({ memberId }: { memberId: string }) {
   const { social, dispatchSocial, trust } = useDemo();
-  const { locale } = useLocale();
-  const c = (fr: string, en: string) => (locale === "en" ? en : fr);
+  const { locale, t } = useLocale();
+  const c = t;
   const invitation = social.connectionInvitations.find((i) => i.memberId === memberId);
   if (trust.blocked.includes(memberId))
     return (
@@ -107,7 +108,6 @@ export function ConnectionControls({ memberId }: { memberId: string }) {
       onClick={() => dispatchSocial({ type: "connection-request", id: memberId })}
     >
       <UserPlus size={18} />
-      Connect
-    </Button>
+      <T>{"Connect"}</T></Button>
   );
 }

@@ -34,6 +34,15 @@ test("feed categories and opportunity subcategories combine; free ignores stale 
     1,
   );
 });
+test("all five feed categories combine with discipline, including posts without a sport", () => {
+  for(const category of feedCategories) for(const sport of ['Football','Padel','-']) {
+    const post={category,sport,text:'Publication de test'};
+    assert.equal(matchesFeed(post,{...emptyFeedFilters,category,sport},true),true);
+    assert.equal(matchesFeed(post,{...emptyFeedFilters,category,sport:'Tennis'},true),false);
+    assert.equal(matchesFeed(post,{...emptyFeedFilters,category:category==='News'?'Divers':'News',sport},true),false);
+    assert.equal(matchesFeed(post,emptyFeedFilters,true),true);
+  }
+});
 test("post classification validates and preserves opportunity category", () => {
   const initial = createSocialState();
   const post = {

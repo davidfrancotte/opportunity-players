@@ -1,4 +1,5 @@
 "use client";
+import { T } from "./locale";
 import { LocaleProvider, useLocale } from "./locale";
 import { limits } from "@/lib/studio/entitlements";
 import {
@@ -100,6 +101,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   );
 }
 function DemoStateProvider({ children }: { children: ReactNode }) {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { locale } = useLocale();
   const [profile, rawSetProfile] = useState<Profile>(structuredClone(initialProfile));
   function setProfile(next: Profile) {
@@ -304,7 +306,7 @@ function DemoStateProvider({ children }: { children: ReactNode }) {
       career.notices
         .filter((n) => n.recipient === careerActor.id)
         .forEach((n) => seenCareerNotices.current.add(n.id));
-      setNotice(locale === "fr" ? latest.fr : latest.en);
+      setNotice(latest.fr);
     }
   }, [career.notices, careerActor.id, locale]);
   function dispatchCareer(action: CareerAction) {
@@ -318,7 +320,7 @@ function DemoStateProvider({ children }: { children: ReactNode }) {
     }
     careerDispatch({
       action,
-      context: { actor: careerActor, actors, blocked: trust.blocked, now: Date.now() },
+      context: { actor: careerActor, actors, blocked: trust.blocked, now: Date.now(), activeListings: careerActor.id==='self' ? social.listings.filter(o=>o.publisherCategory===profile.category).length : 0 },
     });
   }
   function dispatchEvent(action: EventAction) {
@@ -356,7 +358,7 @@ function DemoStateProvider({ children }: { children: ReactNode }) {
     );
     return () => window.clearTimeout(timer);
   }, [events.banner]);
-  const access = { category: profile.category, month };
+  const access = { category: profile.category, month, activeCareerOffers: career.offers.filter(o=>o.owner==='self'&&o.open).length, canPublishOffers: profile.category!=='Organisation'||roleCan(extensionWorkspace,'recruit') };
   function dispatchSocial(action: SocialAction) {
     const content =
       action.type === "message"
@@ -386,6 +388,8 @@ function DemoStateProvider({ children }: { children: ReactNode }) {
       action,
       context: {
         category: profile.category,
+        activeCareerOffers: access.activeCareerOffers,
+        canPublishOffers: access.canPublishOffers,
         month: monthKey(),
         ...{ blocked: trust.blocked },
       },
@@ -465,11 +469,11 @@ function DemoStateProvider({ children }: { children: ReactNode }) {
                   dispatchEvent({ type: "dismiss" });
                 }}
               >
-                <small>OP / NOTIFICATION DÉMO</small>
+                <small><T>{"OP / NOTIFICATION DÉMO"}</T></small>
                 <strong>{n.text}</strong>
               </Link>
               <button
-                aria-label="Fermer la bannière"
+                aria-label={uiCopy("Fermer la bannière")}
                 onClick={() => dispatchEvent({ type: "dismiss" })}
               >
                 <X size={18} />
@@ -480,8 +484,8 @@ function DemoStateProvider({ children }: { children: ReactNode }) {
         {notice && (
           <div className="toast">
             <Check size={17} />
-            <span>{notice}</span>
-            <button aria-label="Fermer la notification" onClick={() => setNotice("")}>
+            <span><T>{notice}</T></span>
+            <button aria-label={uiCopy("Fermer la notification")} onClick={() => setNotice("")}>
               <X size={16} />
             </button>
           </div>

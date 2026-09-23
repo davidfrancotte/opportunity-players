@@ -1,9 +1,10 @@
 "use client";
-import { T } from "./locale";
+import { T, useLocale } from "./locale";
 import Link from "next/link";
 import { Bell, CalendarDays, ArrowUpRight } from "lucide-react";
 import { useDemo } from "./demo-provider";
 export function EventHeader() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { events, career, careerActor, extensionWorkspace } = useDemo();
   const unread =
     events.notices.filter((n) => n.recipient === "me" && !n.read).length +
@@ -11,7 +12,7 @@ export function EventHeader() {
     extensionWorkspace.notices.filter((n) => !n.read).length;
   return (
     <div className="event-header">
-      <Link href="/espace/agenda" className="icon-link" aria-label="Mon agenda">
+      <Link href="/espace/agenda" className="icon-link" aria-label={uiCopy("Mon agenda")}>
         <CalendarDays size={21} />
       </Link>
       <Link
@@ -30,8 +31,9 @@ export function NetworkSections({
 }: {
   active?: "members" | "play" | "agenda";
 }) {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   return (
-    <nav className="network-sections" aria-label="Rubriques du réseau">
+    <nav className="network-sections" aria-label={uiCopy("Rubriques du réseau")}>
       <Link href="/espace/reseau" aria-current={active === "members" ? "page" : undefined}>
         <T>{"Les membres"}</T>
       </Link>
@@ -45,6 +47,7 @@ export function NetworkSections({
   );
 }
 export function PlayHomeCard() {
+  const { dateLocale }=useLocale();
   const { events } = useDemo();
   const upcoming = events.matches
     .filter(
@@ -96,7 +99,7 @@ export function PlayHomeCard() {
           </small>
           <strong>{upcoming.m.title}</strong>
           <span>
-            {new Intl.DateTimeFormat("fr-BE", {
+            {new Intl.DateTimeFormat(dateLocale, {
               weekday: "short",
               day: "numeric",
               month: "short",

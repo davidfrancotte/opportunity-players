@@ -1,4 +1,6 @@
 "use client";
+import { useLocale } from "./locale";
+import { T } from "./locale";
 import { useEffect, useRef, useState } from "react";
 import { Upload } from "lucide-react";
 import { Button } from "./ui/button";
@@ -90,16 +92,17 @@ export function PostAttachment({
 }: {
   attachment: ReturnType<typeof usePostAttachment>;
 }) {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const input = useRef<HTMLInputElement>(null);
   const { media, busy, error, choose, clear } = attachment;
   return (
     <div className="post-attachment">
-      <p>Photo ou vidéo (facultatif)</p>
+      <p><T>{"Photo ou vidéo (facultatif)"}</T></p>
       <input
         ref={input}
         hidden
         type="file"
-        aria-label="Importer une photo ou une vidéo"
+        aria-label={uiCopy("Importer une photo ou une vidéo")}
         accept="image/jpeg,image/png,image/webp,video/mp4,video/webm"
         onChange={(e) => {
           const file = e.target.files?.[0];
@@ -114,34 +117,30 @@ export function PostAttachment({
         onClick={() => input.current?.click()}
       >
         <Upload size={18} />
-        {media ? "Remplacer le média" : "Importer une photo ou une vidéo"}
+        <T>{media ? "Remplacer le média" : "Importer une photo ou une vidéo"}</T>
       </Button>
       <p className="field-hint">
-        JPG, PNG ou WebP : 10 Mo maximum. MP4 ou WebM : 50 Mo maximum. Aperçu local uniquement, sans
-        envoi vers un serveur.
-      </p>
-      {busy && <p role="status">Vérification du fichier…</p>}
+        <T>{"JPG, PNG ou WebP : 10 Mo maximum. MP4 ou WebM : 50 Mo maximum. Aperçu local uniquement, sans envoi vers un serveur."}</T></p>
+      {busy && <p role="status"><T>{"Vérification du fichier…"}</T></p>}
       {error && (
         <>
           <p role="alert" className="field-error">
             {error}
           </p>
           <Button type="button" variant="ghost" onClick={() => clear()}>
-            Continuer sans média
-          </Button>
+            <T>{"Continuer sans média"}</T></Button>
         </>
       )}
       {media && (
         <div className="post-attachment-preview">
           {media.video ? (
-            <video controls playsInline src={media.url} aria-label="Aperçu de la vidéo à publier" />
+            <video controls playsInline src={media.url} aria-label={uiCopy("Aperçu de la vidéo à publier")} />
           ) : (
-            <img src={media.url} alt="Aperçu de la photo à publier" />
+            <img src={media.url} alt={uiCopy("Aperçu de la photo à publier")} />
           )}
           <p>{media.name}</p>
           <Button type="button" variant="ghost" onClick={() => clear()}>
-            Retirer le média
-          </Button>
+            <T>{"Retirer le média"}</T></Button>
         </div>
       )}
     </div>

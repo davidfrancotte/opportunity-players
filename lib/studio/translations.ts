@@ -1,7 +1,12 @@
 // Stable French domain values are never translated in storage. Only interface labels change.
-import {networkRows} from './network-translations';
 export const english: Record<string, string> = {
-  ...Object.fromEntries(networkRows.map(row=>[row[0],row[8]])),
+  'Apparence de l’app': 'App appearance',
+  'Choisissez le thème qui vous convient. Vous pouvez le changer à tout moment.': 'Choose the theme you prefer. You can change it at any time.',
+  'Thème de l’application': 'App theme',
+  'Mode clair': 'Light mode',
+  'Mode sombre': 'Dark mode',
+  'Votre préférence est enregistrée sur cet appareil.': 'Your preference is saved on this device.',
+  'Le stockage est indisponible. Ce choix reste actif pendant cette visite.': 'Storage is unavailable. This choice remains active during this visit.',
   'Écrire librement': 'Message freely',
   'Ouvrir la publication de': 'Open post by',
   'Voir la publication': 'View post',

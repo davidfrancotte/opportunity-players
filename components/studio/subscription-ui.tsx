@@ -1,4 +1,5 @@
 "use client";
+import { useLocale } from "./locale";
 import { T } from "./locale";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -23,15 +24,14 @@ export function FreePlanNote({ category }: { category: Category }) {
         <T>{"Votre compte est gratuit"}</T>
       </span>
       <p>
-        {category === "Sportif"
+        <T>{category === "Sportif"
           ? "Explorez le réseau, initiez 3 conversations par mois et répondez gratuitement. La création de publications nécessite Premium."
-          : "Présentez votre activité, recevez et répondez gratuitement aux messages. Les nouvelles prises de contact et les outils métier dépendent de votre offre."}
+          : "Présentez votre activité, recevez et répondez gratuitement aux messages. Les nouvelles prises de contact et les outils métier dépendent de votre offre."}</T>
       </p>
       <small>
         <T>{"Premium optionnel :"}</T>
         {monthlyPrice(category)}
-        /mois ou {annualPrice(category)}/an. Aucun paiement à l’inscription.
-      </small>
+        <T>{"/mois ou"}</T>{annualPrice(category)}<T>{"/an. Aucun paiement à l’inscription."}</T></small>
     </aside>
   );
 }
@@ -47,21 +47,20 @@ export function PlanStatus({ compact = false }: { compact?: boolean }) {
       </span>
       <span>
         <strong>
-          {categoryLabel(profile.category)} · {premium ? "Premium simulé" : "Gratuit"}
+          <T>{categoryLabel(profile.category)}</T> · <T>{premium ? "Premium simulé" : "Gratuit"}</T>
         </strong>
         <small>
           {premium
-            ? "Vos outils Premium sont actifs dans la démo."
+            ? <T>{"Vos outils Premium sont actifs dans la démo."}</T>
             : profile.category === "Sportif"
-              ? left + " nouvelles prises de contact disponibles ce mois-ci"
-              : "Réception et réponses gratuites."}
+              ? <>{left} <T>{"nouvelles prises de contact disponibles ce mois-ci"}</T></>
+              : <T>{"Réception et réponses gratuites."}</T>}
         </small>
         {!premium && (
           <em className="plan-monthly">
-            Premium · {monthlyPrice(profile.category)}
+            <T>{"Premium ·"}</T>{monthlyPrice(profile.category)}
             <T>{"/mois"}</T>
-            {" · ou "}{annualPrice(profile.category)}/an
-          </em>
+            <T>{" · ou "}</T>{annualPrice(profile.category)}<T>{"/an"}</T></em>
         )}
       </span>
       <ArrowUpRight size={18} />
@@ -118,16 +117,17 @@ export function LockedFeature({ reason = "receive" }: { reason?: AccessReason })
   return (
     <aside className="locked-feature">
       <LockKeyhole size={21} />
-      <h3>{gateCopy[reason].title}</h3>
-      <p>{gateCopy[reason].text}</p>
+      <h3><T>{gateCopy[reason].title}</T></h3>
+      <p><T>{gateCopy[reason].text}</T></p>
       <Button variant="secondary" onClick={() => dispatchSocial({ type: "gate", reason })}>
-        {reason === "recipient" || paid ? "Comprendre cette limite" : "Découvrir Premium"}
+        <T>{reason === "recipient" || paid ? "Comprendre cette limite" : "Découvrir Premium"}</T>
         <ArrowUpRight size={15} />
       </Button>
     </aside>
   );
 }
 export function UpgradeGate() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { profile, social, dispatchSocial } = useDemo();
   const router = useRouter();
   const pathname = usePathname();
@@ -146,20 +146,20 @@ export function UpgradeGate() {
       }}
     >
       <DialogContent className="studio-modal upgrade-modal" showCloseButton={false}>
-        <Button className="modal-close" variant="ghost" aria-label="Fermer" onClick={close}>
+        <Button className="modal-close" variant="ghost" aria-label={uiCopy("Fermer")} onClick={close}>
           <X size={20} />
         </Button>
         <span className="premium-eyebrow">
           <Sparkles size={15} />
-          {reason === "recipient" ? "DISPONIBILITÉ DU MEMBRE" : paid ? "VOTRE QUOTA" : "ARENA / PREMIUM"}
+          <T>{reason === "recipient" ? "DISPONIBILITÉ DU MEMBRE" : paid ? "VOTRE QUOTA" : "ARENA / PREMIUM"}</T>
         </span>
-        <DialogTitle className="modal-title">{copy.title}</DialogTitle>
-        <DialogDescription className="modal-description">{copy.text}</DialogDescription>
+        <DialogTitle className="modal-title"><T>{copy.title}</T></DialogTitle>
+        <DialogDescription className="modal-description"><T>{copy.text}</T></DialogDescription>
         {promotion && (
           <p className="upgrade-price">
             {monthlyPrice(profile.category)}
-            <span>/mois · offre {categoryLabel(profile.category)}</span>
-            <span>ou {annualPrice(profile.category)}/an, payés en une fois</span>
+            <span><T>{"/mois · offre "}</T>{categoryLabel(profile.category)}</span>
+            <span><T>{"ou "}</T>{annualPrice(profile.category)}<T>{"/an, payés en une fois"}</T></span>
           </p>
         )}
         {promotion && !!copy.benefits.length && (
@@ -167,7 +167,7 @@ export function UpgradeGate() {
             {copy.benefits.map((s) => (
               <li key={s}>
                 <Check size={16} />
-                {s}
+                <T>{s}</T>
               </li>
             ))}
           </ul>
@@ -185,7 +185,7 @@ export function UpgradeGate() {
           </Button>
         )}
         <Button variant="ghost" className="keep-free" onClick={close}>
-          {reason === "recipient" || paid ? "Compris" : "Continuer gratuitement"}
+          <T>{reason === "recipient" || paid ? "Compris" : "Continuer gratuitement"}</T>
         </Button>
         <p className="demo-context">
           <T>{"Démo uniquement. Aucun prélèvement, aucun achat réel."}</T>

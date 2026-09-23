@@ -1,4 +1,5 @@
 "use client";
+import { T } from "./locale";
 import {limits} from '@/lib/studio/entitlements';
 import { useId, useState, useEffect, type ReactNode, type FormEvent } from "react";
 import Link from "next/link";
@@ -27,16 +28,17 @@ import {
 import type { Member } from "@/lib/studio/social";
 import { useDemo } from "./demo-provider";
 import { useLocale } from "./locale";
+import { intlLocale } from "@/lib/studio/i18n";
 import { ProfileLayout, Modal } from "./profile-screens";
 import { Field, Submit } from "./studio-ui";
 
 const uid = () => crypto.randomUUID();
 function useCopy() {
-  const { locale } = useLocale();
-  return (fr: string, en: string) => (locale === "fr" ? fr : en);
+  const { t } = useLocale();
+  return t;
 }
 function dateText(value: string, locale: string) {
-  return new Intl.DateTimeFormat(locale === "fr" ? "fr-BE" : "en-GB", {
+  return new Intl.DateTimeFormat(intlLocale(locale), {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
@@ -157,9 +159,9 @@ export function CareerNav() {
       className="career-nav"
       aria-label={c("Parcours et rendez-vous", "Career and appointments")}
     >
-      <Link href="/espace/talents">Listes & portefeuille</Link>
-      <Link href="/espace/essais-groupes">Essais groupés</Link>
-      <Link href="/espace/agenda">Agenda</Link>
+      <Link href="/espace/talents"><T>{"Listes & portefeuille"}</T></Link>
+      <Link href="/espace/essais-groupes"><T>{"Essais groupés"}</T></Link>
+      <Link href="/espace/agenda"><T>{"Agenda"}</T></Link>
       <Link href="/espace/candidatures">
         <BriefcaseBusiness size={17} />
         {c("Candidatures & essais", "Applications & trials")}
@@ -1147,7 +1149,7 @@ export function AppointmentsPage() {
                         onClick={() => dispatchCareer({ type: "book", id: a.id, slot: s.id })}
                       >
                         {dateText(s.start, locale)}
-                        <small>{s.place} · 30 min</small>
+                        <small>{s.place} <T>{" · 30 min"}</T></small>
                       </Button>
                     ))}
                     {!slots.length && (

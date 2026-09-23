@@ -1,4 +1,6 @@
 "use client";
+import { useLocale } from "./locale";
+import { T } from "./locale";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Upload } from "lucide-react";
 import { Button } from "./ui/button";
@@ -10,6 +12,7 @@ import { limits } from "@/lib/studio/entitlements";
 
 type PendingMedia = { url: string; name: string; video: boolean; size: number; seconds: number };
 export function MediaUpload({ onAdded }: { onAdded: () => void }) {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { profile, setProfile, social, trust, notify } = useDemo();
   const cap = limits(profile.category, isPremium(social, profile.category));
   const [pending, setPending] = useState<PendingMedia | null>(null);
@@ -140,11 +143,11 @@ export function MediaUpload({ onAdded }: { onAdded: () => void }) {
     <form className="profile-media-upload" onSubmit={add}>
       <label className="media-file-picker">
         <Upload size={18} />
-        <span>Choisir un fichier sur mon appareil</span>
+        <span><T>{"Choisir un fichier sur mon appareil"}</T></span>
         <input
           type="file"
           accept="image/jpeg,image/png,image/webp,video/mp4,video/webm"
-          aria-label="Choisir un média"
+          aria-label={uiCopy("Choisir un média")}
           onChange={(e) => {
             const file = e.target.files?.[0];
             e.target.value = "";
@@ -153,17 +156,15 @@ export function MediaUpload({ onAdded }: { onAdded: () => void }) {
         />
       </label>
       <p className="section-note">
-        Photos JPG, PNG ou WebP : 10 Mo maximum. Vidéos MP4 ou WebM : 50 Mo, {cap.videoSeconds / 60}{" "}
-        minutes maximum, selon votre offre. Aucun envoi vers un serveur ; les fichiers disparaissent
-        au rechargement.
-      </p>
-      {busy && <p role="status">Vérification du fichier…</p>}
+        <T>{"Photos JPG, PNG ou WebP : 10 Mo maximum. Vidéos MP4 ou WebM : 50 Mo,"}</T>{cap.videoSeconds / 60}{" "}
+        <T>{"minutes maximum, selon votre offre. Aucun envoi vers un serveur ; les fichiers disparaissent au rechargement."}</T></p>
+      {busy && <p role="status"><T>{"Vérification du fichier…"}</T></p>}
       {pending && (
         <div className="media-upload-preview">
           {pending.video ? (
-            <video controls playsInline src={pending.url} aria-label="Aperçu de la vidéo" />
+            <video controls playsInline src={pending.url} aria-label={uiCopy("Aperçu de la vidéo")} />
           ) : (
-            <img src={pending.url} alt="Aperçu du média sélectionné" />
+            <img src={pending.url} alt={uiCopy("Aperçu du média sélectionné")} />
           )}
           <p>{pending.name}</p>
         </div>
@@ -175,16 +176,14 @@ export function MediaUpload({ onAdded }: { onAdded: () => void }) {
           onChange={(e) => setConsent(e.target.checked)}
           required
         />
-        Je confirme disposer des droits et autorisations pour partager ce média sportif.
-      </label>
+        <T>{"Je confirme disposer des droits et autorisations pour partager ce média sportif."}</T></label>
       {error && (
         <p role="alert" className="field-error">
           {error}
         </p>
       )}
       <Button type="submit" className="action primary" disabled={!pending || busy || !consent}>
-        Ajouter à ma galerie
-      </Button>
+        <T>{"Ajouter à ma galerie"}</T></Button>
     </form>
   );
 }

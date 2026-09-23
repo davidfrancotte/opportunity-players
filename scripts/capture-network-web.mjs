@@ -8,7 +8,7 @@ try{
  async function shot(id){
   await page.evaluate(()=>document.fonts.ready);await page.evaluate(()=>Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))));
   await page.addStyleTag({content:'nextjs-portal{display:none!important}'});await page.evaluate(()=>document.activeElement?.blur());
-  await page.screenshot({path:`public/app-visuals/web-20260923-network-${id}.png`,animations:'disabled'});
+  await page.screenshot({path:`public/app-visuals/web-20260924-parity-${id}.png`,animations:'disabled'});
  }
  for(const route of ['profil','reseau','messages','accueil','opportunities','agenda']){
   await page.goto(`${base}/espace/${route}`,{waitUntil:'networkidle'});
@@ -24,7 +24,7 @@ try{
    await page.locator('.network-contact-profile').filter({hasText:'Horizon Padel'}).click();await page.getByRole('button',{name:'Ne plus suivre',exact:true}).click();await page.getByRole('button',{name:'Fermer la fenêtre',exact:true}).click();assert.equal(await page.locator('.network-contact').count(),1);
    await page.getByRole('button',{name:'Retour aux membres',exact:true}).click();assert.deepEqual(await cards.locator('strong').allTextContents(),['1','1']);
    for(const theme of ['sombre','clair']){
-    await page.getByRole('button',{name:'Thème '+theme,exact:true}).filter({visible:true}).click();
+    await page.getByRole('button',{name:'Mode '+theme,exact:true}).filter({visible:true}).click();
     for(const width of [1440,768,390,320]){
      await page.setViewportSize({width,height:1000});
      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`Network ${theme} ${width}`);
@@ -41,8 +41,9 @@ try{
   await shot(route);
  }
  await page.goto(base+'/espace/jouer',{waitUntil:'networkidle'});assert.equal(await page.getByText('NEW',{exact:true}).count(),0);
- await page.goto(base+'/espace/reseau',{waitUntil:'networkidle'});
- await page.getByRole('combobox',{name:'Langue / Language',exact:true}).filter({visible:true}).first().selectOption('en');
+ await page.goto(base+'/espace/parametres',{waitUntil:'networkidle'});
+ await page.locator('.language-preferences select').selectOption('en');
+ await page.locator('a[href="/espace/reseau"]').filter({visible:true}).first().click();
  await page.getByRole('heading',{name:'My network',exact:true}).waitFor();await page.locator('.network-count-cards > button').first().click();await page.getByRole('button',{name:'Back to members',exact:true}).waitFor();
  assert.deepEqual(errors,[]);console.log('PASS web network: counts, search, profiles, unfollow, two themes, four widths, FR/EN, new logo, no NEW. Six web captures regenerated.');
 }finally{await browser.close();}

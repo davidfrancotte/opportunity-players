@@ -834,6 +834,12 @@ body:has(.studio-surface[data-theme="light"]) .event-tabs button[aria-pressed="t
   color: var(--studio-accent-ink);
   border-bottom: 2px solid var(--studio-accent-ink);
 }
+body:has(.studio-surface[data-theme="light"]) .play-view-switch {
+  background: var(--studio-subtle);
+}
+body:has(.studio-surface[data-theme="light"]) .play-view-switch > button {
+  color: var(--studio-muted);
+}
 body:has(.studio-surface[data-theme="light"]) .match-card {
   background: var(--studio-panel);
   border: 1px solid var(--studio-line);
@@ -1341,6 +1347,10 @@ body:has(.studio-surface[data-theme="light"]) .extension-page a:focus-visible,
 body:has(.studio-surface[data-theme="light"]) .extension-page summary:focus-visible {
   outline: 2px solid var(--studio-accent-ink);
 }
+body:has(.studio-surface[data-theme="light"]) .spotlight-card { border: 1px solid var(--studio-accent-ink); background: var(--studio-subtle); }
+body:has(.studio-surface[data-theme="light"]) .spotlight-card header > svg { color: var(--studio-accent-ink); }
+body:has(.studio-surface[data-theme="light"]) .spotlight-card header p { color: var(--studio-muted); }
+body:has(.studio-surface[data-theme="light"]) .opportunity-filter-toggle[aria-expanded="true"], body:has(.studio-surface[data-theme="light"]) .opportunity-filter-toggle[data-active="true"] { border-color: var(--studio-accent-ink); }
 body:has(.studio-surface[data-theme="light"]) .post-attachment-preview img, body:has(.studio-surface[data-theme="light"]) .post-attachment-preview video { background: var(--studio-panel); }
 body:has(.studio-surface[data-theme="light"]) video.post-image { background: var(--studio-panel); }
 body:has(.studio-surface[data-theme="light"]) .schedule-premium-badge {
@@ -1367,6 +1377,15 @@ body:has(.studio-surface[data-theme="light"]) .connection-pending > small { colo
 body:has(.studio-surface[data-theme="light"]) .connection-demo { border-top: 1px solid var(--studio-line); }
 body:has(.studio-surface[data-theme="light"]) .connection-demo p { color: var(--studio-muted); }
 body:has(.studio-surface[data-theme="light"]) .connection-sent { border-bottom: 1px solid var(--studio-line); }
+body:has(.studio-surface[data-theme="light"]) .network-count-cards > button { border:1px solid var(--studio-line); background:var(--studio-panel); color:var(--studio-ink); }
+body:has(.studio-surface[data-theme="light"]) .network-count-cards strong { color:var(--studio-accent-ink); }
+body:has(.studio-surface[data-theme="light"]) .network-contact { border-bottom:1px solid var(--studio-line); }
+body:has(.studio-surface[data-theme="light"]) .network-contact-profile small { color:var(--studio-muted); }
+body:has(.studio-surface[data-theme="light"]) .network-contact-profile .network-contact-status { color:var(--studio-accent-ink); }
+body:has(.studio-surface[data-theme="light"]) .member-media-open { background:var(--studio-panel); }
+body:has(.studio-surface[data-theme="light"]) .member-media-open > span { background:var(--studio-panel); color:var(--studio-ink); }
+body:has(.studio-surface[data-theme="light"]) .member-media-like[aria-pressed="true"] { color:var(--studio-accent-ink); }
+body:has(.studio-surface[data-theme="light"]) .member-media-viewer > img,body:has(.studio-surface[data-theme="light"]) .member-media-viewer > video { background:var(--studio-panel); }
 body:has(.studio-surface[data-theme="light"]) .agenda-dot.spectator {
   background: #fff0ee;
 }
@@ -1400,6 +1419,8 @@ body:has(.studio-surface[data-theme="light"]) .agenda-request-booking select {
 body:has(.studio-surface[data-theme="light"]) .agenda-requests-empty {
   color: var(--studio-muted);
 }
+body:has(.studio-surface[data-theme="light"]) .appearance-option { border: 1px solid var(--studio-line); color: var(--studio-muted); background: var(--studio-panel); }
+body:has(.studio-surface[data-theme="light"]) .appearance-option[data-selected="true"] { color: var(--studio-accent-ink); }
 /* Small brand and portal adjustments, outside the color migration. */
 body:has(.studio-surface[data-theme="light"]) .web-content-area { background: var(--studio-canvas); }
 body:has(.studio-surface[data-theme="light"]) .web-sidebar { box-shadow: 1px 0 0 var(--studio-line); }
@@ -1433,4 +1454,20 @@ body:has(.studio-surface[data-theme="light"]) .agenda-tools {
 body:has(.studio-surface[data-theme="light"]) .agenda-dot.match { background: #547719; }
 body:has(.studio-surface[data-theme="light"]) .agenda-dot.professional { background: #365bac; }
 body:has(.studio-surface[data-theme="light"]) .agenda-dot.spectator { background: #a85c23; }
+/* Approved app selection treatment: citron #D1F94C, dark text. */
+body:has(.studio-surface[data-theme="light"]) .identity-card { border: 0; background: transparent; }
+body:has(.studio-surface[data-theme="light"]) .play-view-switch > button[aria-pressed="true"],
+body:has(.studio-surface[data-theme="light"]) .profile-subnav a[aria-current="page"],
+body:has(.studio-surface[data-theme="light"]) .sport-filters > button[aria-pressed="true"],
+body:has(.studio-surface[data-theme="light"]) .agenda-filters button[aria-pressed="true"],
+body:has(.studio-surface[data-theme="light"]) .billing-toggle button[aria-pressed="true"],
+body:has(.studio-surface[data-theme="light"]) .billing-period button[aria-pressed="true"],
+body:has(.studio-surface[data-theme="light"]) .appearance-option[data-selected="true"] {
+  background: var(--primary); color: var(--studio-ink); border-color: var(--primary);
+}
+body:has(.studio-surface[data-theme="light"]) .bottom-nav-item[aria-current="page"] { background: transparent; color: var(--studio-ink); }
+body:has(.studio-surface[data-theme="light"]) .bottom-nav-item[aria-current="page"] .bottom-nav-icon { background: var(--primary); }
+body:has(.studio-surface[data-theme="light"]) .network-sections [aria-current],
+body:has(.studio-surface[data-theme="light"]) .event-tabs button[aria-pressed="true"] { color: var(--studio-ink); border-bottom: 3px solid var(--primary); }
+body:has(.studio-surface[data-theme="light"]) .studio-tabs > button[data-active] { color: var(--studio-ink) !important; box-shadow: inset 0 -3px var(--primary) !important; }
 

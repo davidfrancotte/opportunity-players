@@ -1,15 +1,16 @@
-'use client';
-import { T } from './locale';
-import { RegistrationFields } from './sport-profile-fields';
-import { sportProfileIssues } from '@/lib/studio/sport-profile';
-import { FreePlanNote } from './subscription-ui';
-import { ProfileDirectoryFields } from './directory-fields';
-import { athleteIssues, normalizeMeasurement } from '@/lib/studio/athlete';
-import { directoryIssues, primaryRecord } from '@/lib/studio/directory';
-import { moderateText } from '@/lib/studio/trust';
-import { useState, type FormEvent } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+"use client";
+import { useLocale } from "./locale";
+import { T } from "./locale";
+import { RegistrationFields } from "./sport-profile-fields";
+import { sportProfileIssues } from "@/lib/studio/sport-profile";
+import { FreePlanNote } from "./subscription-ui";
+import { ProfileDirectoryFields } from "./directory-fields";
+import { athleteIssues, normalizeMeasurement } from "@/lib/studio/athlete";
+import { directoryIssues, primaryRecord } from "@/lib/studio/directory";
+import { moderateText } from "@/lib/studio/trust";
+import { useState, type FormEvent } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   Check,
@@ -18,23 +19,12 @@ import {
   UserRound,
   BriefcaseBusiness,
   Building2,
-} from 'lucide-react';
-import { Button } from '@/components/studio/ui/button';
-import { Textarea } from '@/components/studio/ui/textarea';
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from '@/components/studio/ui/native-select';
-import { useDemo } from './demo-provider';
-import {
-  AuthLayout,
-  Field,
-  Password,
-  Submit,
-  Guard,
-  FormErrors,
-  focusError,
-} from './studio-ui';
+} from "lucide-react";
+import { Button } from "@/components/studio/ui/button";
+import { Textarea } from "@/components/studio/ui/textarea";
+import { NativeSelect, NativeSelectOption } from "@/components/studio/ui/native-select";
+import { useDemo } from "./demo-provider";
+import { AuthLayout, Field, Password, Submit, Guard, FormErrors, focusError } from "./studio-ui";
 import {
   DEMO_CODE,
   DEMO_PASSWORD,
@@ -51,15 +41,15 @@ import {
   type Category,
   type Issues,
   type Profile,
-} from '@/lib/studio/model';
-const value = (form: FormData, key: string) =>
-  String(form.get(key) || '').trim();
+} from "@/lib/studio/model";
+const value = (form: FormData, key: string) => String(form.get(key) || "").trim();
 
 export function Signup() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { draft, setDraft, setEmailVerified, dispatchTrust } = useDemo();
   const [identityDefaults] = useState(draft);
   const [registration, setRegistration] = useState<Profile>(
-    () => draft || createProfile({ firstName: '', lastName: '', email: '' }),
+    () => draft || createProfile({ firstName: "", lastName: "", email: "" }),
   );
   const router = useRouter();
   const [errors, setErrors] = useState<Issues>({});
@@ -67,26 +57,24 @@ export function Signup() {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const identity = {
-      firstName: value(data, 'firstName'),
-      lastName: value(data, 'lastName'),
-      email: value(data, 'email'),
+      firstName: value(data, "firstName"),
+      lastName: value(data, "lastName"),
+      email: value(data, "email"),
     };
     const issues = {
-      ...validateIdentity(identity, String(data.get('password') || '')),
+      ...validateIdentity(identity, String(data.get("password") || "")),
       ...sportProfileIssues(registration),
     };
-    if (!data.get('policy'))
-      issues.policy = 'Prenez connaissance de la notice de confidentialité.';
-    if (!data.get('accuracy'))
-      issues.accuracy =
-        'Confirmez l’exactitude des informations et le respect de la charte.';
+    if (!data.get("policy")) issues.policy = "Prenez connaissance de la notice de confidentialité.";
+    if (!data.get("accuracy"))
+      issues.accuracy = "Confirmez l’exactitude des informations et le respect de la charte.";
     if (moderateText(JSON.stringify(identity)))
-      issues.firstName = 'Reformulez les informations de manière respectueuse.';
+      issues.firstName = "Reformulez les informations de manière respectueuse.";
     setErrors(issues);
     focusError(issues);
     if (Object.keys(issues).length) return;
-    dispatchTrust({ type: 'reset' });
-    dispatchTrust({ type: 'consent', policy: true, accuracy: true });
+    dispatchTrust({ type: "reset" });
+    dispatchTrust({ type: "consent", policy: true, accuracy: true });
     setDraft({
       ...createProfile(identity),
       birthDate: registration.birthDate,
@@ -95,16 +83,16 @@ export function Signup() {
     });
     setEmailVerified(false);
     e.currentTarget.reset();
-    router.push('/espace/verification');
+    router.push("/espace/verification");
   }
   return (
     <AuthLayout
       step={1}
       title={
         <>
-          <T>{'Votre compte,'}</T>
+          <T>{"Votre compte,"}</T>
           <br />
-          <T>{'votre départ'}</T>
+          <T>{"votre départ"}</T>
           <span className="lime">.</span>
         </>
       }
@@ -112,16 +100,12 @@ export function Signup() {
     >
       <form onSubmit={submit} noValidate>
         <FormErrors errors={errors} />
-        <RegistrationFields
-          profile={registration}
-          onChange={setRegistration}
-          errors={errors}
-        />
-        {registration.registrationMode === 'child' && (
+        <RegistrationFields profile={registration} onChange={setRegistration} errors={errors} />
+        {registration.registrationMode === "child" && (
           <p className="child-mode-note">
             <T>
               {
-                'Les prénom et nom ci-dessous sont ceux de l’enfant. L’adresse e-mail et le compte appartiennent au représentant.'
+                "Les prénom et nom ci-dessous sont ceux de l’enfant. L’adresse e-mail et le compte appartiennent au représentant."
               }
             </T>
           </p>
@@ -134,7 +118,7 @@ export function Signup() {
             required
             maxLength={60}
             defaultValue={identityDefaults?.firstName}
-            placeholder="Alex"
+            placeholder={uiCopy("Alex")}
             error={errors.firstName}
           />
           <Field
@@ -144,7 +128,7 @@ export function Signup() {
             required
             maxLength={60}
             defaultValue={identityDefaults?.lastName}
-            placeholder="Dupont"
+            placeholder={uiCopy("Dupont")}
             error={errors.lastName}
           />
         </div>
@@ -159,20 +143,16 @@ export function Signup() {
           required
           maxLength={254}
           defaultValue={identityDefaults?.email}
-          placeholder="alex@demo.example"
+          placeholder={uiCopy("alex@demo.example")}
           error={errors.email}
         />
         <Password error={errors.password} newPassword />
         <div className="trust-consents">
           <label>
             <input id="policy" name="policy" type="checkbox" required />
-            <T>{'J’ai pris connaissance de la'}</T>{' '}
-            <Link
-              href="/espace/confidentialite"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <T>{'notice de confidentialité de la démo'}</T>
+            <T>{"J’ai pris connaissance de la"}</T>{" "}
+            <Link href="/espace/confidentialite" target="_blank" rel="noreferrer">
+              <T>{"notice de confidentialité de la démo"}</T>
             </Link>
             .
           </label>
@@ -180,7 +160,7 @@ export function Signup() {
             <input id="accuracy" name="accuracy" type="checkbox" required />
             <T>
               {
-                'J’atteste l’exactitude de mes informations dans le service réel et j’accepte la charte de respect. Pour cette démo, j’utilise uniquement des données fictives.'
+                "J’atteste l’exactitude de mes informations dans le service réel et j’accepte la charte de respect. Pour cette démo, j’utilise uniquement des données fictives."
               }
             </T>
           </label>
@@ -188,20 +168,20 @@ export function Signup() {
         <div className="inline-note">
           <Mail size={18} />
           <span>
-            <T>{'Prochaine étape : vérifier votre adresse.'}</T>
+            <T>{"Prochaine étape : vérifier votre adresse."}</T>
             <small>
-              <T>{'La validation sera simulée dans cette démo.'}</T>
+              <T>{"La validation sera simulée dans cette démo."}</T>
             </small>
           </span>
         </div>
         <Submit>
-          <T>{'Continuer'}</T>
+          <T>{"Continuer"}</T>
         </Submit>
       </form>
       <p className="switch-auth">
-        <T>{'Déjà membre ?'}</T>{' '}
+        <T>{"Déjà membre ?"}</T>{" "}
         <Link href="/espace/connexion">
-          <T>{'Se connecter'}</T>
+          <T>{"Se connecter"}</T>
           <ArrowRight size={14} />
         </Link>
       </p>
@@ -212,8 +192,8 @@ export function Signup() {
 export function VerifyEmail() {
   const { draft, setEmailVerified, notify } = useDemo();
   const router = useRouter();
-  const [code, setCode] = useState('');
-  const [error, setError] = useState('');
+  const [code, setCode] = useState("");
+  const [error, setError] = useState("");
   const [resends, setResends] = useState(0);
   const [attempts, setAttempts] = useState(0);
   const [expires, setExpires] = useState(() => Date.now() + 600000);
@@ -221,16 +201,16 @@ export function VerifyEmail() {
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (attempts >= 5 || Date.now() > expires) {
-      setError('Code expiré ou trop de tentatives. Simulez un nouvel envoi.');
+      setError("Code expiré ou trop de tentatives. Simulez un nouvel envoi.");
       return;
     }
     setAttempts(attempts + 1);
     if (!validDemoCode(code)) {
-      setError('Le code de démonstration est 246810.');
+      setError("Le code de démonstration est 246810.");
       return;
     }
     setEmailVerified(true);
-    router.push('/espace/double-facteur');
+    router.push("/espace/double-facteur");
   }
   return (
     <AuthLayout
@@ -238,9 +218,9 @@ export function VerifyEmail() {
       step={2}
       title={
         <>
-          <T>{'Votre e-mail,'}</T>
+          <T>{"Votre e-mail,"}</T>
           <br />
-          <T>{'votre point de départ.'}</T>
+          <T>{"votre point de départ."}</T>
         </>
       }
       intro="Un petit geste pour garder les bons contacts."
@@ -249,15 +229,15 @@ export function VerifyEmail() {
         <Mail size={25} />
         <strong>{draft.email}</strong>
         <Link href="/espace/inscription">
-          <T>{'Corriger l’adresse'}</T>
+          <T>{"Corriger l’adresse"}</T>
         </Link>
       </div>
       <div className="demo-code-note">
         <span>
-          <T>{'SIMULATION · AUCUN E-MAIL ENVOYÉ'}</T>
+          <T>{"SIMULATION · AUCUN E-MAIL ENVOYÉ"}</T>
         </span>
         <p>
-          <T>{'Pour essayer cette étape, saisissez'}</T>
+          <T>{"Pour essayer cette étape, saisissez"}</T>
           <strong>{DEMO_CODE}</strong>.
         </p>
       </div>
@@ -273,8 +253,8 @@ export function VerifyEmail() {
           className="code-input"
           value={code}
           onChange={(e) => {
-            setCode(e.target.value.replace(/\D/g, ''));
-            setError('');
+            setCode(e.target.value.replace(/\D/g, ""));
+            setError("");
           }}
           placeholder="000000"
           error={error}
@@ -285,7 +265,7 @@ export function VerifyEmail() {
           </p>
         )}
         <Submit>
-          <T>{'Valider le code démo'}</T>
+          <T>{"Valider le code démo"}</T>
         </Submit>
       </form>
       <Button
@@ -295,16 +275,16 @@ export function VerifyEmail() {
           setResends(resends + 1);
           setAttempts(0);
           setExpires(Date.now() + 600000);
-          setError('');
-          notify('Renvoi simulé : aucun e-mail envoyé. Le code reste 246810.');
+          setError("");
+          notify("Renvoi simulé : aucun e-mail envoyé. Le code reste 246810.");
         }}
       >
         <RefreshCw size={15} />
-        <T>{'Simuler un nouvel envoi'}</T>
+        <T>{"Simuler un nouvel envoi"}</T>
       </Button>
       {resends > 0 && (
         <p className="field-hint" role="status">
-          <T>{'Renvoi simulé. Utilisez toujours le code'}</T>
+          <T>{"Renvoi simulé. Utilisez toujours le code"}</T>
           {DEMO_CODE}.
         </p>
       )}
@@ -313,11 +293,10 @@ export function VerifyEmail() {
 }
 
 export function Personalise() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { draft, setDraft, emailVerified, trust } = useDemo();
   const router = useRouter();
-  const [category, setCategory] = useState<Category>(
-    draft?.category || 'Sportif',
-  );
+  const [category, setCategory] = useState<Category>(draft?.category || "Sportif");
   const [errors, setErrors] = useState<Issues>({});
   const [discovery, setDiscovery] = useState<Profile>(() =>
     structuredClone(draft || initialProfile),
@@ -327,14 +306,11 @@ export function Personalise() {
   if (!trust.securityStep || !trust.policy || !trust.accuracy)
     return (
       <AuthLayout
-        title="Terminez la validation."
+        title={uiCopy("Terminez la validation.")}
         intro="Les validations de la démo sont nécessaires avant de poursuivre."
       >
-        <Link
-          className="action primary"
-          href={trust.policy ? '/espace/double-facteur' : '/espace/inscription'}
-        >
-          <T>{'Reprendre la validation'}</T>
+        <Link className="action primary" href={trust.policy ? "/espace/double-facteur" : "/espace/inscription"}>
+          <T>{"Reprendre la validation"}</T>
         </Link>
       </AuthLayout>
     );
@@ -346,22 +322,21 @@ export function Personalise() {
       ...sportProfileIssues({ ...discovery, category }),
       ...athleteIssues({ ...discovery, category }),
     };
-    if (!value(data, 'headline'))
-      issues.headline = 'Indiquez votre rôle dans le sport.';
-    if (!value(data, 'city')) issues.city = 'Indiquez une ville fictive.';
-    if (category === 'Organisation' && !value(data, 'organisation'))
-      issues.organisation = 'Indiquez le nom de l’organisation fictive.';
+    if (!value(data, "headline")) issues.headline = "Indiquez votre rôle dans le sport.";
+    if (!value(data, "city")) issues.city = "Indiquez une ville fictive.";
+    if (category === "Organisation" && !value(data, "organisation"))
+      issues.organisation = "Indiquez le nom de l’organisation fictive.";
     if (
       moderateText(
         [
-          value(data, 'headline'),
-          value(data, 'city'),
-          value(data, 'organisation'),
+          value(data, "headline"),
+          value(data, "city"),
+          value(data, "organisation"),
           JSON.stringify(discovery),
-        ].join(' '),
+        ].join(" "),
       )
     )
-      issues.headline = 'Utilisez des informations respectueuses.';
+      issues.headline = "Utilisez des informations respectueuses.";
     setErrors(issues);
     focusError(issues);
     if (Object.keys(issues).length) return;
@@ -372,23 +347,19 @@ export function Personalise() {
       guardian: discovery.guardian,
       category,
       country: discovery.country.trim(),
-      weightKg:
-        category === 'Sportif' ? normalizeMeasurement(discovery.weightKg) : '',
-      heightCm:
-        category === 'Sportif' ? normalizeMeasurement(discovery.heightCm) : '',
-      gender: category === 'Sportif' ? discovery.gender : '',
-      accountType: category === 'Sportif' ? '' : discovery.accountType,
+      weightKg: category === "Sportif" ? normalizeMeasurement(discovery.weightKg) : "",
+      heightCm: category === "Sportif" ? normalizeMeasurement(discovery.heightCm) : "",
+      gender: category === "Sportif" ? discovery.gender : "",
+      accountType: category === "Sportif" ? "" : discovery.accountType,
       sport: discovery.sport,
-      disciplines: discovery.disciplines.some(
-        (r) => r.sport === discovery.sport,
-      )
+      disciplines: discovery.disciplines.some((r) => r.sport === discovery.sport)
         ? discovery.disciplines
         : [...discovery.disciplines, primaryRecord(discovery)],
-      headline: value(data, 'headline'),
-      city: value(data, 'city'),
-      organisation: value(data, 'organisation'),
+      headline: value(data, "headline"),
+      city: value(data, "city"),
+      organisation: value(data, "organisation"),
     });
-    router.push('/espace/presentation');
+    router.push("/espace/presentation");
   }
   const icons = [UserRound, BriefcaseBusiness, Building2];
   return (
@@ -397,9 +368,9 @@ export function Personalise() {
       step={3}
       title={
         <>
-          <T>{'Votre place'}</T>
+          <T>{"Votre place"}</T>
           <br />
-          <T>{'dans le sport'}</T>
+          <T>{"dans le sport"}</T>
           <span className="lime">.</span>
         </>
       }
@@ -409,27 +380,21 @@ export function Personalise() {
         <FormErrors errors={errors} />
         <fieldset className="role-choices">
           <legend>
-            <T>{'Vous êtes…'}</T>
+            <T>{"Vous êtes…"}</T>
           </legend>
           {categories.map((cat, i) => {
             const Icon = icons[i];
             return (
-              <label key={cat} className={category === cat ? 'selected' : ''}>
+              <label key={cat} className={category === cat ? "selected" : ""}>
                 <input
                   type="radio"
                   name="category"
                   value={cat}
-                  disabled={
-                    discovery.registrationMode === 'child' && cat !== 'Sportif'
-                  }
+                  disabled={discovery.registrationMode === "child" && cat !== "Sportif"}
                   checked={category === cat}
                   onChange={() => {
                     setCategory(cat);
-                    setDiscovery((p) => ({
-                      ...p,
-                      category: cat,
-                      accountType: '',
-                    }));
+                    setDiscovery((p) => ({ ...p, category: cat, accountType: "" }));
                     setErrors({});
                   }}
                 />
@@ -443,7 +408,7 @@ export function Personalise() {
           })}
         </fieldset>
         <FreePlanNote category={category} />
-        {category === 'Organisation' && (
+        {category === "Organisation" && (
           <Field
             label="Nom de l’organisation fictive"
             name="organisation"
@@ -458,9 +423,7 @@ export function Personalise() {
             id="sport"
             name="sport"
             value={discovery.sport}
-            onChange={(e) =>
-              setDiscovery((p) => ({ ...p, sport: e.target.value }))
-            }
+            onChange={(e) => setDiscovery((p) => ({ ...p, sport: e.target.value }))}
             className="select-field"
           >
             {sports.map((s) => (
@@ -487,21 +450,15 @@ export function Personalise() {
           errors={errors}
         />
         <Field
-          label={
-            category === 'Organisation'
-              ? 'Votre activité'
-              : 'Votre rôle ou spécialité'
-          }
+          label={category === "Organisation" ? "Votre activité" : "Votre rôle ou spécialité"}
           name="headline"
           defaultValue={discovery.headline}
           autoComplete="organization-title"
-          placeholder={
-            category === 'Professionnel'
-              ? 'Coach de padel'
-              : category === 'Organisation'
-                ? 'Club de padel'
-                : 'Joueur de padel'
-          }
+          placeholder={uiCopy(category === "Professionnel"
+              ? "Coach de padel"
+              : category === "Organisation"
+                ? "Club de padel"
+                : "Joueur de padel")}
           maxLength={90}
           error={errors.headline}
         />
@@ -510,12 +467,12 @@ export function Personalise() {
           name="city"
           defaultValue={discovery.city}
           autoComplete="address-level2"
-          placeholder="Liège"
+          placeholder={uiCopy("Liège")}
           maxLength={90}
           error={errors.city}
         />
         <Submit>
-          <T>{'Continuer'}</T>
+          <T>{"Continuer"}</T>
         </Submit>
       </form>
     </AuthLayout>
@@ -523,48 +480,36 @@ export function Personalise() {
 }
 
 export function Presentation() {
-  const {
-    draft,
-    setDraft,
-    emailVerified,
-    setProfile,
-    notify,
-    dispatchSocial,
-    trust,
-  } = useDemo();
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
+  const { draft, setDraft, emailVerified, setProfile, notify, dispatchSocial, trust } = useDemo();
   const router = useRouter();
   const [photo, setPhoto] = useState(draft?.photo || photos[0].src);
-  const [bio, setBio] = useState(draft?.bio || '');
-  const [bioError, setBioError] = useState('');
+  const [bio, setBio] = useState(draft?.bio || "");
+  const [bioError, setBioError] = useState("");
   if (!draft) return <Guard />;
   if (!emailVerified) return <Guard verification />;
   if (!trust.securityStep || !trust.policy || !trust.accuracy)
     return (
       <AuthLayout
-        title="Terminez la validation."
+        title={uiCopy("Terminez la validation.")}
         intro="Votre parcours d’inscription n’est pas terminé."
       >
-        <Link
-          className="action primary"
-          href={trust.policy ? '/espace/double-facteur' : '/espace/inscription'}
-        >
-          <T>{'Reprendre la validation'}</T>
+        <Link className="action primary" href={trust.policy ? "/espace/double-facteur" : "/espace/inscription"}>
+          <T>{"Reprendre la validation"}</T>
         </Link>
       </AuthLayout>
     );
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (moderateText(bio)) {
-      setBioError('Reformulez votre présentation de manière respectueuse.');
+      setBioError("Reformulez votre présentation de manière respectueuse.");
       return;
     }
     setProfile({ ...draft!, bio: bio.trim(), photo });
-    dispatchSocial({ type: 'reset' });
+    dispatchSocial({ type: "reset" });
     setDraft(null);
-    notify(
-      'Votre profil de démonstration est prêt. Aucun compte réel n’a été créé.',
-    );
-    router.push('/espace/accueil');
+    notify("Votre profil de démonstration est prêt. Aucun compte réel n’a été créé.");
+    router.push("/espace/accueil");
   }
   return (
     <AuthLayout
@@ -572,9 +517,9 @@ export function Presentation() {
       step={4}
       title={
         <>
-          <T>{'Un profil'}</T>
+          <T>{"Un profil"}</T>
           <br />
-          <T>{'à votre image.'}</T>
+          <T>{"à votre image."}</T>
         </>
       }
       intro="Ajoutez une touche personnelle. Vous pourrez compléter le reste à votre rythme."
@@ -587,14 +532,14 @@ export function Presentation() {
         )}
         <fieldset className="photo-choices">
           <legend>
-            <T>{'Choisir une illustration de profil'}</T>
+            <T>{"Choisir une illustration de profil"}</T>
           </legend>
           <p className="field-hint">
-            <T>{'Personnages fictifs, images de démonstration.'}</T>
+            <T>{"Personnages fictifs, images de démonstration."}</T>
           </p>
           <div>
             {photos.slice(0, 4).map((p) => (
-              <label key={p.src} className={photo === p.src ? 'selected' : ''}>
+              <label key={p.src} className={photo === p.src ? "selected" : ""}>
                 <input
                   type="radio"
                   name="photo"
@@ -610,9 +555,9 @@ export function Presentation() {
         </fieldset>
         <div className="field">
           <label htmlFor="bio">
-            <T>{'Quelques mots sur vous'}</T>
+            <T>{"Quelques mots sur vous"}</T>
             <span className="optional">
-              <T>{'facultatif'}</T>
+              <T>{"facultatif"}</T>
             </span>
           </label>
           <Textarea
@@ -621,7 +566,7 @@ export function Presentation() {
             value={bio}
             maxLength={600}
             onChange={(e) => setBio(e.target.value)}
-            placeholder="Votre passion, votre approche, ce qui vous anime…"
+            placeholder={uiCopy("Votre passion, votre approche, ce qui vous anime…")}
             rows={4}
           />
           <p className="field-hint char-count">{bio.length}/600</p>
@@ -629,14 +574,14 @@ export function Presentation() {
         <div className="ready-card">
           <Check size={19} />
           <span>
-            <T>{'Le terrain est à vous.'}</T>
+            <T>{"Le terrain est à vous."}</T>
             <small>
-              <T>{'Votre profil est prêt à être exploré.'}</T>
+              <T>{"Votre profil est prêt à être exploré."}</T>
             </small>
           </span>
         </div>
         <Submit>
-          <T>{'Découvrir mon profil'}</T>
+          <T>{"Découvrir mon profil"}</T>
         </Submit>
       </form>
     </AuthLayout>
@@ -650,28 +595,23 @@ export function Login() {
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-    const email = value(data, 'email').toLowerCase();
-    const issues = validateDemoLogin(
-      email,
-      String(data.get('password') || ''),
-      profile.email,
-    );
+    const email = value(data, "email").toLowerCase();
+    const issues = validateDemoLogin(email, String(data.get("password") || ""), profile.email);
     setErrors(issues);
     focusError(issues);
     if (Object.keys(issues).length) return;
-    if (email !== profile.email.toLowerCase())
-      setProfile(structuredClone(initialProfile));
+    if (email !== profile.email.toLowerCase()) setProfile(structuredClone(initialProfile));
     e.currentTarget.reset();
-    notify('Vous explorez une session fictive, sans authentification réelle.');
-    router.push('/espace/accueil');
+    notify("Vous explorez une session fictive, sans authentification réelle.");
+    router.push("/espace/accueil");
   }
   return (
     <AuthLayout
       title={
         <>
-          <T>{'Heureux de'}</T>
+          <T>{"Heureux de"}</T>
           <br />
-          <T>{'vous revoir'}</T>
+          <T>{"vous revoir"}</T>
           <span className="lime">.</span>
         </>
       }
@@ -694,42 +634,42 @@ export function Login() {
         />
         <Password error={errors.password} />
         <Link href="/espace/mot-de-passe-oublie" className="forgot-link">
-          <T>{'Mot de passe oublié ?'}</T>
+          <T>{"Mot de passe oublié ?"}</T>
         </Link>
         <Submit>
-          <T>{'Se connecter à la démo'}</T>
+          <T>{"Se connecter à la démo"}</T>
         </Submit>
       </form>
       <p className="switch-auth">
-        <T>{'Pas encore de profil ?'}</T>
+        <T>{"Pas encore de profil ?"}</T>
         <Link href="/espace/inscription">
-          <T>{'Créer un compte gratuit'}</T>
+          <T>{"Créer un compte gratuit"}</T>
         </Link>
       </p>
       <div className="demo-access">
         <span className="eyebrow">
-          <T>{'POUR ESSAYER EN UN CLIC'}</T>
+          <T>{"POUR ESSAYER EN UN CLIC"}</T>
         </span>
         <strong>
-          <T>{'Le profil fictif d’Alex vous attend.'}</T>
+          <T>{"Le profil fictif d’Alex vous attend."}</T>
         </strong>
         <p>
-          <T>{'Aucune information personnelle nécessaire.'}</T>
+          <T>{"Aucune information personnelle nécessaire."}</T>
         </p>
         <Button
           type="button"
           variant="secondary"
           onClick={() => {
             setProfile(structuredClone(initialProfile));
-            notify('Profil fictif d’Alex ouvert.');
-            router.push('/espace/accueil');
+            notify("Profil fictif d’Alex ouvert.");
+            router.push("/espace/accueil");
           }}
         >
-          <T>{'Entrer dans l’espace web démo'}</T>
+          <T>{"Explorer le profil démo"}</T>
           <ArrowRight size={17} />
         </Button>
         <small>
-          <T>{'Accès formulaire :'}</T>
+          <T>{"Accès formulaire :"}</T>
           {DEMO_EMAIL} / {DEMO_PASSWORD}
         </small>
       </div>
@@ -739,15 +679,15 @@ export function Login() {
 
 export function ForgotPassword() {
   const [sent, setSent] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const email = value(new FormData(e.currentTarget), 'email');
+    const email = value(new FormData(e.currentTarget), "email");
     if (!validEmail(email)) {
-      setError('Indiquez une adresse au format nom@exemple.com.');
+      setError("Indiquez une adresse au format nom@exemple.com.");
       return;
     }
-    setError('');
+    setError("");
     setSent(true);
   }
   return (
@@ -755,41 +695,37 @@ export function ForgotPassword() {
       back="/espace/connexion"
       title={
         sent ? (
-          'Votre accès, en toute simplicité.'
+          "Votre accès, en toute simplicité."
         ) : (
           <>
-            <T>{'On vous remet'}</T>
+            <T>{"On vous remet"}</T>
             <br />
-            <T>{'dans le jeu.'}</T>
+            <T>{"dans le jeu."}</T>
           </>
         )
       }
       intro={
         sent
-          ? 'Vous venez de tester le parcours de récupération.'
-          : 'Indiquez une adresse fictive pour découvrir la récupération de compte.'
+          ? "Vous venez de tester le parcours de récupération."
+          : "Indiquez une adresse fictive pour découvrir la récupération de compte."
       }
     >
       {sent ? (
         <div className="recovery-success" role="status">
           <Mail size={32} />
           <h2>
-            <T>{'Envoi simulé.'}</T>
+            <T>{"Envoi simulé."}</T>
           </h2>
           <p>
-            <T>
-              {
-                'Aucun e-mail n’a été envoyé. Dans cette démo, le mot de passe reste'
-              }
-            </T>{' '}
+            <T>{"Aucun e-mail n’a été envoyé. Dans cette démo, le mot de passe reste"}</T>{" "}
             <strong>{DEMO_PASSWORD}</strong>.
           </p>
           <Link href="/espace/connexion" className="action primary">
-            <T>{'Retour à la connexion'}</T>
+            <T>{"Retour à la connexion"}</T>
             <ArrowRight size={18} />
           </Link>
           <Button variant="ghost" onClick={() => setSent(false)}>
-            <T>{'Essayer une autre adresse'}</T>
+            <T>{"Essayer une autre adresse"}</T>
           </Button>
         </div>
       ) : (
@@ -811,7 +747,7 @@ export function ForgotPassword() {
             </span>
           )}
           <Submit>
-            <T>{'Simuler l’envoi du lien'}</T>
+            <T>{"Simuler l’envoi du lien"}</T>
           </Submit>
         </form>
       )}

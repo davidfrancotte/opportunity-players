@@ -197,7 +197,7 @@ export type CareerAction =
   | { type: "slots-series"; slots: Slot[] }
   | { type: "book"; id: string; slot: string }
   | { type: "cancel"; id: string };
-export type CareerContext = { actor: Actor; actors: Actor[]; blocked: string[]; now: number };
+export type CareerContext = { actor: Actor; actors: Actor[]; blocked: string[]; now: number; activeListings?: number };
 const clean = (s: string, max = 160) => !!s.trim() && s.length <= max && !moderateText(s);
 const future = (s: string, now: number) => Number.isFinite(Date.parse(s)) && Date.parse(s) > now;
 const overlap = (a: string, b: string) => Math.abs(Date.parse(a) - Date.parse(b)) < 30 * 60000;
@@ -269,7 +269,7 @@ export function careerReducer(
     };
   if (action.type === "offer") {
     const o = action.offer;
-    if (!recruiter||state.offers.filter(x=>x.owner===actor.id&&x.open).length>=quota.offers) return fail("quota");
+    if (!recruiter||state.offers.filter(x=>x.owner===actor.id&&x.open).length+(command.context.activeListings||0)>=quota.offers) return fail("quota");
     if (
       o.owner !== actor.id ||
       state.offers.some((x) => x.id === o.id) ||

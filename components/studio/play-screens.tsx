@@ -1,4 +1,5 @@
 "use client";
+import {MatchShareButton} from './growth-features';
 import { ExtensionNotices } from "./extension-screens";
 import { limits, calendarMonth } from "@/lib/studio/entitlements";
 import { CareerNotices } from "./career-screens";
@@ -49,8 +50,8 @@ function useEventContext() {
     now: Date.now(),
   };
 }
-function dateLabel(value: string) {
-  return new Intl.DateTimeFormat("fr-BE", {
+function dateLabel(value: string, dateLocale: string) {
+  return new Intl.DateTimeFormat(dateLocale, {
     weekday: "short",
     day: "numeric",
     month: "short",
@@ -80,51 +81,47 @@ function PremiumCard({ creation = false }: { creation?: boolean }) {
   if (isPremium(social, profile.category))
     return creation ? (
       <section className="event-empty">
-        <h2>Limite de matchs actifs atteinte.</h2>
+        <h2><T>{"Limite de matchs actifs atteinte."}</T></h2>
         <p>
-          Votre Premium est déjà actif. Attendez la fin d’un match ou annulez une rencontre qui
-          n’aura pas lieu pour en organiser une nouvelle.
-        </p>
+          <T>{"Votre Premium est déjà actif. Attendez la fin d’un match ou annulez une rencontre qui n’aura pas lieu pour en organiser une nouvelle."}</T></p>
         <Link href="/espace/jouer" className="action secondary">
-          Gérer mes matchs
-        </Link>
+          <T>{"Gérer mes matchs"}</T></Link>
       </section>
     ) : null;
   return (
     <section className="event-premium">
       <LockKeyhole size={26} />
-      <span className="mini-kicker">JOUEZ PLUS LOIN / PREMIUM</span>
-      <h2>{creation ? "Rassemblez votre équipe." : "Votre prochain match est tout près."}</h2>
+      <span className="mini-kicker"><T>{"JOUEZ PLUS LOIN / PREMIUM"}</T></span>
+      <h2><T>{creation ? "Rassemblez votre équipe." : "Votre prochain match est tout près."}</T></h2>
       <p>
-        {creation
+        <T>{creation
           ? "Organiser un match, proposer plusieurs créneaux et inviter vos contacts est réservé aux membres payants."
-          : "Avec Premium, découvrez les invitations ouvertes dans les 50 km de votre ville et proposez de rejoindre un match."}
+          : "Avec Premium, découvrez les invitations ouvertes dans les 50 km de votre ville et proposez de rejoindre un match."}</T>
       </p>
       <strong>
-        {monthlyPrice(profile.category)} <small>/ mois</small>
+        {monthlyPrice(profile.category)} <small><T>{"/espace/connexion mois"}</T></small>
       </strong>
       <Link
         className="action primary"
         href={`/espace/abonnement?retour=${creation ? "/espace/organiser" : "/espace/jouer"}`}
       >
-        Découvrir Premium <ArrowUpRight size={18} />
+        <T>{"Découvrir Premium"}</T><ArrowUpRight size={18} />
       </Link>
       <small>
-        Les invitations reçues personnellement restent accessibles gratuitement. Aucun paiement dans
-        la démo.
-      </small>
+        <T>{"Les invitations reçues personnellement restent accessibles gratuitement. Aucun paiement dans la démo."}</T></small>
     </section>
   );
 }
 export function MatchCard({ match: m }: { match: Match }) {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { city } = useEventContext();
   const first = m.slots.find((s) => s.id === m.confirmed) || m.slots[0];
   return (
     <Link href={`/espace/match?id=${m.id}`} className="match-card">
       <div className="match-card-top">
-        <span>{m.sport}</span>
+        <span><T>{m.sport}</T></span>
         <small>
-          {m.cancelled
+          <T>{m.cancelled
             ? "Annulé"
             : m.confirmed
               ? "Confirmé"
@@ -132,7 +129,7 @@ export function MatchCard({ match: m }: { match: Match }) {
                 ? "J’organise"
                 : m.invitees.includes("me")
                   ? "Invitation privée"
-                  : "Ouvert · accord requis"}
+                  : "Ouvert · accord requis"}</T>
         </small>
       </div>
       <h2>{m.title}</h2>
@@ -145,14 +142,13 @@ export function MatchCard({ match: m }: { match: Match }) {
       </p>
       <p>
         <CalendarDays size={15} />
-        {dateLabel(first.start)}
+        {dateLabel(first.start, uiDateLocale)}
         {!m.confirmed && m.slots.length > 1 ? ` + ${m.slots.length - 1} autre(s)` : ""}
       </p>
       <div className="match-card-bottom">
         <span>
           <UsersRound size={16} />
-          {countPlayers(m, first.id)} / {m.minimum} min. · {m.capacity} places
-        </span>
+          {countPlayers(m, first.id)} / {m.minimum} <T>{" min. · "}</T>{m.capacity} <T>{"places"}</T></span>
         <ArrowUpRight size={19} />
       </div>
     </Link>
@@ -237,8 +233,7 @@ function NearbyMatchAlerts({ sport }: { sport: string }) {
         {saved.map((s) => (
           <div className="community-alert-item" key={s.id}>
             <span>
-              {s.name} · {t(s.filters.sport)} · {s.filters.radius} km
-            </span>
+              {s.name} · {t(s.filters.sport)} · {s.filters.radius} <T>{"km"}</T></span>
             <Button
               variant="ghost"
               aria-label={t("Supprimer l’alerte") + " " + s.name}
@@ -256,6 +251,7 @@ function NearbyMatchAlerts({ sport }: { sport: string }) {
   );
 }
 export function PlayPage() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { t } = useLocale();
   const { events, dispatchEvent } = useDemo(),
     ctx = useEventContext();
@@ -279,24 +275,24 @@ export function PlayPage() {
   return (
     <ProfileLayout>
       <div className="event-title">
-        <span className="mini-kicker">VOTRE RÉSEAU, SUR LE TERRAIN</span>
+        <span className="mini-kicker"><T>{"VOTRE RÉSEAU, SUR LE TERRAIN"}</T></span>
         <h1>
           <T>{"Jouer ensemble"}</T>
           <span>.</span>
         </h1>
-        <p>Moins de messages pour s’organiser. Plus de moments à partager.</p>
+        <p><T>{"Moins de messages pour s’organiser. Plus de moments à partager."}</T></p>
       </div>
       <NetworkSections active="play" />
-      <div className="event-tabs" role="group" aria-label="Filtrer les matchs">
+      <div className="play-view-switch" role="group" aria-label={uiCopy("Filtrer les matchs")}>
         {[
           ["invitations", "Mes invitations"],
           ["organise", "J’organise"],
           ["nearby", "À proximité"],
         ].map(([v, l]) => (
           <Button key={v} variant="ghost" aria-pressed={tab === v} onClick={() => setTab(v)}>
-            <T>{l}</T>
+            <span><T>{l}</T></span>
             {v === "nearby" && !limits(ctx.category, ctx.premium).discover && (
-              <LockKeyhole size={12} />
+              <LockKeyhole size={12} aria-hidden="true" />
             )}
           </Button>
         ))}
@@ -308,7 +304,7 @@ export function PlayPage() {
           <label className="event-select-label">
             <T>{"Sport"}</T>
             <NativeSelect
-              aria-label="Sport"
+              aria-label={uiCopy("Sport")}
               value={sport}
               onChange={(e) => setSport(e.target.value)}
             >
@@ -333,8 +329,7 @@ export function PlayPage() {
               >
                 {[10, 25, 50, 100, 200, 500].map((n) => (
                   <NativeSelectOption key={n} value={String(n)}>
-                    {n} km
-                  </NativeSelectOption>
+                    {n} <T>{"km"}</T></NativeSelectOption>
                 ))}
               </NativeSelect>
               {!ctx.premium && (
@@ -358,10 +353,10 @@ export function PlayPage() {
             </label>
           )}
           {tab === "nearby" && ctx.premium && <NearbyMatchAlerts sport={sport} />}
-          <Link className="action primary" href="/espace/organiser">
+          <Link className="action primary play-organize-action" href="/espace/organiser">
             <Plus size={18} />
             <T>{"Organiser un match"}</T>
-            {!ctx.premium && <small>1 / mois inclus</small>}
+            {!ctx.premium && <small><T>{"1 / mois inclus"}</T></small>}
           </Link>
           {tab === "nearby" && (
             <p className="event-note">
@@ -379,22 +374,21 @@ export function PlayPage() {
             <div className="event-empty">
               <CalendarDays size={30} />
               <h2>
-                {tab === "organise"
+                <T>{tab === "organise"
                   ? "Votre prochain match commence ici."
-                  : "Pas encore de match ici."}
+                  : "Pas encore de match ici."}</T>
               </h2>
               <p>
-                {tab === "organise"
+                <T>{tab === "organise"
                   ? "Invitez vos contacts et trouvez un créneau commun."
-                  : "Essayez une autre discipline ou consultez vos invitations."}
+                  : "Essayez une autre discipline ou consultez vos invitations."}</T>
               </p>
             </div>
           )}
         </>
       )}
       <p className="event-note">
-        Des rencontres fictives pour tester le parcours. Aucune invitation réelle n’est envoyée.
-      </p>
+        <T>{"Des rencontres fictives pour tester le parcours. Aucune invitation réelle n’est envoyée."}</T></p>
     </ProfileLayout>
   );
 }
@@ -404,6 +398,7 @@ function blankSlot(): DraftSlot {
   return { id: crypto.randomUUID(), date: "", time: "18:00", minutes: 90 };
 }
 export function CreateMatchPage() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { profile, events, dispatchEvent, social, trust } = useDemo(),
     ctx = useEventContext(),
     router = useRouter();
@@ -493,9 +488,9 @@ export function CreateMatchPage() {
   return (
     <ProfileLayout back="/espace/jouer">
       <div className="event-title">
-        <span className="mini-kicker">LANCEZ LE MOUVEMENT</span>
+        <span className="mini-kicker"><T>{"LANCEZ LE MOUVEMENT"}</T></span>
         <h1>
-          On organise<span> ?</span>
+          <T>{"On organise"}</T><span> ?</span>
         </h1>
       </div>
       {events.matches.filter(
@@ -512,7 +507,7 @@ export function CreateMatchPage() {
             {["Le match", "Les créneaux", "Les invités"].map((s, i) => (
               <li key={s} aria-current={step === i + 1 ? "step" : undefined}>
                 <span>{i + 1}</span>
-                {s}
+                <T>{s}</T>
               </li>
             ))}
           </ol>
@@ -526,12 +521,12 @@ export function CreateMatchPage() {
                   onChange={(e) => setTitle(e.target.value)}
                   required
                   maxLength={90}
-                  placeholder="Un padel après le boulot ?"
+                  placeholder={uiCopy("Un padel après le boulot ?")}
                 />
                 <label>
                   <T>{"Sport"}</T>
                   <NativeSelect
-                    aria-label="Sport du match"
+                    aria-label={uiCopy("Sport du match")}
                     value={sport}
                     onChange={(e) => {
                       setSport(e.target.value);
@@ -546,13 +541,12 @@ export function CreateMatchPage() {
                   </NativeSelect>
                 </label>
                 <label>
-                  Niveau souhaité
-                  <NativeSelect
-                    aria-label="Niveau du match"
+                  <T>{"Niveau souhaité"}</T><NativeSelect
+                    aria-label={uiCopy("Niveau du match")}
                     value={level}
                     onChange={(e) => setLevel(e.target.value)}
                   >
-                    <NativeSelectOption value="">Tous niveaux</NativeSelectOption>
+                    <NativeSelectOption value=""><T>{"Tous niveaux"}</T></NativeSelectOption>
                     {["Débutant", "Intermédiaire", "Confirmé", "Compétition"].map((l) => (
                       <NativeSelectOption value={l} key={l}>
                         {l}
@@ -561,9 +555,8 @@ export function CreateMatchPage() {
                   </NativeSelect>
                 </label>
                 <label>
-                  Ville du match
-                  <NativeSelect
-                    aria-label="Ville du match"
+                  <T>{"Ville du match"}</T><NativeSelect
+                    aria-label={uiCopy("Ville du match")}
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                   >
@@ -579,7 +572,7 @@ export function CreateMatchPage() {
                   onChange={(e) => setVenue(e.target.value)}
                   required
                   maxLength={150}
-                  placeholder="Club, terrain, adresse…"
+                  placeholder={uiCopy("Club, terrain, adresse…")}
                   hint="Utilisez un lieu fictif dans cette démo. L’adresse n’est visible qu’aux invités ou candidats acceptés."
                 />
                 <div className="event-fields">
@@ -609,30 +602,24 @@ export function CreateMatchPage() {
                   />
                 </div>
                 <p className="event-note">
-                  Suggestion {sport} : {suggestedTotals[sport]} participant(s) au total, modifiable
-                  selon votre format. Ce n’est pas une règle officielle. Organisateur et +1 inclus.
-                </p>
+                  <T>{"Suggestion"}</T> <T>{sport}</T> : {suggestedTotals[sport]} <T>{"participant(s) au total, modifiable selon votre format. Ce n’est pas une règle officielle. Organisateur et +1 inclus."}</T></p>
                 <label className="event-check">
                   <input
                     type="checkbox"
                     checked={hostPlays}
                     onChange={(e) => setHostPlays(e.target.checked)}
                   />
-                  Je participe moi aussi (+1 dans le total)
-                </label>
+                  <T>{"Je participe moi aussi (+1 dans le total)"}</T></label>
               </>
             )}
             {step === 2 && (
               <>
-                <h2>Proposez le choix.</h2>
+                <h2><T>{"Proposez le choix."}</T></h2>
                 <p className="event-note">
-                  Plusieurs propositions pour un seul match. Les invités pourront en sélectionner
-                  plusieurs ; vous confirmerez un seul créneau. Saisie dans le fuseau de votre
-                  appareil ; affichage en heure de Bruxelles.
-                </p>
+                  <T>{"Plusieurs propositions pour un seul match. Les invités pourront en sélectionner plusieurs ; vous confirmerez un seul créneau. Saisie dans le fuseau de votre appareil ; affichage en heure de Bruxelles."}</T></p>
                 {slots.map((s, i) => (
                   <fieldset key={s.id} className="slot-form">
-                    <legend>Option {i + 1}</legend>
+                    <legend><T>{"Option "}</T>{i + 1}</legend>
                     <Field
                       label="Date"
                       id={`date-${s.id}`}
@@ -681,8 +668,7 @@ export function CreateMatchPage() {
                         variant="ghost"
                         onClick={() => setSlots(slots.filter((t) => t.id !== s.id))}
                       >
-                        Retirer cette option
-                      </Button>
+                        <T>{"Retirer cette option"}</T></Button>
                     )}
                   </fieldset>
                 ))}
@@ -693,22 +679,19 @@ export function CreateMatchPage() {
                   onClick={() => setSlots([...slots, blankSlot()])}
                 >
                   <Plus size={17} />
-                  Ajouter un créneau
-                </Button>
+                  <T>{"Ajouter un créneau"}</T></Button>
               </>
             )}
             {step === 3 && (
               <>
-                <h2>Qui rejoint le terrain ?</h2>
+                <h2><T>{"Qui rejoint le terrain ?"}</T></h2>
                 <p className="event-note">
-                  Invitez vos connexions acceptées. Suivre une personne ou lui envoyer une demande
-                  de connexion ne suffit pas. La réponse à une invitation reste gratuite.
-                </p>
+                  <T>{"Invitez vos connexions acceptées. Suivre une personne ou lui envoyer une demande de connexion ne suffit pas. La réponse à une invitation reste gratuite."}</T></p>
                 <div className="invite-list">
                   {!connections.length && (
                     <p className="event-note">
-                      Aucune connexion acceptée pour le moment.{" "}
-                      <Link href="/espace/reseau">Développer mon réseau</Link>
+                      <T>{"Aucune connexion acceptée pour le moment."}</T>{" "}
+                      <Link href="/espace/reseau"><T>{"Développer mon réseau"}</T></Link>
                     </p>
                   )}
                   {connections.map((m) => (
@@ -728,7 +711,7 @@ export function CreateMatchPage() {
                       <span>
                         {m.name}
                         <small>
-                          {m.sport} · {m.city}
+                          <T>{m.sport}</T> · {m.city}
                         </small>
                       </span>
                     </label>
@@ -740,28 +723,22 @@ export function CreateMatchPage() {
                     checked={plusOne}
                     onChange={(e) => setPlusOne(e.target.checked)}
                   />
-                  Autoriser un ami non inscrit (+1 par participant)
-                </label>
+                  <T>{"Autoriser un ami non inscrit (+1 par participant)"}</T></label>
                 <label className="event-check">
                   <input
                     type="checkbox"
                     checked={open}
                     onChange={(e) => setOpen(e.target.checked)}
                   />
-                  Ouvrir aux membres Premium dans les 50 km
-                </label>
+                  <T>{"Ouvrir aux membres Premium dans les 50 km"}</T></label>
                 <p className="event-note">
-                  Les candidatures externes nécessitent votre accord. Un +1 est lié à son
-                  accompagnant et ne reçoit pas de notification personnelle.
-                </p>
+                  <T>{"Les candidatures externes nécessitent votre accord. Un +1 est lié à son accompagnant et ne reçoit pas de notification personnelle."}</T></p>
                 <div className="event-summary">
                   <strong>{title}</strong>
                   <p>
-                    {sport} · {city} · {minimum} à {capacity} participants au total
-                  </p>
+                    <T>{sport}</T> · {city} · {minimum} <T>{" à "}</T>{capacity} <T>{"participants au total"}</T></p>
                   <p>
-                    {slots.length} créneau(x) proposé(s) · {invitees.length} invité(s)
-                  </p>
+                    {slots.length} <T>{" créneau(x) proposé(s) · "}</T>{invitees.length} <T>{"invité(s)"}</T></p>
                 </div>
               </>
             )}
@@ -778,7 +755,7 @@ export function CreateMatchPage() {
                 </Button>
               )}
               <Button type="submit" className="action primary">
-                {step === 3 ? "Créer et inviter" : "Continuer"}
+                <T>{step === 3 ? "Créer et inviter" : "Continuer"}</T>
                 <ArrowUpRight size={17} />
               </Button>
             </div>
@@ -801,20 +778,18 @@ export function MatchPage() {
       ) : (
         <div className="event-empty">
           <LockKeyhole size={30} />
-          <h1>Match indisponible.</h1>
+          <h1><T>{"Match indisponible."}</T></h1>
           <p>
-            Il peut être privé, hors de votre rayon ou réservé à Premium. Les matchs créés dans la
-            démo disparaissent au rechargement.
-          </p>
+            <T>{"Il peut être privé, hors de votre rayon ou réservé à Premium. Les matchs créés dans la démo disparaissent au rechargement."}</T></p>
           <Link className="action primary" href="/espace/jouer">
-            Revenir à Jouer
-          </Link>
+            <T>{"Revenir à Jouer"}</T></Link>
         </div>
       )}
     </ProfileLayout>
   );
 }
 function MatchDetail({ match: m }: { match: Match }) {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { events, dispatchEvent, notify } = useDemo(),
     ctx = useEventContext();
   const host = m.host === "me",
@@ -842,13 +817,14 @@ function MatchDetail({ match: m }: { match: Match }) {
       <div className="event-title">
         <span className="mini-kicker">
           {m.sport.toUpperCase()} /{" "}
-          {m.cancelled ? "ANNULÉ" : m.confirmed ? "CONFIRMÉ" : "À ORGANISER"}
+          <T>{m.cancelled ? "ANNULÉ" : m.confirmed ? "CONFIRMÉ" : "À ORGANISER"}</T>
         </span>
         <h1>{m.title}</h1>
         <p>
-          Organisé par <MemberName id={m.host} />
+          <T>{"Organisé par"}</T><MemberName id={m.host} />
         </p>
       </div>
+      <MatchShareButton match={m}/>
       <div className="event-summary">
         <p>
           <MapPin size={17} />
@@ -857,21 +833,19 @@ function MatchDetail({ match: m }: { match: Match }) {
         <strong>{exact ? m.venue : "Adresse communiquée après acceptation"}</strong>
         <p>
           <UsersRound size={17} />
-          {m.minimum} minimum · {m.capacity} maximum, au total
-        </p>
+          {m.minimum} <T>{" minimum · "}</T>{m.capacity} <T>{"maximum, au total"}</T></p>
         <small>
-          {m.hostPlays ? "Organisateur inclus" : "Organisateur non participant"} ·{" "}
-          {m.plusOne ? "+1 autorisé" : "Sans accompagnant"}
+          <T>{m.hostPlays ? "Organisateur inclus" : "Organisateur non participant"}</T> ·{" "}
+          <T>{m.plusOne ? "+1 autorisé" : "Sans accompagnant"}</T>
         </small>
       </div>
       {!host && !m.cancelled && !m.confirmed && (
         <p className="event-note">
-          Cochez toutes vos disponibilités.{" "}
-          {m.invitees.includes("me")
+          <T>{"Cochez toutes vos disponibilités."}</T>{" "}
+          <T>{m.invitees.includes("me")
             ? "Votre réponse ne consomme aucun message."
-            : "Votre candidature ne sera comptée qu’après accord de l’organisateur."}{" "}
-          Vous pouvez ajouter un ami différent selon le créneau.
-        </p>
+            : "Votre candidature ne sera comptée qu’après accord de l’organisateur."}</T>{" "}
+          <T>{"Vous pouvez ajouter un ami différent selon le créneau."}</T></p>
       )}
       <div className="match-slots">
         {m.slots
@@ -884,8 +858,8 @@ function MatchDetail({ match: m }: { match: Match }) {
                 <div className="slot-heading">
                   <span>0{i + 1}</span>
                   <div>
-                    <h2>{dateLabel(slot.start)}</h2>
-                    <small>{slot.minutes} min · heure de Bruxelles</small>
+                    <h2>{dateLabel(slot.start, uiDateLocale)}</h2>
+                    <small>{slot.minutes} <T>{" min · heure de Bruxelles"}</T></small>
                   </div>
                   {m.confirmed && <Check size={21} />}
                 </div>
@@ -897,8 +871,8 @@ function MatchDetail({ match: m }: { match: Match }) {
                   />
                 </div>
                 <p className="slot-count">
-                  {total} / {m.minimum} participants requis{" "}
-                  <small>{m.capacity - total} place(s) libre(s)</small>
+                  {total} / {m.minimum} <T>{" participants requis"}</T>{" "}
+                  <small>{m.capacity - total} <T>{" place(s) libre(s)"}</T></small>
                 </p>
                 {host && !m.confirmed && !m.cancelled && (
                   <Button
@@ -906,7 +880,7 @@ function MatchDetail({ match: m }: { match: Match }) {
                     disabled={!ready || Date.parse(slot.start) <= Date.now()}
                     onClick={() => setConfirmSlot(slot)}
                   >
-                    {ready ? "Confirmer ce créneau" : "En attente de participants"}
+                    <T>{ready ? "Confirmer ce créneau" : "En attente de participants"}</T>
                   </Button>
                 )}
                 {!host && !m.confirmed && !m.cancelled && (
@@ -925,8 +899,7 @@ function MatchDetail({ match: m }: { match: Match }) {
                           if (!e.target.checked) setGuests(guests.filter((id) => id !== slot.id));
                         }}
                       />
-                      Je suis disponible
-                    </label>
+                      <T>{"Je suis disponible"}</T></label>
                     {selected.includes(slot.id) && m.plusOne && (
                       <label className="event-check guest-check">
                         <input
@@ -941,8 +914,7 @@ function MatchDetail({ match: m }: { match: Match }) {
                             );
                           }}
                         />
-                        Je viens avec un ami (+1)
-                      </label>
+                        <T>{"Je viens avec un ami (+1)"}</T></label>
                     )}
                   </>
                 )}
@@ -952,30 +924,30 @@ function MatchDetail({ match: m }: { match: Match }) {
       </div>
       {m.confirmed && (
         <p className="event-note">
-          Le créneau est fixé ; les autres propositions sont closes.{" "}
-          {host
+          <T>{"Le créneau est fixé ; les autres propositions sont closes."}</T>{" "}
+          <T>{host
             ? "Les participants ont été notifiés dans la simulation."
             : reply?.status === "approved" && reply.slots.includes(m.confirmed)
               ? "Votre présence est confirmée. Pensez à prévenir votre +1."
-              : "Vous n’êtes pas inscrit sur ce créneau."}
+              : "Vous n’êtes pas inscrit sur ce créneau."}</T>
         </p>
       )}
       {!host && !m.cancelled && !m.confirmed && (
         <>
           <Button className="action primary" onClick={save}>
-            {reply
+            <T>{reply
               ? "Mettre à jour ma réponse"
               : m.invitees.includes("me")
                 ? "Envoyer mes disponibilités"
-                : "Proposer de rejoindre"}
+                : "Proposer de rejoindre"}</T>
           </Button>
           {saved && !events.error && (
             <p className="event-success" role="status">
-              {reply?.status === "pending"
+              <T>{reply?.status === "pending"
                 ? "Candidature envoyée, en attente de l’organisateur."
                 : selected.length
                   ? "Disponibilités enregistrées dans la démo."
-                  : "Votre réponse a été retirée."}
+                  : "Votre réponse a été retirée."}</T>
             </p>
           )}
         </>
@@ -988,16 +960,15 @@ function MatchDetail({ match: m }: { match: Match }) {
             notify("Désistement enregistré dans la démo.");
           }}
         >
-          Me désister (avec mon +1)
-        </Button>
+          <T>{"Me désister (avec mon +1)"}</T></Button>
       ) : null}
       <EventError />
       {host && (
         <>
           <section className="event-section">
-            <h2>Les réponses</h2>
+            <h2><T>{"Les réponses"}</T></h2>
             {!m.replies.length && (
-              <p className="event-note">Vos invités n’ont pas encore répondu.</p>
+              <p className="event-note"><T>{"Vos invités n’ont pas encore répondu."}</T></p>
             )}
             {m.replies.map((r) => (
               <article className="reply-row" key={r.user}>
@@ -1005,17 +976,16 @@ function MatchDetail({ match: m }: { match: Match }) {
                   <MemberName id={r.user} />
                 </strong>
                 <small>
-                  {r.status === "pending"
+                  <T>{r.status === "pending"
                     ? "Candidature à approuver"
                     : r.status === "declined"
                       ? "Refusée"
-                      : "Accepté / invité"}{" "}
-                  · {r.slots.length} créneau(x)
-                  {r.guests.length ? " · avec +1" : ""}
+                      : "Accepté / invité"}</T>{" "}
+                  · {r.slots.length} <T>{"créneau(x)"}</T><T>{r.guests.length ? " · avec +1" : ""}</T>
                 </small>
                 <small>
                   {r.slots
-                    .map((id) => dateLabel(m.slots.find((s) => s.id === id)!.start))
+                    .map((id) => dateLabel(m.slots.find((s) => s.id === id)!.start, uiDateLocale))
                     .join(" / ")}
                 </small>
                 {r.status === "pending" && !m.confirmed && !m.cancelled && (
@@ -1029,8 +999,7 @@ function MatchDetail({ match: m }: { match: Match }) {
                         })
                       }
                     >
-                      Accepter
-                    </Button>
+                      <T>{"Accepter"}</T></Button>
                     <Button
                       variant="outline"
                       onClick={() =>
@@ -1041,8 +1010,7 @@ function MatchDetail({ match: m }: { match: Match }) {
                         })
                       }
                     >
-                      Refuser
-                    </Button>
+                      <T>{"Refuser"}</T></Button>
                   </div>
                 )}
               </article>
@@ -1050,15 +1018,12 @@ function MatchDetail({ match: m }: { match: Match }) {
           </section>
           {!m.cancelled && !m.confirmed && (
             <details className="event-demo">
-              <summary>Tester les réponses · simulation</summary>
+              <summary><T>{"Tester les réponses · simulation"}</T></summary>
               <p>
-                Simulez un invité ou une candidature externe. Aucun autre utilisateur n’est
-                connecté.
-              </p>
+                <T>{"Simulez un invité ou une candidature externe. Aucun autre utilisateur n’est connecté."}</T></p>
               <label>
-                Membre
-                <NativeSelect
-                  aria-label="Membre"
+                <T>{"Membre"}</T><NativeSelect
+                  aria-label={uiCopy("Membre")}
                   value={simUser}
                   onChange={(e) => setSimUser(e.target.value)}
                 >
@@ -1067,21 +1032,20 @@ function MatchDetail({ match: m }: { match: Match }) {
                     .map((p) => (
                       <NativeSelectOption key={p.id} value={p.id}>
                         {p.name}
-                        {m.invitees.includes(p.id) ? " · invité" : " · candidature"}
+                        <T>{m.invitees.includes(p.id) ? " · invité" : " · candidature"}</T>
                       </NativeSelectOption>
                     ))}
                 </NativeSelect>
               </label>
               <label>
-                Créneau
-                <NativeSelect
-                  aria-label="Créneau"
+                <T>{"Créneau"}</T><NativeSelect
+                  aria-label={uiCopy("Créneau")}
                   value={simSlot}
                   onChange={(e) => setSimSlot(e.target.value)}
                 >
                   {m.slots.map((s) => (
                     <NativeSelectOption key={s.id} value={s.id}>
-                      {dateLabel(s.start)}
+                      {dateLabel(s.start, uiDateLocale)}
                     </NativeSelectOption>
                   ))}
                 </NativeSelect>
@@ -1093,8 +1057,7 @@ function MatchDetail({ match: m }: { match: Match }) {
                     checked={simGuest}
                     onChange={(e) => setSimGuest(e.target.checked)}
                   />
-                  Avec un ami (+1)
-                </label>
+                  <T>{"Avec un ami (+1)"}</T></label>
               )}
               <Button
                 variant="outline"
@@ -1108,17 +1071,15 @@ function MatchDetail({ match: m }: { match: Match }) {
                   })
                 }
               >
-                Simuler la disponibilité
-              </Button>
+                <T>{"Simuler la disponibilité"}</T></Button>
             </details>
           )}
           <Link href={`/espace/organiser?copie=${m.id}`} className="action secondary">
-            Créer un autre match similaire <Plus size={17} />
+            <T>{"Créer un autre match similaire"}</T><Plus size={17} />
           </Link>
           {!m.cancelled && (
             <Button className="event-cancel" variant="ghost" onClick={() => setCancel(true)}>
-              Annuler ce match
-            </Button>
+              <T>{"Annuler ce match"}</T></Button>
           )}
         </>
       )}
@@ -1127,13 +1088,12 @@ function MatchDetail({ match: m }: { match: Match }) {
         onOpenChange={(v) => {
           if (!v) setConfirmSlot(null);
         }}
-        title="On bloque ce créneau ?"
+        title={uiCopy("On bloque ce créneau ?")}
         description="Cette action confirme un seul créneau, ferme les autres propositions et génère les notifications dans la démo."
       >
         <p>
-          {confirmSlot && dateLabel(confirmSlot.start)} ·{" "}
-          {confirmSlot && countPlayers(m, confirmSlot.id)} participants au total.
-        </p>
+          {confirmSlot && dateLabel(confirmSlot.start, uiDateLocale)} ·{" "}
+          {confirmSlot && countPlayers(m, confirmSlot.id)} <T>{"participants au total."}</T></p>
         <Button
           className="action primary"
           onClick={() => {
@@ -1146,13 +1106,12 @@ function MatchDetail({ match: m }: { match: Match }) {
             setConfirmSlot(null);
           }}
         >
-          Confirmer et notifier
-        </Button>
+          <T>{"Confirmer et notifier"}</T></Button>
       </Modal>
       <Modal
         open={cancel}
         onOpenChange={setCancel}
-        title="Annuler le match ?"
+        title={uiCopy("Annuler le match ?")}
         description="Tous les invités recevront une notification d’annulation dans la simulation."
       >
         <Button
@@ -1162,21 +1121,21 @@ function MatchDetail({ match: m }: { match: Match }) {
             setCancel(false);
           }}
         >
-          Confirmer l’annulation
-        </Button>
+          <T>{"Confirmer l’annulation"}</T></Button>
       </Modal>
     </div>
   );
 }
 
 export function NotificationsPage() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { events, dispatchEvent, dispatchSocial, requestAccess } = useDemo();
   const [unreadOnly, setUnreadOnly] = useState(false);
   const list = events.notices.filter((n) => n.recipient === "me" && (!unreadOnly || !n.read));
   return (
     <ProfileLayout>
       <div className="event-title">
-        <span className="mini-kicker">NE MANQUEZ PAS LE RENDEZ-VOUS</span>
+        <span className="mini-kicker"><T>{"NE MANQUEZ PAS LE RENDEZ-VOUS"}</T></span>
         <h1>
           <T>{"Notifications"}</T>
           <span>.</span>
@@ -1188,11 +1147,9 @@ export function NotificationsPage() {
           aria-pressed={unreadOnly}
           onClick={() => setUnreadOnly(!unreadOnly)}
         >
-          Non lues uniquement
-        </Button>
+          <T>{"Non lues uniquement"}</T></Button>
         <Button variant="ghost" onClick={() => dispatchEvent({ type: "read" })}>
-          Tout marquer lu
-        </Button>
+          <T>{"Tout marquer lu"}</T></Button>
       </div>
       <div className="notification-list">
         <ExtensionNotices />
@@ -1229,13 +1186,13 @@ export function NotificationsPage() {
               </small>
               <strong>{n.text}</strong>
             </span>
-            {!n.read && <i aria-label="Non lue" />}
+            {!n.read && <i aria-label={uiCopy("Non lue")} />}
           </Link>
         ))}
       </div>
-      {!list.length && <p className="event-empty">Vous êtes à jour.</p>}
+      {!list.length && <p className="event-empty"><T>{"Vous êtes à jour."}</T></p>}
       <details className="event-demo">
-        <summary>Préférences et test de la démo</summary>
+        <summary><T>{"Préférences et test de la démo"}</T></summary>
         <label className="event-check">
           <input
             type="checkbox"
@@ -1248,8 +1205,7 @@ export function NotificationsPage() {
               })
             }
           />
-          Bannières dans l’application
-        </label>
+          <T>{"Bannières dans l’application"}</T></label>
         <label className="event-check">
           <input
             type="checkbox"
@@ -1262,15 +1218,11 @@ export function NotificationsPage() {
               })
             }
           />
-          Rappels à moins de 24 h et 2 h
-        </label>
+          <T>{"Rappels à moins de 24 h et 2 h"}</T></label>
         <p>
-          Les rappels sont calculés uniquement lorsque cette démo est ouverte. Les notifications
-          push et e-mails nécessiteront le service serveur de la vraie application.
-        </p>
+          <T>{"Les rappels sont calculés uniquement lorsque cette démo est ouverte. Les notifications push et e-mails nécessiteront le service serveur de la vraie application."}</T></p>
         <Button variant="outline" onClick={() => dispatchEvent({ type: "demo-invite" })}>
-          Simuler une invitation reçue
-        </Button>
+          <T>{"Simuler une invitation reçue"}</T></Button>
         <Button
           variant="outline"
           onClick={() => {
@@ -1287,8 +1239,7 @@ export function NotificationsPage() {
             });
           }}
         >
-          Simuler un message reçu
-        </Button>
+          <T>{"Simuler un message reçu"}</T></Button>
       </details>
     </ProfileLayout>
   );

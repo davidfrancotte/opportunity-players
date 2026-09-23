@@ -9,21 +9,26 @@ import {
 } from "react";
 import { Sun, Moon } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useLocale } from './locale';
 
 type Theme = "light" | "dark";
 const storageKey = "op-web-appearance";
 const ThemeContext = createContext<{
   theme: Theme;
   choose: (theme: Theme) => void;
+  saved: boolean;
 } | null>(null);
+export const useWebAppearance = () => useContext(ThemeContext);
 
 export function WebThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>("dark");
+  const [saved, setSaved] = useState(true);
   useEffect(() => {
     try {
       const saved = localStorage.getItem(storageKey);
       if (saved === "light" || saved === "dark") setTheme(saved);
     } catch {
+      setSaved(false);
       // Private/locked storage must not prevent the theme switch from working.
     }
   }, []);
@@ -32,10 +37,11 @@ export function WebThemeProvider({ children }: { children: ReactNode }) {
     try {
       // Only a display preference is stored. No demo profile or personal data.
       localStorage.setItem(storageKey, next);
-    } catch {}
+      setSaved(true);
+    } catch { setSaved(false); }
   }
   return (
-    <ThemeContext.Provider value={{ theme, choose }}>
+    <ThemeContext.Provider value={{ theme, choose, saved }}>
       <div className="studio-surface" data-theme={theme}>
         {children}
       </div>
@@ -45,24 +51,25 @@ export function WebThemeProvider({ children }: { children: ReactNode }) {
 
 export function WebThemeSwitch() {
   const context = useContext(ThemeContext);
+  const { t } = useLocale();
   if (!context) return null;
   return (
     <ToggleGroup
       className="web-theme-switch"
-      aria-label="Apparence de l’espace membre"
+      aria-label={t('Apparence de l’app')}
       value={[context.theme]}
       onValueChange={(values) => {
         const next = values[0];
         if (next === "light" || next === "dark") context.choose(next);
       }}
     >
-      <ToggleGroupItem value="light" aria-label="Thème clair">
+      <ToggleGroupItem value="light" aria-label={t('Mode clair')}>
         <Sun size={16} aria-hidden="true" />
-        Clair
+        {t('Mode clair')}
       </ToggleGroupItem>
-      <ToggleGroupItem value="dark" aria-label="Thème sombre">
+      <ToggleGroupItem value="dark" aria-label={t('Mode sombre')}>
         <Moon size={16} aria-hidden="true" />
-        Sombre
+        {t('Mode sombre')}
       </ToggleGroupItem>
     </ToggleGroup>
   );

@@ -1,0 +1,10 @@
+/* App rules scoped to the web workspace; desktop adaptations remain separate. */
+body:has(.studio-surface) .appearance-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; border: 0; padding: 0; margin: 18px 0 12px; min-width: 0; }
+body:has(.studio-surface) .appearance-option { position: relative; display: grid; gap: 12px; padding: 18px 14px; border: 1px solid #48514a; border-radius: 16px; cursor: pointer; min-height: 110px; color: #bdc6bc; background: #1d2124; }
+body:has(.studio-surface) .appearance-option span { font-size: 14px; font-weight: 600; }
+body:has(.studio-surface) .appearance-option input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+body:has(.studio-surface) .appearance-option:has(input:focus-visible) { outline: 2px solid var(--primary); outline-offset: 4px; }
+body:has(.studio-surface) .appearance-option[data-selected="true"] { background: #d1f94c14; border-color: var(--primary); color: var(--primary); }
+body:has(.studio-surface) .appearance-check { position: absolute; top: 18px; right: 14px; visibility: hidden; }
+body:has(.studio-surface) .appearance-option[data-selected="true"] .appearance-check { visibility: visible; }
+body:has(.studio-surface) .appearance-preferences .appearance-note { font-size: 11px; line-height: 1.5; }

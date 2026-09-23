@@ -8,13 +8,13 @@ import { availableSlots, unconfirmedAppointments, type Appointment } from "@/lib
 
 function RequestDetail({ request }: { request: Appointment }) {
   const { career, careerActor, dispatchCareer } = useDemo();
-  const { locale } = useLocale();
-  const c = (fr: string, en: string) => (locale === "en" ? en : fr);
+  const { dateLocale, t } = useLocale();
+  const c = t;
   const [chosen, setChosen] = useState("");
   const receiving = request.professional === careerActor.id;
   const slots = availableSlots(career, request, careerActor.id, Date.now());
   const format = (start: string | number) =>
-    new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-BE", {
+    new Intl.DateTimeFormat(dateLocale, {
       timeZone: "Europe/Brussels",
       dateStyle: "medium",
       timeStyle: "short",
@@ -132,8 +132,8 @@ function RequestDetail({ request }: { request: Appointment }) {
 
 export function AgendaRequests() {
   const { career, careerActor, careerActors } = useDemo();
-  const { locale } = useLocale();
-  const c = (fr: string, en: string) => (locale === "en" ? en : fr);
+  const { locale, t } = useLocale();
+  const c = t;
   const requests = unconfirmedAppointments(career, careerActor.id);
   return (
     <details className="agenda-requests">

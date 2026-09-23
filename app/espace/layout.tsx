@@ -16,8 +16,8 @@ import './studio-theme.css';
 import './studio-sport-profile.css';
 import './studio-career.css';
 import './studio-extensions.css';
+import './studio-appearance.css';
 import './studio-light.css';
-import './studio-network.css';
 export const metadata: Metadata = {
   title: 'Espace membre · Démo Arena',
   description:

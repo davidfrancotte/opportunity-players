@@ -2,8 +2,8 @@
 
 ## Current web/app alignment
 
-See `WEB-APP-ALIGNMENT-2026-09-22.md` for the current implementation and verification.
-The September 22 release supersedes the older feed recommendations, directory, separate agenda and predefined-post-image descriptions below. The desktop shell, two-pane messaging, light/dark theme and web onboarding remain web-specific. Updated actual screenshots are named `*-20260922-*.png`.
+See `WEB-APP-ALIGNMENT-2026-09-24.md` for the current implementation and verification. It supersedes the September 22 alignment and the historical descriptions below.
+The current web workspace shares the latest mobile business rules, including all thirteen opportunity categories, publishing, profile sectors, nine languages, passport and match sharing, Spotlight, and member media galleries. Desktop navigation, two-pane messages, theme scope and authentication editorial remain web-specific. Current desktop captures use `web-20260924-parity-*.png`.
 
 ## Trust / multisport update
 

@@ -1,7 +1,8 @@
 "use client";
+import { AppearancePreferences } from "./app-appearance";
 import {ExtensionNav} from './extension-screens';
-import { LanguageSwitch, T, useLocale } from "./locale";
-import { useState, type ReactNode, type FormEvent } from "react";
+import { LanguagePreferences, T, useLocale } from "./locale";
+import { useRef, useState, type ReactNode, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import {
@@ -36,6 +37,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 import { useDemo } from "./demo-provider";
 import { PlanStatus } from "./subscription-ui";
 import { MediaUpload } from "./media-upload";
+import {PassportButton,MediaLike} from './growth-features';
 import { ProfileExtensions } from "./trust-screens";
 import { ProfileDirectoryFields } from "./directory-fields";
 import { normalizeMeasurement } from "@/lib/studio/athlete";
@@ -59,12 +61,13 @@ const navigation = [
   { href: "/espace/accueil", label: "Accueil", icon: House },
   { href: "/espace/reseau", label: "Réseau", icon: UsersRound },
   { href: "/espace/messages", label: "Messages", icon: MessageCircle },
-  { href: "/espace/opportunities", label: "Opportunities", icon: Compass },
+  { href: "/espace/opportunities", label: "Opportunités", icon: Compass },
   { href: "/espace/profil", label: "Profil", icon: UserRound },
 ];
 
 function BottomNav() {
-  const route = usePathname();
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
+  const route = usePathname().replace(/\/$/, "");
   const pathname = route === "/espace" ? "/espace/accueil" : route;
   const current = [
     "/espace/dossier-sportif",
@@ -85,7 +88,7 @@ function BottomNav() {
       : ["/espace/candidatures", "/espace/recrutement"].includes(pathname) ? "/espace/opportunities"
       : pathname === "/espace/rendez-vous" ? "/espace/reseau" : pathname;
   return (
-    <nav className="bottom-nav" aria-label="Navigation de l’application">
+    <nav className="bottom-nav" aria-label={uiCopy("Navigation de l’application")}>
       {navigation.map(({ href, label, icon: Icon }) => (
         <Link
           key={href}
@@ -114,6 +117,7 @@ export function ProfileLayout({
   back?: string;
   title?: string;
 }) {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { profile } = useDemo();
   return (
     <main id="main" className="profile-layout">
@@ -122,38 +126,30 @@ export function ProfileLayout({
         <div className="header-right">
           <EventHeader />
           {back ? (
-            <Link
-              href={back}
-              className="icon-link"
-              aria-label="Retour au profil"
-            >
+            <Link href={back} className="icon-link" aria-label={uiCopy("Retour au profil")}>
               <ArrowLeft size={21} />
             </Link>
           ) : (
-            <Link
-              href="/espace/parametres"
-              className="icon-link"
-              aria-label="Réglages de la démo"
-            >
+            <Link href="/espace/parametres" className="icon-link" aria-label={uiCopy("Réglages de la démo")}>
               <Settings size={21} />
             </Link>
           )}
         </div>
       </header>
-      {profile.registrationMode === 'child' && (
+      {profile.registrationMode === "child" && (
         <p className="child-mode-note">
-          <T>Profil géré par un représentant</T> ·{' '}
+          <T>{"Profil géré par un représentant"}</T> ·{" "}
           <T>
-            Coordonnées privées du représentant. Les échanges passent par son
-            compte. Vérification parentale simulée, sans valeur de vérification
-            réelle.
+            {
+              "Coordonnées privées du représentant. Les échanges passent par son compte. Vérification parentale simulée, sans valeur de vérification réelle."
+            }
           </T>
         </p>
       )}
       {title && (
         <div className="page-title">
           <p className="eyebrow">
-            <T>{'VOTRE ESPACE / ARENA STUDIO'}</T>
+            <T>{"VOTRE ESPACE / ARENA STUDIO"}</T>
           </p>
           <h1>
             <T>{title}</T>
@@ -163,12 +159,12 @@ export function ProfileLayout({
       {children}
       <footer className="profile-footer">
         <span>
-          <T>{'CONTENUS FICTIFS · DÉMO INTERACTIVE'}</T>
+          <T>{"CONTENUS FICTIFS · DÉMO INTERACTIVE"}</T>
         </span>
         <p>
           <T>
             {
-              'Les modifications restent dans cette visite et sont effacées au rechargement. Rien n’est publié.'
+              "Les modifications restent dans cette visite et sont effacées au rechargement. Rien n’est publié."
             }
           </T>
         </p>
@@ -190,20 +186,22 @@ export function Modal({
   description: string;
   children: ReactNode;
 }) {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
+  const titleRef = useRef<HTMLHeadingElement>(null);
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="studio-modal" showCloseButton={false}>
+      <DialogContent className="studio-modal" showCloseButton={false} initialFocus={titleRef}>
         <Button
           type="button"
           variant="ghost"
           className="modal-close"
-          aria-label="Fermer la fenêtre"
+          aria-label={uiCopy("Fermer la fenêtre")}
           onClick={() => onOpenChange(false)}
         >
           <X size={20} />
         </Button>
-        <DialogTitle className="modal-title">{title}</DialogTitle>
-        <DialogDescription className="modal-description">{description}</DialogDescription>
+        <DialogTitle ref={titleRef} tabIndex={-1} className="modal-title"><T>{title}</T></DialogTitle>
+        <DialogDescription className="modal-description"><T>{description}</T></DialogDescription>
         {children}
       </DialogContent>
     </Dialog>
@@ -223,14 +221,15 @@ function EmptyCard({
   return (
     <div className="empty-card">
       <Icon size={28} />
-      <h3>{title}</h3>
-      <p>{text}</p>
+      <h3><T>{title}</T></h3>
+      <p><T>{text}</T></p>
       {action}
     </div>
   );
 }
 
 export function ProfilePage({ section = "about" }: { section?: "about" | "career" | "media" }) {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { profile, setProfile, notify } = useDemo();
   const progress = completion(profile);
   const router = useRouter();
@@ -312,7 +311,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
           </T>
         </Link>
       )}
-      <nav className="profile-subnav" aria-label="Rubriques de mon profil">
+      <nav className="profile-subnav" aria-label={uiCopy("Rubriques de mon profil")}>
         <Link href="/espace/profil" aria-current={tab === "about" ? "page" : undefined}>
           <T>{"À propos"}</T>
         </Link>
@@ -340,7 +339,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
                 size="icon"
                 variant="secondary"
                 className="change-photo"
-                aria-label="Changer l’illustration du profil"
+                aria-label={uiCopy("Changer l’illustration du profil")}
                 onClick={() => setPhotoOpen(true)}
               >
                 <Camera size={18} />
@@ -352,7 +351,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
                 <Link
                   href="/espace/modifier-profil"
                   className="edit-circle"
-                  aria-label="Modifier mon profil"
+                  aria-label={uiCopy("Modifier mon profil")}
                 >
                   <Pencil size={18} />
                 </Link>
@@ -362,7 +361,8 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
                 <MapPin size={14} />
                 {profile.city || "Ville à compléter"}
               </p>
-              <span className="sport-chip">{profile.sport}</span>
+              <span className="sport-chip"><T>{profile.sport}</T></span>
+              {profile.category!=='Sportif'&&profile.accountType&&<p className="profile-sector"><span><T>Secteur / métier</T> : </span><strong><T>{profile.accountType}</T></strong></p>}
               <div className="identity-rule" />
               <p className="identity-small">
                 <T>{"Un parcours singulier."}</T>
@@ -377,24 +377,24 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
           </aside>
         )}
         <section className="profile-content">
-          {tab === "about" && <ProfileExtensions />}
+          {tab === "about" && <><PassportButton/><ProfileExtensions /></>}
           {tab === "about" && (
             <Button className="completion-card" onClick={() => setProgressOpen(true)}>
               <UserRound size={26} />
               <span>
                 <strong>
-                  {progress.count === progress.total
+                  <T>{progress.count === progress.total
                     ? "Votre profil prend vie."
-                    : "Compléter mon profil"}
+                    : "Compléter mon profil"}</T>
                 </strong>
                 <small>
                   {progress.count}
                   <T>{"sur"}</T>
                   {progress.total}
                   <T>{"rubriques renseignées."}</T>{" "}
-                  {progress.count === progress.total
+                  <T>{progress.count === progress.total
                     ? "Personnalisez-le à votre image."
-                    : "Chaque détail raconte votre parcours."}
+                    : "Chaque détail raconte votre parcours."}</T>
                 </small>
               </span>
               <ArrowRight size={20} />
@@ -402,14 +402,14 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
           )}
           <div className="profile-sections">
             {tab === "about" && (
-              <section aria-label="À propos" className="tab-body">
+              <section aria-label={uiCopy("À propos")} className="tab-body">
                 <article className="info-card">
                   <div className="card-heading">
                     <h3>
                       <UserRound size={16} />
                       <T>{"Ma présentation"}</T>
                     </h3>
-                    <Link href="/espace/modifier-profil" aria-label="Modifier ma présentation">
+                    <Link href="/espace/modifier-profil" aria-label={uiCopy("Modifier ma présentation")}>
                       <Pencil size={15} />
                     </Link>
                   </div>
@@ -491,7 +491,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
               </section>
             )}
             {tab === "career" && (
-              <section aria-label="Mon parcours" className="tab-body">
+              <section aria-label={uiCopy("Mon parcours")} className="tab-body">
                 <div className="card-heading section-heading">
                   <h3>
                     <T>{"Chaque étape compte."}</T>
@@ -529,7 +529,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
                 ) : (
                   <EmptyCard
                     icon={BriefcaseBusiness}
-                    title="Votre parcours commence ici."
+                    title={uiCopy("Votre parcours commence ici.")}
                     text="Ajoutez une expérience, un club ou une formation. Utilisez des informations fictives pour cette démo."
                     action={
                       <Button onClick={addExperience} className="small-primary">
@@ -554,7 +554,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
               </section>
             )}
             {tab === "media" && (
-              <section aria-label="Mes médias" className="tab-body">
+              <section aria-label={uiCopy("Mes médias")} className="tab-body">
                 <div className="card-heading section-heading media-heading">
                   <h3>
                     <T>{"Votre sport en images."}</T>
@@ -588,7 +588,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
                 ) : profile.videos.length ? null : (
                   <EmptyCard
                     icon={Camera}
-                    title="Un autre regard sur votre sport."
+                    title={uiCopy("Un autre regard sur votre sport.")}
                     text="Importez un média depuis votre appareil pour personnaliser votre galerie."
                     action={
                       <Button onClick={() => setMediaOpen(true)} className="small-primary">
@@ -600,7 +600,8 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
                 {profile.videos.map(video => <article className="profile-video-card" key={video.id}>
                   <video controls playsInline preload="metadata" src={video.url} aria-label={video.title} />
                   <h3>{video.title}</h3><p>{video.sport}</p>
-                  <Button variant="ghost" onClick={() => { setProfile({ ...profile, videos: profile.videos.filter(v => v.id !== video.id) }); notify("Vidéo retirée de la galerie."); }}><Trash2 size={16} />Retirer la vidéo</Button>
+                  <MediaLike id={'video:'+video.id}/>
+                  <Button variant="ghost" onClick={() => { setProfile({ ...profile, videos: profile.videos.filter(v => v.id !== video.id) }); notify("Vidéo retirée de la galerie."); }}><Trash2 size={16} /><T>{"Retirer la vidéo"}</T></Button>
                 </article>)}
               </section>
             )}
@@ -610,7 +611,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
       <Modal
         open={photoOpen}
         onOpenChange={setPhotoOpen}
-        title="À votre image."
+        title={uiCopy("À votre image.")}
         description="Choisissez une illustration fictive pour votre profil. Aucun portrait réel n’est importé."
       >
         <div className="image-picker">
@@ -634,11 +635,11 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
       <Modal
         open={mediaOpen}
         onOpenChange={setMediaOpen}
-        title="Ajouter un média"
+        title={uiCopy("Ajouter un média")}
         description="Importez une photo ou une vidéo. Vous pourrez la retirer à tout moment."
       >
         {mediaOpen && <MediaUpload onAdded={() => setMediaOpen(false)} />}
-        <details className="demo-media-picker"><summary>Ou choisir une image de démonstration</summary>
+        <details className="demo-media-picker"><summary><T>{"Ou choisir une image de démonstration"}</T></summary>
         <div className="image-picker">
           {photos.map((p) => {
             const added = profile.media.includes(p.src);
@@ -673,6 +674,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
             alt={photos.find((p) => p.src === selectedMedia)?.label || "Photo importée"}
           />
         )}
+        {selectedMedia&&<MediaLike id={'photo:'+selectedMedia}/>}
         <Button
           className="danger-link"
           variant="ghost"
@@ -692,7 +694,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
       <Modal
         open={experienceOpen}
         onOpenChange={setExperienceOpen}
-        title={experience ? "Modifier cette étape." : "Une nouvelle étape."}
+        title={uiCopy(experience ? "Modifier cette étape." : "Une nouvelle étape.")}
         description="Expérience, formation ou engagement : ajoutez une étape fictive à votre parcours."
       >
         <form onSubmit={saveExperience} key={experience?.id || "new"}>
@@ -702,7 +704,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
             required
             maxLength={100}
             defaultValue={experience?.title}
-            placeholder="Coach de padel"
+            placeholder={uiCopy("Coach de padel")}
           />
           <Field
             label="Organisation fictive"
@@ -710,7 +712,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
             required
             maxLength={100}
             defaultValue={experience?.organisation}
-            placeholder="Club Horizon · fictif"
+            placeholder={uiCopy("Club Horizon · fictif")}
           />
           <Field
             label="Période"
@@ -718,7 +720,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
             required
             maxLength={60}
             defaultValue={experience?.period}
-            placeholder="2023 — Aujourd’hui"
+            placeholder={uiCopy("2023 — Aujourd’hui")}
           />
           <div className="field">
             <label htmlFor="description">
@@ -757,7 +759,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
       <Modal
         open={progressOpen}
         onOpenChange={setProgressOpen}
-        title="Chaque détail vous rapproche."
+        title={uiCopy("Chaque détail vous rapproche.")}
         description="Un profil complet aide à raconter votre parcours. Ces informations restent dans la démo."
       >
         <div className="completion-list">
@@ -773,7 +775,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
               <span className={item.done ? "checked" : ""}>
                 {item.done ? <Check size={16} /> : <Plus size={15} />}
               </span>
-              {item.label}
+              <T>{item.label}</T>
               <ArrowRight size={15} />
             </button>
           ))}
@@ -788,6 +790,7 @@ export function ProfilePage({ section = "about" }: { section?: "about" | "career
 }
 
 export function EditProfile() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { profile, setProfile, notify } = useDemo();
   const router = useRouter();
   const [draft, setDraft] = useState<Profile>(structuredClone(profile));
@@ -844,7 +847,7 @@ export function EditProfile() {
     router.push("/espace/profil");
   }
   return (
-    <ProfileLayout back="/espace/profil" title="À votre image.">
+    <ProfileLayout back="/espace/profil" title={uiCopy("À votre image.")}>
       <form className="edit-form" onSubmit={submit} noValidate>
         <div className="edit-intro">
           <Pencil size={21} />
@@ -970,7 +973,7 @@ export function EditProfile() {
             onChange={(e) => setSkills(e.target.value)}
             maxLength={200}
             hint="Séparez les compétences par une virgule. Jusqu’à 8 compétences."
-            placeholder="Pédagogie, technique, préparation"
+            placeholder={uiCopy("Pédagogie, technique, préparation")}
           />
         </section>
         <section className="edit-section">
@@ -1005,7 +1008,7 @@ export function EditProfile() {
               onChange={(e) => update("objective", e.target.value)}
               maxLength={250}
               rows={3}
-              placeholder="Qu’aimeriez-vous construire dans le sport ?"
+              placeholder={uiCopy("Qu’aimeriez-vous construire dans le sport ?")}
             />
           </div>
         </section>
@@ -1023,15 +1026,18 @@ export function EditProfile() {
 }
 
 export function SettingsPage() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { reset, notify, setDraft, setEmailVerified } = useDemo();
   const router = useRouter();
   const [confirm, setConfirm] = useState(false);
   return (
-    <ProfileLayout back="/espace/profil" title="Votre espace, simplement.">
+    <ProfileLayout back="/espace/profil" title={uiCopy("Votre espace, simplement.")}>
       <div className="settings-grid">
+        <AppearancePreferences />
+        <LanguagePreferences />
         <ExtensionNav/>
         <PlanStatus />
-        <Link href="/espace/abonnement" className="settings-action">Gérer mon abonnement <ArrowUpRight size={17} /></Link>
+        <Link href="/espace/abonnement" className="settings-action"><T>{"Gérer mon abonnement "}</T><ArrowUpRight size={17} /></Link>
         <section className="info-card">
           <div className="card-heading">
             <h2>
@@ -1090,7 +1096,7 @@ export function SettingsPage() {
       <Modal
         open={confirm}
         onOpenChange={setConfirm}
-        title="Repartir du premier point ?"
+        title={uiCopy("Repartir du premier point ?")}
         description="Le profil, le parcours, la galerie, les publications, les suivis, les conversations et les favoris seront réinitialisés. Les données fictives de départ seront restaurées."
       >
         <Button

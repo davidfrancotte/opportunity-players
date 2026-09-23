@@ -1,0 +1,22 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createSocialState,socialReducer} from '../lib/studio/social.ts';
+import {networkMembers} from '../lib/studio/network-lists.ts';
+import {networkRows} from '../lib/studio/locales/network.ts';
+test('accepted connections and following are distinct, live, searchable and block-aware',()=>{
+ let state=createSocialState();
+ assert.equal(networkMembers(state,[],'connections').length,0);
+ assert.deepEqual(networkMembers(state,[],'following').map(m=>m.id),['horizon']);
+ state=socialReducer(state,{type:'connection-response',id:'lea',accept:true});
+ assert.equal(networkMembers(state,[],'connections')[0].id,'lea');
+ assert.ok(networkMembers(state,[],'following').some(m=>m.id==='lea'));
+ state=socialReducer(state,{type:'follow',id:'lea'});
+ assert.equal(networkMembers(state,[],'following').some(m=>m.id==='lea'),false);
+ assert.equal(networkMembers(state,[],'connections').length,1);
+ assert.equal(networkMembers(state,['lea'],'connections').length,0);
+ assert.equal(networkMembers(state,[],'connections','Moreau').length,1);
+ assert.equal(networkMembers(state,[],'connections','zzzz').length,0);
+ state=socialReducer(state,{type:'connection-response',id:'noah',accept:false});
+ assert.equal(networkMembers(state,[],'connections').length,1);
+});
+test('all network labels have nine language variants',()=>{for(const row of networkRows){assert.equal(row.length,9);assert.ok(row.every(Boolean));}});

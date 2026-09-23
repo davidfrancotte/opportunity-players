@@ -70,7 +70,8 @@ export function memberSearchFilters(filters: DirectoryFilters, premium: boolean)
         city: filters.city,
         sport: filters.sport,
         ranking: filters.ranking,
-        kind: filters.ranking.trim() ? "Joueurs" : "Tous",
+        accountType: filters.accountType,
+        kind: filters.ranking.trim() ? "Joueurs" : filters.kind,
       }
     : { ...emptyDirectoryFilters, query: filters.query };
 }

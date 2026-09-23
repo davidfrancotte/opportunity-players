@@ -2,6 +2,10 @@ import type { Category } from "./model";
 import { moderateText } from "./trust.ts";
 import { limits } from './entitlements.ts';
 import { validClassification, type PostClassification } from './community.ts';
+import {offerTypesFor} from './opportunity-types.ts';
+import {sports} from './model.ts';
+import {calendarMonth} from './entitlements.ts';
+import {previousMonth,chooseSpotlight,type MonthlyEngagement,type Spotlight} from './spotlight.ts';
 export type Member = {
   birthDate?: string;
   id: string;
@@ -130,6 +134,9 @@ export const members: Member[] = [
   },
 ];
 export type Post = PostClassification & {
+  monthly?: MonthlyEngagement;
+  likedMonth?: string;
+  spotlightExcluded?: boolean;
   id: string;
   author: string;
   name: string;
@@ -150,6 +157,7 @@ export type Conversation = {
   messages: ChatMessage[];
 };
 export type Opportunity = {
+  publisherCategory?: Category;
   groupTrial?: boolean;
   id: string;
   title: string;
@@ -237,6 +245,9 @@ export const opportunities: Opportunity[] = [
   },
 ];
 export type SocialState = {
+  spotlights?: Record<string,Spotlight|null>;
+  mediaLikes?: Record<string,boolean>;
+  listings: Opportunity[];
   paidCategory: Category | null;
   sentByMonth: Record<string, number>;
   contactedByMonth?: Record<string,string[]>;
@@ -251,6 +262,7 @@ export type SocialState = {
 };
 export function createSocialState(): SocialState {
   return {
+    listings: [],
     paidCategory: null,
     sentByMonth: {},
     gate: null,
@@ -262,6 +274,7 @@ export function createSocialState(): SocialState {
     posts: [
       {
         id: "post-padel",
+        monthly: {[previousMonth()]:{likes:24,comments:0}},
         category: 'News',
         author: "horizon",
         name: "Horizon Padel",
@@ -357,6 +370,10 @@ export function createSocialState(): SocialState {
   };
 }
 export type SocialAction =
+  | {type:'spotlight-close';month:string;now?:number}
+  | {type:'media-like';id:string}
+  | {type: 'opportunity-publish'; opportunity: Opportunity}
+  | {type: 'opportunity-remove'; id: string}
   | { type: 'connection-request' | 'connection-cancel'; id: string }
   | { type: 'connection-demo-response'; id: string; accept: boolean }
   | { type: "subscription"; category: Category | null }
@@ -378,8 +395,27 @@ export type SocialAction =
 function toggle(list: string[], id: string) {
   return list.includes(id) ? list.filter((x) => x !== id) : [...list, id];
 }
+function togglePostLike(p:Post):Post {
+  const month=calendarMonth(),monthly={...p.monthly};
+  const stats={likes:Math.max(0,(monthly[month]?.likes||0)+(p.liked?(p.likedMonth===month?-1:0):1)),comments:monthly[month]?.comments||0};
+  if(stats.likes||stats.comments)monthly[month]=stats;else delete monthly[month];
+  const next:Post={...p,liked:!p.liked,likes:Math.max(0,p.likes+(p.liked?-1:1)),monthly};
+  if(next.liked)next.likedMonth=month;else delete next.likedMonth;
+  if(!Object.keys(monthly).length)delete next.monthly;
+  return next;
+}
 export function socialReducer(state: SocialState, action: SocialAction): SocialState {
   switch (action.type) {
+    case 'spotlight-close': {
+      if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(action.month)||action.month>=calendarMonth(action.now)||Object.hasOwn(state.spotlights||{},action.month))return state;
+      return {...state,spotlights:{...state.spotlights,[action.month]:chooseSpotlight(state.posts,action.month)}};
+    }
+    case 'media-like':
+      return {...state,mediaLikes:{...state.mediaLikes,[action.id]:!state.mediaLikes?.[action.id]}};
+    case 'opportunity-publish':
+      return state.listings.some(o=>o.id===action.opportunity.id)||opportunities.some(o=>o.id===action.opportunity.id) ? state : {...state,listings:[action.opportunity,...state.listings]};
+    case 'opportunity-remove':
+      return {...state,listings:state.listings.filter(o=>o.id!==action.id),saved:state.saved.filter(id=>id!==action.id),interested:state.interested.filter(id=>id!==action.id)};
     case "subscription":
       return { ...state, paidCategory: action.category, gate: null };
     case "gate":
@@ -394,7 +430,7 @@ export function socialReducer(state: SocialState, action: SocialAction): SocialS
       return {
         ...state,
         posts: state.posts.map((p) =>
-          p.id === action.id ? { ...p, liked: !p.liked, likes: p.likes + (p.liked ? -1 : 1) } : p,
+          p.id === action.id ? togglePostLike(p) : p,
         ),
       };
     case "comment": {
@@ -403,7 +439,7 @@ export function socialReducer(state: SocialState, action: SocialAction): SocialS
       return {
         ...state,
         posts: state.posts.map((p) =>
-          p.id === action.id ? { ...p, comments: [...p.comments, { ...action.comment, text }] } : p,
+          p.id === action.id ? { ...p, comments: [...p.comments, { ...action.comment, text }],monthly:{...p.monthly,[calendarMonth()]:{likes:p.monthly?.[calendarMonth()]?.likes||0,comments:(p.monthly?.[calendarMonth()]?.comments||0)+1}} } : p,
         ),
       };
     }
@@ -450,11 +486,11 @@ export function socialReducer(state: SocialState, action: SocialAction): SocialS
       };
     }
     case "save":
-      return opportunities.some((o) => o.id === action.id)
+      return allOpportunities(state).some((o) => o.id === action.id)
         ? { ...state, saved: toggle(state.saved, action.id) }
         : state;
     case "interest":
-      return opportunities.some((o) => o.id === action.id)
+      return allOpportunities(state).some((o) => o.id === action.id)
         ? { ...state, interested: toggle(state.interested, action.id) }
         : state;
     case "reset":
@@ -473,11 +509,22 @@ export function matchesQuery(text: string, query: string) {
 export type AccessReason = "publish" | "player-contact" | "receive" | "quota" | "recipient";
 export type AccessFeature = "publish" | "message" | "comment" | "receive";
 export type AccessContext = {
+  canPublishOffers?: boolean;
+  activeCareerOffers?: number;
   category: Category;
   month: string;
   blocked?: string[];
 };
 export const FREE_MESSAGES = 3;
+export function allOpportunities(state: SocialState) { return [...state.listings,...opportunities]; }
+export function opportunityPublishIssue(state:SocialState, context:AccessContext, o:Opportunity):string|null {
+  if(context.canPublishOffers===false)return 'Ce gestionnaire ne dispose pas des droits de recrutement.';
+  if(!offerTypesFor(context.category).includes(o.type)||o.publisherCategory!==context.category)return 'Ce type d’annonce n’est pas disponible pour ce profil.';
+  if(state.listings.filter(item=>item.publisherCategory===context.category).length+(context.activeCareerOffers||0)>=limits(context.category,isPremium(state,context.category)).offers)return 'Le quota d’annonces actives de votre offre est atteint.';
+  if(!o.id||allOpportunities(state).some(item=>item.id===o.id)||!o.title.trim()||o.title.length>120||!o.description.trim()||o.description.length>2000||!o.city.trim()||o.city.length>100||!o.owner.trim()||o.format.length>100||(!sports.includes(o.sport)&&o.sport!=='-'))return 'Complétez le titre, la description, la ville et la discipline.';
+  if(moderateText([o.title,o.description,o.city,o.owner,o.format,...o.details].join(' ')))return 'Contenu bloqué dans la démo. Aucun envoi ni quota consommé.';
+  return null;
+}
 // Fictional recipient plans, not subscription data from the real platform.
 export const unpaidRecipients = ["sam", "united"];
 export function monthKey(date = new Date()) {
@@ -551,6 +598,11 @@ export function guardedSocialReducer(
   command: { action: SocialAction; context: AccessContext },
 ): SocialState {
   const { action, context } = command;
+  if(action.type==='opportunity-publish') {
+    if(opportunityPublishIssue(state,context,action.opportunity))return state;
+    return socialReducer(state,action);
+  }
+  if(action.type==='opportunity-remove'&&(context.canPublishOffers===false||!state.listings.some(o=>o.id===action.id&&o.publisherCategory===context.category)))return state;
   const text =
     action.type === "message"
       ? action.message.text

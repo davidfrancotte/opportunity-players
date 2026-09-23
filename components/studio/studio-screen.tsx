@@ -1,4 +1,6 @@
 "use client";
+import { T } from "./locale";
+import {DownloadAppPage,SharedCardPage} from './growth-features';
 import { ExtensionPage } from "./extension-screens";
 import { AgendaPage } from "./agenda-screen";
 import { ApplicationsPage, RecruitmentPage, AppointmentsPage } from "./career-screens";
@@ -27,6 +29,8 @@ import { FeedPage, NetworkPage, MessagesPage, OpportunitiesPage } from "./social
 import { PlayPage, CreateMatchPage, MatchPage, NotificationsPage } from "./play-screens";
 export function StudioScreen({ screen }: { screen: string }) {
   switch (screen) {
+    case 'telecharger': return <DownloadAppPage/>;
+    case 'invitation': return <SharedCardPage/>;
     case "outils":
     case "recherches":
     case "publications-programmees":
@@ -68,7 +72,7 @@ export function StudioScreen({ screen }: { screen: string }) {
         <Suspense
           fallback={
             <ProfileLayout>
-              <p>Chargement du match…</p>
+              <p><T>{"Chargement du match…"}</T></p>
             </ProfileLayout>
           }
         >

@@ -1,4 +1,5 @@
 "use client";
+import {MediaLike} from './growth-features';
 import {limits} from '@/lib/studio/entitlements';
 import {isPremium} from '@/lib/studio/social';
 import { useRef, useState, useEffect, type FormEvent } from "react";
@@ -20,7 +21,7 @@ export function SportProfileSummary({ showLink = true }: { showLink?: boolean })
     <div className="sport-profile-summary">
       {p.category === "Sportif" && age !== null && (
         <span className="sport-chip">
-          {age} {locale === "en" ? "years old" : "ans"}
+          {age} <T>{"ans"}</T>
         </span>
       )}
       {p.registrationMode === "child" && (
@@ -30,7 +31,7 @@ export function SportProfileSummary({ showLink = true }: { showLink?: boolean })
       )}
       {p.disciplines.map((r) => (
         <p key={r.sport}>
-          <strong>{r.sport}</strong>
+          <strong>{t(r.sport)}</strong>
           {r.paraSport === "yes" && <> · {t("Handisport")}</>}
           {r.availability && r.availability !== "Non renseignée" && (
             <>
@@ -93,17 +94,13 @@ export function SportsPortfolioPage() {
       !sports.includes(entry.sport)
     ) {
       setError(
-        locale === "en"
-          ? "Complete the title, competition and valid year."
-          : "Complétez le titre, l’épreuve et une année valide.",
+        t("Complétez le titre, l’épreuve et une année valide."),
       );
       return;
     }
     if (moderateText(entry.title + " " + entry.event)) {
       setError(
-        locale === "en"
-          ? "Please use respectful wording."
-          : "Reformulez le contenu de manière respectueuse.",
+        t("Reformulez le contenu de manière respectueuse."),
       );
       return;
     }
@@ -161,9 +158,7 @@ export function SportsPortfolioPage() {
       URL.revokeObjectURL(url);
       pendingURL.current = "";
       setVideoError(
-        locale === "en"
-          ? `Unreadable video or longer than ${cap.videoSeconds / 60} minutes.`
-          : `Vidéo illisible ou de plus de ${cap.videoSeconds / 60} minutes.`,
+        t("Vidéo illisible ou trop longue."),
       );
       return;
     }
@@ -178,17 +173,13 @@ export function SportsPortfolioPage() {
       sport = String(data.get("videoSport"));
     if (!pending || !title || !data.get("videoConsent") || !sports.includes(sport)) {
       setVideoError(
-        locale === "en"
-          ? "Choose a video, add a title and confirm sharing permission."
-          : "Choisissez une vidéo, indiquez un titre et confirmez les autorisations.",
+        t("Choisissez une vidéo, indiquez un titre et confirmez les autorisations."),
       );
       return;
     }
     if (moderateText(title)) {
       setVideoError(
-        locale === "en"
-          ? "Please use respectful wording."
-          : "Reformulez le titre de manière respectueuse.",
+        t("Reformulez le titre de manière respectueuse."),
       );
       return;
     }
@@ -213,7 +204,7 @@ export function SportsPortfolioPage() {
         </h2>
         {p.disciplines.map((r) => (
           <article className="portfolio-record" key={r.sport}>
-            <strong>{r.sport}</strong>
+            <strong>{t(r.sport)}</strong>
             <p>
               {r.licenceNumber
                 ? `${t("Licence déclarée · non vérifiée")} · ${t("Numéro masqué")} · ••••${r.licenceNumber.slice(-2)}`
@@ -271,7 +262,7 @@ export function SportsPortfolioPage() {
           <Field label="Discipline" name="awardSport">
             <select id="awardSport" name="awardSport" defaultValue={current?.sport || p.sport}>
               {disciplines.map((s) => (
-                <option key={s}>{s}</option>
+                <option key={s} value={s}>{t(s)}</option>
               ))}
             </select>
           </Field>
@@ -333,6 +324,7 @@ export function SportsPortfolioPage() {
             <video controls playsInline preload="metadata" src={v.url} aria-label={v.title} />
             <h3>{v.title}</h3>
             <p>{v.sport}</p>
+            <MediaLike id={'video:'+v.id}/>
             <Button
               variant="ghost"
               onClick={() => setProfile({ ...p, videos: p.videos.filter((x) => x.id !== v.id) })}
@@ -350,7 +342,7 @@ export function SportsPortfolioPage() {
             onChange={(e) => void choose(e.target.files?.[0])}
           />
           {busy && (
-            <p role="status">{locale === "en" ? "Reading video…" : "Lecture de la vidéo…"}</p>
+            <p role="status"><T>{"Lecture de la vidéo…"}</T></p>
           )}
           {pending && (
             <video controls playsInline src={pending.url} aria-label={t("Vidéos sportives")} />
@@ -359,7 +351,7 @@ export function SportsPortfolioPage() {
           <Field label="Discipline" name="videoSport">
             <select id="videoSport" name="videoSport" defaultValue={p.sport}>
               {disciplines.map((s) => (
-                <option key={s}>{s}</option>
+                <option key={s} value={s}>{t(s)}</option>
               ))}
             </select>
           </Field>

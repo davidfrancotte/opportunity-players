@@ -1,4 +1,5 @@
 "use client";
+import { T } from "./locale";
 import { useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, CalendarDays, ArrowUpRight, Check } from "lucide-react";
@@ -19,8 +20,8 @@ import {
 export function AgendaPage() {
   const { events, career, careerActor, careerActors, extensionWorkspace, dispatchEvent } =
     useDemo();
-  const { locale } = useLocale();
-  const c = (fr: string, en: string) => (locale === "en" ? en : fr);
+  const { dateLocale, t } = useLocale();
+  const c = t;
   const today = agendaDay(new Date());
   const [month, setMonth] = useState(today.slice(0, 7));
   const [day, setDay] = useState<string | null>(null);
@@ -41,7 +42,7 @@ export function AgendaPage() {
   const monthEntries = filterAgenda(entries, month, category);
   const visible = filterAgenda(entries, month, category, day);
   const date = (value: string, options: Intl.DateTimeFormatOptions) =>
-    new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-BE", {
+    new Intl.DateTimeFormat(dateLocale, {
       timeZone: "Europe/Brussels",
       ...options,
     }).format(new Date(value));
@@ -59,7 +60,7 @@ export function AgendaPage() {
           {c("VOTRE RÉSEAU, VOTRE TEMPS", "YOUR NETWORK, YOUR TIME")}
         </span>
         <h1>
-          Agenda<span>.</span>
+          <T>{"Agenda"}</T><span>.</span>
         </h1>
         <p>
           {c(
@@ -103,10 +104,7 @@ export function AgendaPage() {
         <table className="agenda-month-grid" aria-label={monthTitle}>
           <thead>
             <tr>
-              {(locale === "en"
-                ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-                : ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
-              ).map((d) => (
+              {Array.from({length:7},(_,i)=>new Intl.DateTimeFormat(dateLocale,{weekday:'short',timeZone:'UTC'}).format(new Date(Date.UTC(2026,0,5+i)))).map((d) => (
                 <th scope="col" key={d}>
                   {d}
                 </th>
@@ -271,7 +269,7 @@ export function AgendaPage() {
             return (
               <article key={e.id}>
                 <small>
-                  {e.sport} ·{" "}
+                  <T>{e.sport}</T> ·{" "}
                   {date(e.start, {
                     day: "numeric",
                     month: "short",

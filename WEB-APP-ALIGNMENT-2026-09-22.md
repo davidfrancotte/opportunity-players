@@ -1,5 +1,7 @@
 # Alignement web / app — 22 septembre 2026
 
+Document historique, remplacé par `WEB-APP-ALIGNMENT-2026-09-24.md`, notamment pour les catégories d’opportunités, les langues et les fonctionnalités de partage.
+
 Version concernée : ce projet Next.js/Netlify. L’app autonome et l’ancien projet Sites n’ont pas été modifiés par cette livraison. Aucune mise en production ni modification du domaine officiel.
 
 ## Fonctionnalités reprises

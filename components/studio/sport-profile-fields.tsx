@@ -1,13 +1,10 @@
-'use client';
-import type { Profile, Issues } from '@/lib/studio/model';
-import type { SportRecord } from '@/lib/studio/trust';
-import type { DirectoryFilters } from '@/lib/studio/directory';
-import {
-  availabilityOptions,
-  contractOptions,
-} from '@/lib/studio/sport-profile';
-import { Field } from './studio-ui';
-import { T, useLocale } from './locale';
+"use client";
+import type { Profile, Issues } from "@/lib/studio/model";
+import type { SportRecord } from "@/lib/studio/trust";
+import type { DirectoryFilters } from "@/lib/studio/directory";
+import { availabilityOptions, contractOptions } from "@/lib/studio/sport-profile";
+import { Field } from "./studio-ui";
+import { T, useLocale } from "./locale";
 
 export function RegistrationFields({
   profile,
@@ -25,7 +22,7 @@ export function RegistrationFields({
         <T>Inscription</T>
       </legend>
       <div className="registration-choices">
-        {(['self', 'child'] as const).map((mode) => (
+        {(["self", "child"] as const).map((mode) => (
           <label key={mode}>
             <input
               type="radio"
@@ -36,11 +33,11 @@ export function RegistrationFields({
                 onChange({
                   ...profile,
                   registrationMode: mode,
-                  ...(mode === 'child' ? { category: 'Sportif' as const } : {}),
+                  ...(mode === "child" ? { category: "Sportif" as const } : {}),
                 })
               }
             />
-            {t(mode === 'child' ? 'J’inscris mon enfant' : 'Je m’inscris')}
+            {t(mode === "child" ? "J’inscris mon enfant" : "Je m’inscris")}
           </label>
         ))}
       </div>
@@ -54,7 +51,7 @@ export function RegistrationFields({
         error={errors.birthDate}
         hint="Seul l’âge sera affiché, jamais la date de naissance. Utilisez une date fictive."
       />
-      {profile.registrationMode === 'child' && (
+      {profile.registrationMode === "child" && (
         <>
           <Field
             label="Nom du représentant"
@@ -63,10 +60,7 @@ export function RegistrationFields({
             maxLength={100}
             value={profile.guardian.name}
             onChange={(e) =>
-              onChange({
-                ...profile,
-                guardian: { ...profile.guardian, name: e.target.value },
-              })
+              onChange({ ...profile, guardian: { ...profile.guardian, name: e.target.value } })
             }
             error={errors.guardianName}
           />
@@ -81,15 +75,12 @@ export function RegistrationFields({
               onChange={(e) =>
                 onChange({
                   ...profile,
-                  guardian: {
-                    ...profile.guardian,
-                    relationship: e.target.value,
-                  },
+                  guardian: { ...profile.guardian, relationship: e.target.value },
                 })
               }
             >
-              <option value="">{t('Non renseigné')}</option>
-              {['Parent', 'Tuteur légal'].map((v) => (
+              <option value="">{t("Non renseigné")}</option>
+              {["Parent", "Tuteur légal"].map((v) => (
                 <option key={v} value={v}>
                   {t(v)}
                 </option>
@@ -117,9 +108,8 @@ export function RegistrationFields({
           )}
           <p className="field-hint">
             <T>
-              Coordonnées privées du représentant. Les échanges passent par son
-              compte. Vérification parentale simulée, sans valeur de
-              vérification réelle.
+              Coordonnées privées du représentant. Les échanges passent par son compte. Vérification
+              parentale simulée, sans valeur de vérification réelle.
             </T>
           </p>
         </>
@@ -149,15 +139,13 @@ export function SportExtraFields({
       >
         <select
           id={`${prefix}-para`}
-          value={r.paraSport || ''}
-          onChange={(e) =>
-            onChange({ paraSport: e.target.value as SportRecord['paraSport'] })
-          }
+          value={r.paraSport || ""}
+          onChange={(e) => onChange({ paraSport: e.target.value as SportRecord["paraSport"] })}
         >
           {[
-            ['', 'Non renseignée'],
-            ['yes', 'Oui'],
-            ['no', 'Non'],
+            ["", "Non renseignée"],
+            ["yes", "Oui"],
+            ["no", "Non"],
           ].map(([v, l]) => (
             <option key={v} value={v}>
               {t(l)}
@@ -178,13 +166,13 @@ export function SportExtraFields({
           ))}
         </select>
       </Field>
-      {r.availability === 'Disponible à partir du' && (
+      {r.availability === "Disponible à partir du" && (
         <Field
           label="Date de disponibilité"
           name={`${prefix}-availableFrom`}
           type="date"
           required
-          value={r.availableFrom || ''}
+          value={r.availableFrom || ""}
           onChange={(e) => onChange({ availableFrom: e.target.value })}
         />
       )}
@@ -213,7 +201,7 @@ export function SportExtraFields({
           label="Numéro de licence"
           name={`${prefix}-licence`}
           maxLength={50}
-          value={r.licenceNumber || ''}
+          value={r.licenceNumber || ""}
           onChange={(e) => onChange({ licenceNumber: e.target.value })}
         />
         <Field
@@ -221,14 +209,14 @@ export function SportExtraFields({
           name={`${prefix}-season`}
           placeholder="2026–2027"
           maxLength={20}
-          value={r.licenceSeason || ''}
+          value={r.licenceSeason || ""}
           onChange={(e) => onChange({ licenceSeason: e.target.value })}
         />
       </div>
       <p className="field-hint">
         <T>
-          Le numéro reste privé et n’apparaît pas dans le CV partagé. Ne
-          saisissez aucune vraie licence dans la démo.
+          Le numéro reste privé et n’apparaît pas dans le CV partagé. Ne saisissez aucune vraie
+          licence dans la démo.
         </T>
       </p>
     </fieldset>
@@ -244,11 +232,11 @@ export function ExtraDirectoryFilters({
   const { t } = useLocale();
   return (
     <>
-      {(['ageMin', 'ageMax'] as const).map((k, i) => (
+      {(["ageMin", "ageMax"] as const).map((k, i) => (
         <label key={k}>
-          {t(i ? 'Âge maximum' : 'Âge minimum')}
+          {t(i ? "Âge maximum" : "Âge minimum")}
           <input
-            aria-label={t(i ? 'Âge maximum' : 'Âge minimum')}
+            aria-label={t(i ? "Âge maximum" : "Âge minimum")}
             type="number"
             min={0}
             max={120}
@@ -258,16 +246,16 @@ export function ExtraDirectoryFilters({
         </label>
       ))}
       <label>
-        {t('Handisport')}
+        {t("Handisport")}
         <select
-          aria-label={t('Handisport')}
+          aria-label={t("Handisport")}
           value={f.paraSport}
-          onChange={(e) => onChange('paraSport', e.target.value)}
+          onChange={(e) => onChange("paraSport", e.target.value)}
         >
           {[
-            ['Tous', 'Tous'],
-            ['yes', 'Oui'],
-            ['no', 'Non'],
+            ["Tous", "Tous"],
+            ["yes", "Oui"],
+            ["no", "Non"],
           ].map(([v, l]) => (
             <option key={v} value={v}>
               {t(l)}
@@ -275,15 +263,15 @@ export function ExtraDirectoryFilters({
           ))}
         </select>
       </label>
-      {(['availability', 'contractStatus'] as const).map((k, i) => (
+      {(["availability", "contractStatus"] as const).map((k, i) => (
         <label key={k}>
-          {t(i ? 'Situation contractuelle' : 'Disponibilité')}
+          {t(i ? "Situation contractuelle" : "Disponibilité")}
           <select
-            aria-label={t(i ? 'Situation contractuelle' : 'Disponibilité')}
+            aria-label={t(i ? "Situation contractuelle" : "Disponibilité")}
             value={f[k]}
             onChange={(e) => onChange(k, e.target.value)}
           >
-            <option value="Tous">{t('Tous')}</option>
+            <option value="Tous">{t("Tous")}</option>
             {(i ? contractOptions : availabilityOptions).slice(1).map((v) => (
               <option key={v} value={v}>
                 {t(v)}
@@ -294,7 +282,7 @@ export function ExtraDirectoryFilters({
       ))}
       {f.ageMin && f.ageMax && Number(f.ageMin) > Number(f.ageMax) && (
         <p className="field-error" role="alert">
-          {t('Âge minimum')} &gt; {t('Âge maximum')}
+          {t("Âge minimum")} <T>{" &gt; "}</T>{t("Âge maximum")}
         </p>
       )}
     </>

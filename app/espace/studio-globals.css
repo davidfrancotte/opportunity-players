@@ -12,6 +12,13 @@ body:has(.studio-surface) {
   --foreground: #f1f2eb;
   --card: #1d2124;
   --primary: #d1f94c;
+  --secondary: #24282b;
+  --muted: #24282b;
+  --muted-foreground: #a9afaf;
+  --border: #3b4043;
+  --input: #3b4043;
+  --ring: var(--primary);
+  --destructive: #ffaaaa;
   color-scheme: dark;
 }
 body:has(.studio-surface) * {
@@ -1515,7 +1522,10 @@ body:has(.studio-surface) .studio-modal [data-slot="dialog-title"] {
   letter-spacing: -0.045em;
   font-weight: 600;
   line-height: 1.1;
-  padding-right: 24px;
+  padding-right: 36px;
+}
+body:has(.studio-surface) .studio-modal .modal-title:focus {
+  outline: none;
 }
 body:has(.studio-surface) .modal-description {
   font-size: 12px;
@@ -1525,12 +1535,26 @@ body:has(.studio-surface) .modal-description {
 }
 body:has(.studio-surface) .modal-close {
   position: absolute;
-  top: 17px;
-  right: 14px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  top: 12px;
+  right: 10px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
   color: #c2cdbb;
+}
+body:has(.studio-surface) .modal-close svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.75;
+}
+body:has(.studio-surface) .modal-close:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -5px;
+  box-shadow: none;
 }
 body:has(.studio-surface) .studio-modal [data-slot="input"] {
   min-height: 48px;
@@ -1954,7 +1978,7 @@ body:has(.studio-surface) .not-found > a {
     left: 18px;
   }
   body:has(.studio-surface) .identity-content {
-    padding: 18px 1px 20px;
+    padding: 20px 10px 24px;
   }
   body:has(.studio-surface) .identity-name h2 {
     font-size: 28px;

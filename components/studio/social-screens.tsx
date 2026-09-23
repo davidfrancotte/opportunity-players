@@ -1,7 +1,12 @@
 "use client";
 import { isPremium, isConnected, inCommunityFeed, matchesOpportunityType } from "@/lib/studio/social";
 import { ConnectionControls } from "./connection-controls";
+import {MemberMediaGallery} from './member-media';
+import {OpportunityPublisher} from './opportunity-publisher';
+import {MonthlySpotlight} from './growth-features';
 import {networkMembers,type NetworkList} from '@/lib/studio/network-lists';
+import {allOfferTypes} from '@/lib/studio/opportunity-types';
+import {allOpportunities} from '@/lib/studio/social';
 import { ApplyButton, AppointmentRequestButton } from "./career-screens";
 import { T, useLocale } from "./locale";
 import {
@@ -24,6 +29,8 @@ import { MemberDossier, SafetyActions } from "./trust-screens";
 import { memberSports } from "@/lib/studio/trust";
 import {
   countrySuggestions,
+  professionalTypes,
+  collectiveTypes,
   emptyDirectoryFilters,
   matchesDirectory,
   type DirectoryFilters,
@@ -77,8 +84,9 @@ function Chips({
   onChange: (v: string) => void;
   label: string;
 }) {
+  const { t }=useLocale();
   return (
-    <div className="sport-filters" role="group" aria-label={label}>
+    <div className="sport-filters" role="group" aria-label={t(label)}>
       {values.map((v) => (
         <Button
           type="button"
@@ -87,7 +95,7 @@ function Chips({
           aria-pressed={v === value}
           onClick={() => onChange(v)}
         >
-          {v}
+          <T>{v}</T>
         </Button>
       ))}
     </div>
@@ -102,13 +110,14 @@ function SearchField({
   onChange: (v: string) => void;
   label: string;
 }) {
+  const { t }=useLocale();
   return (
     <label className="social-search">
       <Search size={18} aria-hidden="true" />
       <Input
         type="search"
-        aria-label={label}
-        placeholder={label}
+        aria-label={t(label)}
+        placeholder={t(label)}
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
@@ -119,8 +128,8 @@ function Empty({ title, text }: { title: string; text: string }) {
   return (
     <div className="social-empty">
       <Search size={26} />
-      <h2>{title}</h2>
-      <p>{text}</p>
+      <h2><T>{title}</T></h2>
+      <p><T>{text}</T></p>
     </div>
   );
 }
@@ -128,14 +137,16 @@ function SportSelect({
   value,
   onChange,
   id,
+  showIcon = true,
 }: {
   value: string;
   onChange: (s: string) => void;
   id: string;
+  showIcon?: boolean;
 }) {
   return (
     <div className="compact-select">
-      <SlidersHorizontal size={16} aria-hidden="true" />
+      {showIcon && <SlidersHorizontal size={16} aria-hidden="true" />}
       <label htmlFor={id}>
         <T>{"Sport"}</T>
       </label>
@@ -154,6 +165,7 @@ function SportSelect({
 }
 
 export function FeedPage() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const {
     profile,
     social,
@@ -170,7 +182,7 @@ export function FeedPage() {
   const { t } = useLocale();
   const premium = isPremium(social, profile.category);
   const [feedFilters, setFeedFilters] = useState({ ...emptyFeedFilters });
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(true);
   const [postCategory, setPostCategory] = useState<FeedCategory>("News");
   const [postOpportunity, setPostOpportunity] = useState<OpportunityCategory>(
     opportunityCategories[0],
@@ -233,14 +245,11 @@ export function FeedPage() {
       </div>
       {premium && showFilters && (
         <section id="feed-filters" className="community-filters" aria-label={t("Filtres du fil")}>
-          <SearchField
-            label={t("Rechercher dans le fil")}
-            value={feedFilters.query}
-            onChange={(query) => setFeedFilters((f) => ({ ...f, query }))}
-          />
-          <label>
+          <div className="community-filter-types">
+          <label htmlFor="feed-category">
             <T>{"Catégorie"}</T>
             <NativeSelect
+              id="feed-category"
               aria-label={t("Catégorie du fil")}
               value={feedFilters.category}
               onChange={(e) =>
@@ -253,11 +262,25 @@ export function FeedPage() {
             >
               {["Tous", ...feedCategories].map((v) => (
                 <NativeSelectOption key={v} value={v}>
-                  {t(v)}
+                  {t(v === "Tous" ? "Toutes" : v)}
                 </NativeSelectOption>
               ))}
             </NativeSelect>
           </label>
+          <label htmlFor="feed-sport">
+            <T>{"Discipline"}</T>
+            <NativeSelect
+              id="feed-sport"
+              aria-label={t("Discipline")}
+              value={feedFilters.sport}
+              onChange={(e) => setFeedFilters((f) => ({ ...f, sport: e.target.value }))}
+            >
+              <NativeSelectOption value="Tous">{t("Toutes les disciplines")}</NativeSelectOption>
+              <NativeSelectOption value="-">-</NativeSelectOption>
+              {sports.map(sport => <NativeSelectOption key={sport} value={sport}>{sport}</NativeSelectOption>)}
+            </NativeSelect>
+          </label>
+          </div>
           {feedFilters.category === "Opportunités" && (
             <label>
               <T>{"Type d’opportunité"}</T>
@@ -276,10 +299,10 @@ export function FeedPage() {
               </NativeSelect>
             </label>
           )}
-          <SportSelect
-            id="feed-sport"
-            value={feedFilters.sport}
-            onChange={(sport) => setFeedFilters((f) => ({ ...f, sport }))}
+          <SearchField
+            label={t("Rechercher dans le fil")}
+            value={feedFilters.query}
+            onChange={(query) => setFeedFilters((f) => ({ ...f, query }))}
           />
           <Button variant="ghost" onClick={() => setFeedFilters({ ...emptyFeedFilters })}>
             <T>{"Réinitialiser les filtres"}</T>
@@ -319,6 +342,7 @@ export function FeedPage() {
         <T>{"Profils et publications fictifs · rien n’est publié en ligne."}</T>
       </p>
       <div className="feed-list">
+        <MonthlySpotlight visible={p=>!trust.blocked.includes(p.author)&&inCommunityFeed(social,p.author)&&matchesFeed(p,feedFilters,premium)} onOpen={id=>{setCommentsId(id);setComment('');}}/>
         {openMatches.map((match) => (
           <MatchCard key={match.id} match={match} />
         ))}
@@ -330,7 +354,7 @@ export function FeedPage() {
                 <h2>{post.author === "self" ? displayName(profile) : post.name}</h2>
                 <p>{post.role}</p>
               </div>
-              <span className="post-sport">{post.sport}</span>
+              <span className="post-sport"><T>{post.sport}</T></span>
             </header>
             <p className="post-category">
               <T>{post.category || "Divers"}</T>
@@ -374,14 +398,14 @@ export function FeedPage() {
                 playsInline
                 preload="metadata"
                 src={post.video}
-                aria-label="Vidéo de la publication"
+                aria-label={uiCopy("Vidéo de la publication")}
               />
             )}
             <div className="post-actions">
               <Button
                 variant="ghost"
                 aria-pressed={post.liked}
-                aria-label={post.liked ? "Retirer mon j’aime" : "Aimer la publication"}
+                aria-label={uiCopy(post.liked ? "Retirer mon j’aime" : "Aimer la publication")}
                 onClick={() => dispatchSocial({ type: "like", id: post.id })}
               >
                 <Heart size={18} fill={post.liked ? "currentColor" : "none"} />
@@ -409,7 +433,7 @@ export function FeedPage() {
       </div>
       {!posts.length && !openMatches.length && (
         <Empty
-          title="Le terrain est à vous."
+          title={uiCopy("Le terrain est à vous.")}
           text="Aucune publication pour ces critères. Modifiez les filtres ou partagez une publication."
         />
       )}
@@ -419,7 +443,7 @@ export function FeedPage() {
           setCompose(open);
           if (!open) attachment.clear();
         }}
-        title="À vous de jouer."
+        title={uiCopy("À vous de jouer.")}
         description="Publication de démonstration, visible uniquement pendant cette visite. N’utilisez pas d’informations personnelles."
       >
         <form
@@ -555,7 +579,7 @@ export function FeedPage() {
             id="post-text"
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Un moment à partager avec la communauté…"
+            placeholder={uiCopy("Un moment à partager avec la communauté…")}
             maxLength={1200}
             required
             rows={5}
@@ -636,7 +660,7 @@ export function FeedPage() {
         onOpenChange={(open) => {
           if (!open) setCommentsId(null);
         }}
-        title="La publication complète"
+        title={uiCopy("La publication complète")}
         description="Publication et commentaires de démonstration, conservés pendant cette visite."
       >
         {selected && (
@@ -648,7 +672,7 @@ export function FeedPage() {
                   <h2>{selected.author === "self" ? displayName(profile) : selected.name}</h2>
                   <p>{selected.role}</p>
                 </div>
-                <span className="post-sport">{selected.sport}</span>
+                <span className="post-sport"><T>{selected.sport}</T></span>
               </header>
               <p className="post-text post-full-text">{selected.text}</p>
               {selected.video && (
@@ -657,7 +681,7 @@ export function FeedPage() {
                   controls
                   playsInline
                   src={selected.video}
-                  aria-label="Vidéo de la publication"
+                  aria-label={uiCopy("Vidéo de la publication")}
                 />
               )}
               {selected.image && (
@@ -671,7 +695,7 @@ export function FeedPage() {
                 <Button
                   variant="ghost"
                   aria-pressed={selected.liked}
-                  aria-label={selected.liked ? "Retirer mon j’aime" : "Aimer la publication"}
+                  aria-label={uiCopy(selected.liked ? "Retirer mon j’aime" : "Aimer la publication")}
                   onClick={() => dispatchSocial({ type: "like", id: selected.id })}
                 >
                   <Heart size={18} fill={selected.liked ? "currentColor" : "none"} />
@@ -740,6 +764,7 @@ export function FeedPage() {
 }
 
 export function NetworkPage() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { social, dispatchSocial, requestAccess, trust, profile } = useDemo();
   const { t } = useLocale();
   const router = useRouter();
@@ -749,13 +774,13 @@ export function NetworkPage() {
   const [searched, setSearched] = useState(false);
   const [advanced, setAdvanced] = useState(false);
   const [expandedInvitations, setExpandedInvitations] = useState(false);
+  const [member, setMember] = useState<Member | null>(null);
   const [networkList,setNetworkList]=useState<NetworkList|null>(null);
   const [contactQuery,setContactQuery]=useState('');
   const connectionMembers=networkMembers(social,trust.blocked,'connections');
   const followedMembers=networkMembers(social,trust.blocked,'following');
   const contactMembers=networkList?networkMembers(social,trust.blocked,networkList,contactQuery):[];
   function openNetworkList(kind:NetworkList|null){setNetworkList(kind);setContactQuery('');window.scrollTo({top:0,behavior:'instant'});}
-  const [member, setMember] = useState<Member | null>(null);
   const effectiveFilters = memberSearchFilters(filters, premium);
   const sport = effectiveFilters.sport;
   const updateFilter = (key: keyof DirectoryFilters, value: string) => {
@@ -792,7 +817,7 @@ export function NetworkPage() {
           <img src={m.image} alt="" />
           <span>
             <small>
-              {m.kind} · {memberSports[m.id]?.map((r) => r.sport).join(" / ") || m.sport}
+              <T>{m.kind}</T> · {memberSports[m.id]?.map((r) => t(r.sport)).join(" / ") || t(m.sport)}
             </small>
             <strong>{m.name}</strong>
             {m.kind === "Joueurs" && ageOn(m.birthDate) !== null && (
@@ -802,7 +827,7 @@ export function NetworkPage() {
               </span>
             )}
             <span>{m.role}</span>
-            <span>{[m.gender, m.accountType].filter(Boolean).join(" · ")}</span>
+            <span>{[m.gender, m.accountType].filter(Boolean).map(value=>t(value!)).join(" · ")}</span>
             {memberSports[m.id] && (
               <span className="trust-filter-hint">
                 {memberSports[m.id]
@@ -818,7 +843,7 @@ export function NetworkPage() {
                       r.availability,
                       r.contractStatus,
                     ]
-                      .filter(Boolean)
+                      .filter(Boolean).map(value=>t(value!))
                       .join(" · "),
                   )
                   .join(" / ")}
@@ -838,7 +863,7 @@ export function NetworkPage() {
             onClick={() => dispatchSocial({ type: "follow", id: m.id })}
           >
             {social.following.includes(m.id) ? <Check size={16} /> : <Plus size={16} />}
-            {social.following.includes(m.id) ? "Suivi" : "Suivre"}
+            <T>{social.following.includes(m.id) ? "Suivi" : "Suivre"}</T>
           </Button>
           <Button variant="outline" onClick={() => message(m)}>
             <MessageCircle size={16} />
@@ -850,17 +875,11 @@ export function NetworkPage() {
   }
   return (
     <ProfileLayout>
-      <div className="social-title">
-        <h1>
-          <T>{networkList==='connections'?'Mes connexions':networkList==='following'?'Profils suivis':'Votre réseau'}</T>
-          <span>.</span>
-        </h1>
-      </div>
-      <NetworkSections />
-      {networkList ? <section className="network-directory">
+      {networkList ? <section className="network-directory" aria-labelledby="network-directory-title">
         <Button variant="ghost" className="network-directory-back" onClick={()=>openNetworkList(null)}><ArrowLeft size={18}/><T>Retour aux membres</T></Button>
+        <div className="social-title"><h1 id="network-directory-title"><T>{networkList==='connections'?'Mes connexions':'Profils suivis'}</T><span>.</span></h1></div>
         <p className="field-hint"><T>{networkList==='connections'?'Vos connexions acceptées : échangez et invitez-les à jouer.':'Les membres dont vous suivez les publications. Suivre ne crée pas une connexion.'}</T></p>
-        <SearchField label={t('Rechercher dans cette liste…')} value={contactQuery} onChange={setContactQuery}/>
+        <SearchField label="Rechercher dans cette liste…" value={contactQuery} onChange={setContactQuery}/>
         <p className="list-caption" role="status">{contactMembers.length} <T>résultats</T></p>
         <div className="network-contact-list">{contactMembers.map(m=><article className="network-contact" key={m.id}>
           <button className="network-contact-profile" onClick={()=>setMember(m)}><img src={m.image} alt=""/><span><strong>{m.name}</strong><small>{m.role} · {m.city}</small>{isConnected(social,m.id)&&<small className="network-contact-status"><Check size={12}/><T>Connexion acceptée</T></small>}</span><ArrowUpRight size={18}/></button>
@@ -868,6 +887,13 @@ export function NetworkPage() {
         </article>)}</div>
         {!contactMembers.length&&<div className="network-directory-empty"><p><T>{contactQuery?'Aucun membre trouvé.':networkList==='connections'?'Aucune connexion acceptée pour le moment.':'Vous ne suivez encore aucun membre.'}</T></p><Button variant="outline" onClick={()=>openNetworkList(null)}><T>Découvrir des membres</T><ArrowUpRight size={16}/></Button></div>}
       </section> : <>
+      <div className="social-title">
+        <h1>
+          <T>{"Votre réseau"}</T>
+          <span>.</span>
+        </h1>
+      </div>
+      <NetworkSections />
       <section className="community-section" aria-labelledby="member-search-title">
         <h2 id="member-search-title">
           <T>{"Recherche"}</T>
@@ -906,7 +932,7 @@ export function NetworkPage() {
                 <p>
                   <T>
                     {
-                      "Les filtres avancés sont réservés aux membres Premium. Passez à Premium pour rechercher par pays, ville, sport et classement."
+                      "Les filtres avancés sont réservés aux membres Premium : type de profil, secteur, pays, ville, sport et classement."
                     }
                   </T>
                 </p>
@@ -921,6 +947,25 @@ export function NetworkPage() {
               aria-label={t("Filtres de recherche avancée")}
               aria-describedby={!premium ? "member-search-premium-message" : undefined}
             >
+              <label>
+                <T>Type de profil</T>
+                <NativeSelect aria-label={t('Type de profil')} value={filters.kind} onChange={e=>{
+                  if(!premium)return;
+                  setFilters(f=>({...f,kind:e.target.value,accountType:'Tous',ranking:''}));setSearched(true);
+                }}>
+                  <NativeSelectOption value="Tous">{t('Tous')}</NativeSelectOption>
+                  <NativeSelectOption value="Joueurs">{t('Sportifs')}</NativeSelectOption>
+                  <NativeSelectOption value="Professionnels">{t('Professionnels')}</NativeSelectOption>
+                  <NativeSelectOption value="Collectives">{t('Organisations')}</NativeSelectOption>
+                </NativeSelect>
+              </label>
+              {filters.kind!=='Joueurs'&&<label>
+                <T>Secteur / métier</T>
+                <NativeSelect aria-label={t('Secteur / métier')} value={filters.accountType} onChange={e=>updateFilter('accountType',e.target.value)}>
+                  <NativeSelectOption value="Tous">{t('Tous')}</NativeSelectOption>
+                  {(filters.kind==='Professionnels'?professionalTypes:filters.kind==='Collectives'?collectiveTypes:[...professionalTypes,...collectiveTypes]).map(value=><NativeSelectOption key={value} value={value}>{value}</NativeSelectOption>)}
+                </NativeSelect>
+              </label>}
               <label>
                 <T>{"Pays"}</T>
                 <Input
@@ -961,9 +1006,10 @@ export function NetworkPage() {
                 <T>{"Classement"}</T>
                 <Input
                   aria-label={t("Filtrer par classement")}
+                  disabled={filters.kind==='Professionnels'||filters.kind==='Collectives'}
                   value={filters.ranking}
                   onChange={(e) => updateFilter("ranking", e.target.value)}
-                  placeholder="C15.2, P200…"
+                  placeholder={uiCopy("C15.2, P200…")}
                 />
               </label>
             </fieldset>
@@ -1005,8 +1051,8 @@ export function NetworkPage() {
           </div>
         )}
       </section>
-      <section className="community-section network-overview" aria-labelledby="network-overview-title">
-        <h2 id="network-overview-title"><T>Mon réseau</T></h2>
+      <section className="community-section network-overview" aria-labelledby="my-network-title">
+        <h2 id="my-network-title"><T>Mon réseau</T></h2>
         <div className="network-count-cards">
           <button onClick={()=>openNetworkList('connections')} aria-label={`${t('Connexions')} · ${connectionMembers.length}`}><span><strong>{connectionMembers.length}</strong><T>Connexions</T></span><ArrowUpRight size={20}/></button>
           <button onClick={()=>openNetworkList('following')} aria-label={`${t('Suivis')} · ${followedMembers.length}`}><span><strong>{followedMembers.length}</strong><T>Suivis</T></span><ArrowUpRight size={20}/></button>
@@ -1075,20 +1121,18 @@ export function NetworkPage() {
       </section>
       {!!sentInvitations.length && (
         <details className="connection-sent">
-          <summary>Demandes envoyées ({sentInvitations.length})</summary>
+          <summary><T>{"Demandes envoyées ("}</T>{sentInvitations.length})</summary>
           {sentInvitations.map((i) => {
             const person = members.find((m) => m.id === i.memberId)!;
             return (
               <div key={i.memberId}>
                 <button type="button" onClick={() => setMember(person)}>
-                  {person.name} · En attente
-                </button>
+                  {person.name} <T>{"· En attente"}</T></button>
                 <Button
                   variant="ghost"
                   onClick={() => dispatchSocial({ type: "connection-cancel", id: i.memberId })}
                 >
-                  Retirer
-                </Button>
+                  <T>{"Retirer"}</T></Button>
               </div>
             );
           })}
@@ -1121,13 +1165,13 @@ export function NetworkPage() {
           <div className="member-detail">
             <img src={member.image} alt={"Illustration · " + member.sport} />
             <span className="sport-chip">
-              {member.kind} · {member.sport}
+              <T>{member.kind}</T> · <T>{member.sport}</T>
             </span>
             <h3>{member.role}</h3>
             <p>
               {member.city}, {member.country}
             </p>
-            <p>{[member.gender, member.accountType].filter(Boolean).join(" · ")}</p>
+            <p>{[member.gender, member.accountType].filter(Boolean).map(value=>t(value!)).join(" · ")}</p>
             <p>{member.bio}</p>
             <div className="member-relationship-actions">
               <ConnectionControls memberId={member.id} />
@@ -1138,13 +1182,12 @@ export function NetworkPage() {
                 disabled={trust.blocked.includes(member.id)}
                 onClick={() => dispatchSocial({ type: "follow", id: member.id })}
               >
-                {social.following.includes(member.id) ? "Ne plus suivre" : "Suivre"}
+                <T>{social.following.includes(member.id) ? "Ne plus suivre" : "Suivre"}</T>
               </Button>
             </div>
             <p className="field-hint">
-              Suivre affiche ses publications dans votre fil. Une connexion doit être acceptée pour
-              échanger sans quota et inviter cette personne à un match.
-            </p>
+              <T>{"Suivre affiche ses publications dans votre fil. Une connexion doit être acceptée pour échanger sans quota et inviter cette personne à un match."}</T></p>
+            <MemberMediaGallery key={'media:'+member.id} memberId={member.id}/>
             <MemberDossier key={member.id} member={member} />
             <SafetyActions memberId={member.id} />
             <AppointmentRequestButton member={member} />
@@ -1167,18 +1210,17 @@ export function NetworkPage() {
 }
 
 export function MessagesPage() {
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
   const { social, dispatchSocial, access, requestAccess, trust } = useDemo();
-  const [query, setQuery] = useState('');
-  const [text, setText] = useState('');
+  const [query, setQuery] = useState("");
+  const [text, setText] = useState("");
   const [newChat, setNewChat] = useState(false);
   const log = useRef<HTMLDivElement>(null);
-  const active = social.conversations.find(
-    (c) => c.memberId === social.activeChat,
-  );
+  const active = social.conversations.find((c) => c.memberId === social.activeChat);
   const member = members.find((m) => m.id === active?.memberId);
   useEffect(() => {
     if (log.current) log.current.scrollTop = log.current.scrollHeight;
-    setText('');
+    setText("");
   }, [social.activeChat]);
   useEffect(() => {
     if (log.current) log.current.scrollTop = log.current.scrollHeight;
@@ -1188,147 +1230,117 @@ export function MessagesPage() {
       <div className="social-title">
         <div>
           <span className="mini-kicker">
-            <T>{'LE LIEN COMMENCE ICI'}</T>
+            <T>{"LE LIEN COMMENCE ICI"}</T>
           </span>
           <h1>
-            <T>{'Messages'}</T>
+            <T>{"Messages"}</T>
             <span>.</span>
           </h1>
         </div>
         <Button
           variant="secondary"
           className="square-action"
-          aria-label="Nouvelle conversation"
+          aria-label={uiCopy("Nouvelle conversation")}
           onClick={() => setNewChat(true)}
         >
           <Plus size={22} />
         </Button>
       </div>
       <p className="demo-context">
-        <T>
-          {
-            'Conversations simulées. Aucun message n’est envoyé à une personne réelle.'
-          }
-        </T>
+        <T>{"Conversations simulées. Aucun message n’est envoyé à une personne réelle."}</T>
       </p>
       <PlanStatus compact />
       <Link className="text-link" href="/espace/securite">
-        <T>{'Sécurité : signalements et membres bloqués'}</T>
+        <T>{"Sécurité : signalements et membres bloqués"}</T>
       </Link>
       {!canReceive(social, access.category) && <LockedFeature />}
-      <div
-        className={`web-messaging ${active && member ? 'has-conversation' : ''}`}
-      >
-        {active && member ? (
-          <section
-            className="conversation-panel"
-            aria-label={'Conversation avec ' + member.name}
-          >
-            <header className="conversation-heading">
-              <Button
-                variant="ghost"
-                aria-label="Retour aux conversations"
-                onClick={() => dispatchSocial({ type: 'close-chat' })}
-              >
-                <ArrowLeft size={20} />
-              </Button>
-              <img src={member.image} alt="" />
-              <div>
-                <h2>{member.name}</h2>
-                <p>{member.role}</p>
-              </div>
-            </header>
-            <SafetyActions memberId={member.id} />
-            <div
-              ref={log}
-              className="message-log"
-              role="log"
-              aria-label="Historique des messages"
-              aria-live="polite"
+      <div className={`web-messaging ${active && member ? "has-conversation" : ""}`}>
+      {active && member ? (
+        <section className="conversation-panel" aria-label={"Conversation avec " + member.name}>
+          <header className="conversation-heading">
+            <Button
+              variant="ghost"
+              aria-label={uiCopy("Retour aux conversations")}
+              onClick={() => dispatchSocial({ type: "close-chat" })}
             >
-              <span className="chat-date">
-                <T>{'CONVERSATION DE DÉMONSTRATION'}</T>
-              </span>
-              {!active.messages.length && (
-                <p className="chat-empty">
-                  <T>{'Commencez l’échange avec un message fictif.'}</T>
-                </p>
-              )}
-              {visibleMessages(social, access, active).map((m) => (
-                <div
-                  key={m.id}
-                  className={m.mine ? 'message-bubble mine' : 'message-bubble'}
-                >
-                  <span className="sr-only">
-                    {m.mine ? 'Vous' : member.name} :{' '}
-                  </span>
-                  <p>{m.text}</p>
-                  <small>
-                    {m.mine ? 'Ajouté à la démo' : 'Exemple de message'}
-                  </small>
-                </div>
-              ))}
+              <ArrowLeft size={20} />
+            </Button>
+            <img src={member.image} alt="" />
+            <div>
+              <h2>{member.name}</h2>
+              <p>{member.role}</p>
             </div>
-            <form
-              className="message-composer"
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (!text.trim()) return;
-                if (!requestAccess('message', member.id)) return;
-                dispatchSocial({
-                  type: 'message',
-                  id: member.id,
-                  message: { id: crypto.randomUUID(), text, mine: true },
-                });
-                setText('');
-              }}
-            >
-              <label className="sr-only" htmlFor="message-text">
-                <T>{'Votre message fictif'}</T>
-              </label>
-              <Textarea
-                id="message-text"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                rows={2}
-                maxLength={1000}
-                required
-                placeholder="Votre message fictif…"
-              />
-              <Submit
-                disabled={!text.trim()}
-                aria-label="Ajouter le message à la démo"
-              >
-                <Send size={20} />
-              </Submit>
-            </form>
-          </section>
-        ) : (
-          <div className="web-chat-placeholder">
-            <MessageCircle size={34} />
-            <h2>Une conversation peut tout changer.</h2>
-            <p>
-              Sélectionnez un échange à gauche ou commencez une nouvelle
-              rencontre avec le bouton +.
-            </p>
+          </header>
+          <SafetyActions memberId={member.id} />
+          <div
+            ref={log}
+            className="message-log"
+            role="log"
+            aria-label={uiCopy("Historique des messages")}
+            aria-live="polite"
+          >
+            <span className="chat-date">
+              <T>{"CONVERSATION DE DÉMONSTRATION"}</T>
+            </span>
+            {!active.messages.length && (
+              <p className="chat-empty">
+                <T>{"Commencez l’échange avec un message fictif."}</T>
+              </p>
+            )}
+            {visibleMessages(social, access, active).map((m) => (
+              <div key={m.id} className={m.mine ? "message-bubble mine" : "message-bubble"}>
+                <span className="sr-only">{m.mine ? "Vous" : member.name} : </span>
+                <p>{m.text}</p>
+                <small><T>{m.mine ? "Ajouté à la démo" : "Exemple de message"}</T></small>
+              </div>
+            ))}
           </div>
-        )}
-        <section className="web-conversations" aria-label="Vos conversations">
-          <SearchField
-            value={query}
-            onChange={setQuery}
-            label="Rechercher une conversation…"
-          />
+          <form
+            className="message-composer"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!text.trim()) return;
+              if (!requestAccess("message", member.id)) return;
+              dispatchSocial({
+                type: "message",
+                id: member.id,
+                message: { id: crypto.randomUUID(), text, mine: true },
+              });
+              setText("");
+            }}
+          >
+            <label className="sr-only" htmlFor="message-text">
+              <T>{"Votre message fictif"}</T>
+            </label>
+            <Textarea
+              id="message-text"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              rows={2}
+              maxLength={1000}
+              required
+              placeholder={uiCopy("Votre message fictif…")}
+            />
+            <Submit disabled={!text.trim()} aria-label={uiCopy("Ajouter le message à la démo")}>
+              <Send size={20} />
+            </Submit>
+          </form>
+        </section>
+      ) : (
+        <div className="web-chat-placeholder"><MessageCircle size={34}/><h2><T>Messages</T></h2><p><T>Choisissez un membre fictif pour ouvrir une conversation de démonstration.</T></p></div>
+      )}
+        <section className="web-conversations" aria-label={uiCopy("Messages")}>
+          <SearchField value={query} onChange={setQuery} label="Rechercher une conversation…" />
           <div className="conversation-list">
             {social.conversations
               .filter((c) => {
                 const m = members.find((m) => m.id === c.memberId)!;
                 return matchesQuery(
                   m.name +
-                    ' ' +
+                    " " +
                     visibleMessages(social, access, c)
                       .map((x) => x.text)
-                      .join(' '),
+                      .join(" "),
                   query,
                 );
               })
@@ -1340,27 +1352,21 @@ export function MessagesPage() {
                     key={c.memberId}
                     aria-pressed={social.activeChat === c.memberId}
                     disabled={trust.blocked.includes(c.memberId)}
-                    onClick={() =>
-                      dispatchSocial({ type: 'open-chat', id: c.memberId })
-                    }
+                    onClick={() => dispatchSocial({ type: "open-chat", id: c.memberId })}
                   >
                     <img src={m.image} alt="" />
                     <span>
                       <strong>{m.name}</strong>
                       <small>
                         {trust.blocked.includes(c.memberId)
-                          ? 'Membre bloqué · gérer dans Sécurité'
+                          ? "Membre bloqué · gérer dans Sécurité"
                           : !canReceive(social, access.category)
-                            ? 'Réception des messages réservée à Premium'
-                            : c.messages.at(-1)?.text ||
-                              'Nouvelle conversation'}
+                            ? "Réception des messages réservée à Premium"
+                            : c.messages.at(-1)?.text || "Nouvelle conversation"}
                       </small>
                     </span>
                     {c.unread && canReceive(social, access.category) && (
-                      <span
-                        className="unread-dot"
-                        aria-label="Message non lu"
-                      />
+                      <span className="unread-dot" aria-label={uiCopy("Message non lu")} />
                     )}
                   </button>
                 );
@@ -1370,15 +1376,15 @@ export function MessagesPage() {
             const m = members.find((m) => m.id === c.memberId)!;
             return matchesQuery(
               m.name +
-                ' ' +
+                " " +
                 visibleMessages(social, access, c)
                   .map((x) => x.text)
-                  .join(' '),
+                  .join(" "),
               query,
             );
           }) && (
             <Empty
-              title="Aucune conversation trouvée."
+              title={uiCopy("Aucune conversation trouvée.")}
               text="Modifiez votre recherche ou commencez un nouvel échange avec le bouton +."
             />
           )}
@@ -1387,7 +1393,7 @@ export function MessagesPage() {
       <Modal
         open={newChat}
         onOpenChange={setNewChat}
-        title="Une nouvelle rencontre."
+        title={uiCopy("Une nouvelle rencontre.")}
         description="Choisissez un membre fictif pour ouvrir une conversation de démonstration."
       >
         <div className="new-chat-list">
@@ -1398,7 +1404,7 @@ export function MessagesPage() {
                 key={m.id}
                 className="conversation-row"
                 onClick={() => {
-                  dispatchSocial({ type: 'open-chat', id: m.id });
+                  dispatchSocial({ type: "open-chat", id: m.id });
                   setNewChat(false);
                 }}
               >
@@ -1417,13 +1423,17 @@ export function MessagesPage() {
 }
 
 export function OpportunitiesPage() {
-  const { social, dispatchSocial, notify } = useDemo();
+  const { t: uiCopy, dateLocale: uiDateLocale } = useLocale();
+  const { social, dispatchSocial, notify,profile,access } = useDemo();
   const [type, setType] = useState("Toutes");
   const [sport, setSport] = useState("Tous");
   const [query, setQuery] = useState("");
   const [savedOnly, setSavedOnly] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const activeFilterCount = Number(type !== 'Toutes') + Number(sport !== 'Tous') + Number(Boolean(query.trim())) + Number(savedOnly);
   const [selected, setSelected] = useState<Opportunity | null>(null);
-  const filtered = opportunities.filter(
+  const [confirmRemoval,setConfirmRemoval]=useState(false);
+  const filtered = allOpportunities(social).filter(
     (o) =>
       matchesOpportunityType(o, type) &&
       (sport === "Tous" || o.sport === sport) &&
@@ -1432,15 +1442,16 @@ export function OpportunitiesPage() {
   );
   return (
     <ProfileLayout>
-      <div className="social-title">
-        <div>
+      <div className="social-title opportunity-title">
           <span className="mini-kicker">
             <T>{"VOTRE PROCHAIN CHAPITRE"}</T>
           </span>
+        <div className="opportunity-title-row">
           <h1>
-            <T>{"Opportunities"}</T>
+            <T>{"Opportunités"}</T>
             <span>.</span>
           </h1>
+          <OpportunityPublisher key={profile.category} onPublished={offer=>{setType('Toutes');setSport('Tous');setQuery('');setSavedOnly(false);setSelected(offer);}}/>
         </div>
       </div>
       <p className="social-intro">
@@ -1448,22 +1459,26 @@ export function OpportunitiesPage() {
         <br />
         <T>{"Trouvez ce qui vous fait avancer."}</T>
       </p>
+      <div className="opportunity-list-toolbar">
+        <div className="list-caption">
+          <span><T>{savedOnly ? "Vos favoris" : "À explorer"}</T></span>
+          <span>{filtered.length} <T>opportunités</T></span>
+        </div>
+        <Button variant="ghost" className="opportunity-filter-toggle" aria-label={uiCopy('Filtres')} aria-expanded={filtersOpen} aria-controls="opportunity-filters" data-active={activeFilterCount > 0} onClick={()=>setFiltersOpen(open=>!open)}>
+          <SlidersHorizontal size={20} aria-hidden="true" />
+          {activeFilterCount > 0 && <span className="opportunity-filter-count">{activeFilterCount}</span>}
+        </Button>
+      </div>
+      {filtersOpen && <section id="opportunity-filters" className="opportunity-filters" aria-label={uiCopy('Filtres')}>
       <SearchField value={query} onChange={setQuery} label="Une opportunité, une ville…" />
-      <Chips
-        label="Types d’opportunités"
-        values={[
-          "Toutes",
-          "Coaching",
-          "Recrutement",
-          "Partenariat",
-          "Sponsoring",
-          "Essais groupés",
-        ]}
-        value={type}
-        onChange={setType}
-      />
+      <label className="opportunity-type-filter">
+        <T>Catégorie</T>
+        <NativeSelect aria-label={uiCopy('Types d’opportunités')} value={type} onChange={e=>setType(e.target.value)}>
+          {['Toutes',...allOfferTypes].map(value=><NativeSelectOption key={value} value={value}>{value}</NativeSelectOption>)}
+        </NativeSelect>
+      </label>
       <div className="network-controls">
-        <SportSelect id="opportunity-sport" value={sport} onChange={setSport} />
+        <SportSelect id="opportunity-sport" value={sport} onChange={setSport} showIcon={false} />
         <Button
           variant="ghost"
           aria-pressed={savedOnly}
@@ -1477,13 +1492,8 @@ export function OpportunitiesPage() {
           </span>
         </Button>
       </div>
-      <div className="list-caption">
-        <span>{savedOnly ? "Vos favoris" : "À explorer"}</span>
-        <span>
-          {filtered.length}
-          <T>{"opportunités"}</T>
-        </span>
-      </div>
+      <Button variant="ghost" className="opportunity-filter-reset" disabled={!activeFilterCount} onClick={()=>{setType('Toutes');setSport('Tous');setQuery('');setSavedOnly(false);}}><T>Réinitialiser les filtres</T></Button>
+      </section>}
       <p className="demo-context">
         <T>{"Annonces fictives · aucune candidature ni transaction réelle."}</T>
       </p>
@@ -1493,7 +1503,7 @@ export function OpportunitiesPage() {
             <div className="opportunity-cover">
               <img src={o.image} alt={"Illustration · " + o.sport} />
               <span>
-                {o.type} / {o.sport}
+                <T>{o.type}</T> / <T>{o.sport}</T>
               </span>
               <Button
                 variant="secondary"
@@ -1518,7 +1528,7 @@ export function OpportunitiesPage() {
                 <span>{o.format}</span>
                 <Button
                   variant="ghost"
-                  onClick={() => setSelected(o)}
+                  onClick={() => {setConfirmRemoval(false);setSelected(o);}}
                   aria-label={"Voir l’opportunité : " + o.title}
                 >
                   <T>{"Voir"}</T>
@@ -1531,14 +1541,14 @@ export function OpportunitiesPage() {
       </div>
       {!filtered.length && (
         <Empty
-          title="La prochaine occasion reste à trouver."
+          title={uiCopy("La prochaine occasion reste à trouver.")}
           text="Essayez d’autres filtres, ou enregistrez une annonce pour la retrouver dans vos favoris."
         />
       )}
       <Modal
         open={!!selected}
         onOpenChange={(v) => {
-          if (!v) setSelected(null);
+          if (!v) {setSelected(null);setConfirmRemoval(false);}
         }}
         title={selected?.title || "Opportunité"}
         description="Annonce fictive : aucune demande n’est transmise à un club ou à un recruteur."
@@ -1546,7 +1556,7 @@ export function OpportunitiesPage() {
         {selected && (
           <div className="opportunity-detail">
             <span className="sport-chip">
-              {selected.type} · {selected.sport}
+              <T>{selected.type}</T> · <T>{selected.sport}</T>
             </span>
             <p className="opportunity-owner">
               {selected.owner} · {selected.city}
@@ -1557,7 +1567,13 @@ export function OpportunitiesPage() {
                 <li key={d}>{d}</li>
               ))}
             </ul>
-            {["coach", "tryout"].includes(selected.id) ? (
+            {selected.publisherCategory===profile.category&&access.canPublishOffers!==false ? (
+              confirmRemoval ? <div role="group" aria-label={uiCopy('Retirer cette annonce ?')}>
+                <p><T>Retirer cette annonce ?</T></p>
+                <Button onClick={()=>{dispatchSocial({type:'opportunity-remove',id:selected.id});setSelected(null);setConfirmRemoval(false);}}><T>Confirmer</T></Button>
+                <Button variant="ghost" onClick={()=>setConfirmRemoval(false)}><T>Annuler</T></Button>
+              </div> : <Button variant="outline" onClick={()=>setConfirmRemoval(true)}><T>Retirer mon annonce</T></Button>
+            ) : ["coach", "tryout"].includes(selected.id) ? (
               <ApplyButton offerId={selected.id} />
             ) : (
               <Button
@@ -1572,9 +1588,9 @@ export function OpportunitiesPage() {
                   );
                 }}
               >
-                {social.interested.includes(selected.id)
+                <T>{social.interested.includes(selected.id)
                   ? "Intérêt enregistré · annuler"
-                  : "Ça m’intéresse · simuler"}
+                  : "Ça m’intéresse · simuler"}</T>
                 <Check size={17} />
               </Button>
             )}
