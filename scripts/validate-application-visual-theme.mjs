@@ -1,14 +1,16 @@
 import { chromium } from '/Users/davidfrancotte/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
 import assert from 'node:assert/strict';
 
+const base = process.env.OP_SITE_URL || 'http://localhost:3000';
 const browser = await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
 try {
   for (const width of [1440,390]) {
     const page = await browser.newPage({viewport:{width,height:1000}, reducedMotion:'reduce'});
     const errors=[];
     page.on('pageerror', error=>errors.push(error.message));
-    await page.goto('http://127.0.0.1:3000/application',{waitUntil:'networkidle'});
+    await page.goto(base + '/application',{waitUntil:'networkidle'});
     const toggle=page.getByRole('switch',{name:'App en mode clair',exact:true});
+    const waitForToggle=checked=>page.waitForFunction(value=>document.querySelector('.application-visual-switch')?.getAttribute('aria-checked')===value,checked);
     assert.equal(await toggle.getAttribute('aria-checked'),'false');
     const unchanged=()=>page.evaluate(()=>({
       htmlClass:document.documentElement.className,
@@ -26,6 +28,7 @@ try {
     }
     await page.locator('.application-hero').screenshot({path:`/tmp/application-dark-toggle-${width}.png`,animations:'disabled'});
     await toggle.click();
+    await waitForToggle('true');
     assert.equal(await toggle.getAttribute('aria-checked'),'true');
     for (const img of await captures.all()) {
       assert.match(await img.getAttribute('src'),/-light\.png$/);
@@ -41,14 +44,16 @@ try {
     // Both keyboard directions work; repeated swaps do not duplicate phone canvases.
     await toggle.focus();
     await page.keyboard.press('Space');
+    await waitForToggle('false');
     assert.equal(await toggle.getAttribute('aria-checked'),'false');
     assert.ok((await captures.evaluateAll(images=>images.map(img=>img.src))).every(src=>!src.endsWith('-light.png')));
     await page.keyboard.press('Enter');
+    await waitForToggle('true');
     assert.equal(await toggle.getAttribute('aria-checked'),'true');
     assert.ok(await page.locator('.app-phone canvas').count()<=1);
     assert.deepEqual(await unchanged(),before);
     assert.deepEqual(errors,[]);
-    await page.goto('http://127.0.0.1:3000/',{waitUntil:'networkidle'});
+    await page.goto(base + '/',{waitUntil:'networkidle'});
     assert.equal(await page.locator('img[src$="-light.png"]').count(),0,'Home visuals must not change');
     await page.close();
     console.log(`PASS ${width}px: eleven current visuals, toggle, keyboard, site unchanged, home unchanged.`);

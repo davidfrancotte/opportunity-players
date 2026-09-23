@@ -73,7 +73,9 @@ try {
   const closeToast=page.getByRole('button',{name:'Fermer la notification',exact:true});
   if(await closeToast.count()) await closeToast.click();
   await nav('accueil');
-  await page.getByRole('button',{name:'Filtrer le fil',exact:true}).click();
+  const feedFilters=page.getByRole('button',{name:'Filtrer le fil',exact:true});
+  if(await feedFilters.getAttribute('aria-expanded')!=='true') await feedFilters.click();
+  assert.equal(await feedFilters.getAttribute('aria-expanded'),'true');
   await shot('accueil','.community-heading');
   await nav('reseau');
   await page.locator('.network-sections a[href="/jouer/"]').click();
@@ -90,10 +92,15 @@ try {
   await shot('messages');
   await nav('opportunities');
   assert.equal(await page.locator('.career-nav').count(),0);
-  const types=page.getByRole('group',{name:'Types d’opportunités'});
-  assert.deepEqual(await types.getByRole('button').allTextContents(),['Toutes','Coaching','Recrutement','Partenariat','Sponsoring','Essais groupés']);
-  await types.getByRole('button',{name:'Essais groupés',exact:true}).click();
-  await shot('opportunities','h1');
+  await page.locator('.opportunity-filter-toggle').click();
+  const types=page.getByRole('combobox',{name:'Types d’opportunités',exact:true});
+  assert.deepEqual(await types.locator('option').allTextContents(),[
+    'Toutes','Coaching','Recrutement','Partenariat','Sponsoring','Essais groupés',
+    'Soins de santé','Arbitre','Juridique','Agent','Média','Sport études','Équipe','Université',
+  ]);
+  await types.selectOption({label:'Essais groupés'});
+  assert.equal(await page.getByRole('button',{name:'Publier une annonce',exact:true}).isVisible(),true);
+  await shot('opportunities','.opportunity-filters');
   await nav('profil');
   await shot('profil','.profile-subnav');
   await page.locator('a[href="/medias/"]').filter({visible:true}).first().click();

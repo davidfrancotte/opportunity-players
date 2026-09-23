@@ -34,6 +34,7 @@ const features = [
     text: 'L’accueil se concentre sur les publications de votre communauté. Lisez les trois premières lignes, puis ouvrez le post complet. Partagez du texte avec une photo ou une vidéo importée depuis votre appareil ; choisissez une discipline ou « - » pour un sujet transversal.',
     tools: [
       'Premium : matchs ouverts, emplois, opportunités, news et divers',
+      'Filtres Premium par catégorie, discipline et mots-clés',
       'Aimer et commenter',
       'Importer une photo ou une vidéo avec aperçu',
       'Programmer une publication avec Premium',
@@ -63,13 +64,13 @@ const features = [
     id: 'reseau',
     name: 'Réseau',
     location: 'Réseau › Les membres',
-    capture: 'Compte gratuit · aperçu des filtres Premium',
+    capture: 'Compte gratuit · filtres avancés ouverts',
     route: 'reseau',
     icon: UsersRound,
     title: 'Les bonnes personnes. Le même terrain.',
-    text: 'Trois espaces clairs : Les membres, Jouer ensemble et Agenda. Recherchez un nom, un rôle, un club ou une ville. Suivre affiche les publications d’un membre ; Connect lui envoie une demande qu’il doit accepter pour ouvrir les échanges sans quota et les invitations à vos matchs.',
+    text: 'Trois espaces clairs : Les membres, Jouer ensemble et Agenda. Recherchez un nom, un rôle, un club ou une ville, puis affinez par type de profil, secteur ou métier, localisation et discipline. Suivre affiche les publications d’un membre ; Connect lui envoie une demande qu’il doit accepter pour ouvrir les échanges sans quota et les invitations à vos matchs.',
     tools: [
-      'Recherche simple et filtres Premium : pays, ville, sport, classement',
+      'Recherche simple et filtres Premium : profil, secteur, pays, ville, sport, classement',
       'Invitations reçues : deux visibles, liste dépliable',
       'Suivre ou envoyer une demande Connect',
       'Jouer ensemble : Mes invitations, J’organise, À proximité',
@@ -124,15 +125,15 @@ const features = [
   {
     id: 'opportunities',
     name: 'Opportunités',
-    location: 'Opportunities · annonces et essais groupés',
-    capture: 'Catégorie Essais groupés sélectionnée parmi les six filtres',
+    location: 'Opportunities · annonces et filtres',
+    capture: 'Filtres ouverts · catégorie Essais groupés',
     route: 'opportunities',
     icon: Compass,
     title: 'Votre prochain chapitre se trouve ici.',
-    text: 'La page présente uniquement les catégories Toutes, Coaching, Recrutement, Partenariat, Sponsoring et Essais groupés, puis les annonces. Le suivi des candidatures et les outils du recruteur prolongent ces démarches : ce ne sont pas des catégories supplémentaires dans la barre de filtres.',
+    text: 'Explorez les annonces par mots-clés, catégorie, discipline ou favoris. Le catalogue couvre les besoins communs ainsi que des domaines spécialisés comme la santé, l’arbitrage, le juridique, les médias, les équipes et les universités. Les professionnels et les collectifs peuvent aussi publier une annonce selon les droits et le quota de leur formule.',
     tools: [
-      'Six catégories, dont Essais groupés, et filtre Sport',
-      'Ouvrir une annonce et l’enregistrer en favori',
+      'Recherche, treize catégories, filtre Sport et favoris',
+      'Ouvrir, enregistrer ou publier une annonce selon votre profil',
       'Candidater puis suivre la réponse selon votre offre',
       'Côté recruteur : présélectionner et proposer un essai',
       'Essai confirmé retrouvé dans l’agenda',
@@ -140,10 +141,10 @@ const features = [
     benefits: [
       'Repérez une recherche de joueur ou un essai, partagez votre dossier puis suivez l’avancement de votre candidature.',
       'Trouvez une mission de coaching ou une collaboration. Les outils de recrutement dépendent de votre formule.',
-      'Présentez un besoin de recrutement et traitez les dossiers reçus ; explorez aussi partenariats et sponsoring.',
+      'Publiez un besoin, traitez les dossiers reçus et explorez recrutement, partenariats, sponsoring ou essais groupés.',
     ],
     limit:
-      'Les accès aux candidatures, offres et essais dépendent de la catégorie de profil et de l’abonnement. Un collectif gratuit dispose d’une offre active ; les offres professionnelles sont Premium. Aucun dossier ni candidature n’est envoyé réellement dans la démo.',
+      'Les sportifs ne publient pas d’annonce. Un professionnel peut gérer jusqu’à 5 offres actives avec Premium ; un collectif dispose de 1 offre en gratuit et de 10 avec Premium. Les candidatures, essais et quotas dépendent aussi de la formule. Aucun dossier, annonce ni candidature n’est transmis réellement dans la démo.',
   },
   {
     id: 'agenda',
